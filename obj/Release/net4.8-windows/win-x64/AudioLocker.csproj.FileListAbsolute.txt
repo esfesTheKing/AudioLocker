@@ -1,0 +1,5 @@
+D:\Programming\C#\AudioLocker\obj\Release\net4.8-windows\win-x64\AudioLocker.csproj.AssemblyReference.cache
+D:\Programming\C#\AudioLocker\obj\Release\net4.8-windows\win-x64\AudioLocker.GeneratedMSBuildEditorConfig.editorconfig
+D:\Programming\C#\AudioLocker\obj\Release\net4.8-windows\win-x64\AudioLocker.AssemblyInfoInputs.cache
+D:\Programming\C#\AudioLocker\obj\Release\net4.8-windows\win-x64\AudioLocker.AssemblyInfo.cs
+D:\Programming\C#\AudioLocker\obj\Release\net4.8-windows\win-x64\AudioLocker.csproj.CoreCompileInputs.cache

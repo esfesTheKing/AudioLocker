@@ -1,0 +1,2 @@
+D:\Programming\C#\AudioLocker\bin\Debug\net5.0-windows\win-x64\publish\AudioLocker.pdb
+D:\Programming\C#\AudioLocker\bin\Debug\net5.0-windows\win-x64\publish\AudioLocker.exe

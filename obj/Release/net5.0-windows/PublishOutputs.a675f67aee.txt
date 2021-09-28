@@ -1,0 +1,8 @@
+D:\Programming\C#\AudioLocker\bin\Release\net5.0-windows\publish\AudioLocker.exe
+D:\Programming\C#\AudioLocker\bin\Release\net5.0-windows\publish\App.config
+D:\Programming\C#\AudioLocker\bin\Release\net5.0-windows\publish\AudioLocker.dll
+D:\Programming\C#\AudioLocker\bin\Release\net5.0-windows\publish\AudioLocker.deps.json
+D:\Programming\C#\AudioLocker\bin\Release\net5.0-windows\publish\AudioLocker.runtimeconfig.json
+D:\Programming\C#\AudioLocker\bin\Release\net5.0-windows\publish\AudioLocker.dll.config
+D:\Programming\C#\AudioLocker\bin\Release\net5.0-windows\publish\AudioLocker.pdb
+D:\Programming\C#\AudioLocker\bin\Release\net5.0-windows\publish\log4net.dll
