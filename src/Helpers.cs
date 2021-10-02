@@ -166,12 +166,12 @@ public static class AudioHelper
     {
         foreach (AudioSession session in currentAudioSessions)
         {
-            #nullable enable
-            string? sessionName = session.ToString();
-            #nullable disable
+            string sessionName;
 
-            if (sessionName is null) {
-                _logger.Debug($"sessionName was null in process number: {session.ProcessId}");
+            try{
+                sessionName = session.ToString();
+            } catch (InvalidOperationException ex) {
+                _logger.Debug($"Session exited during loop", ex);
                 continue;
             }
 

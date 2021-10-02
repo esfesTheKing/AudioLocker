@@ -18,7 +18,7 @@ public static class AudioLocker
         //If someone is manually writing to the data file, we ignore that exception and just stop the current iteration of the funtion
         try {
             savedAudioProcs = FileHelper.ReadDataFile();
-        } catch (Exception ex) { 
+        } catch (IOException ex) { 
             _logger.Debug("An error accured with reading data file, skipping current iteration!", ex);
             return;
         }
