@@ -28,14 +28,17 @@ public static class UacHelper
 
     public static void SetRunAtStartup(bool val)
     {
-        RegistryKey rk = Registry.LocalMachine.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
+        //RegistryKey localMachine = Registry.LocalMachine.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
+        RegistryKey currentUser = Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
 
         if (val) {
-            rk.SetValue("AudioLocker", Application.ExecutablePath);
+            //localMachine.SetValue("AudioLocker", Application.ExecutablePath);
+            currentUser.SetValue("AudioLocker", Application.ExecutablePath);
             _logger.Debug("Adding AudioLocker to startup.");
         }
         else {
-            rk.DeleteValue("AudioLocker", false);
+            //localMachine.DeleteValue("AudioLocker", false);
+            currentUser.DeleteValue("AudioLocker", false);
             _logger.Debug("Removing AudioLocker from startup.");
         }
     }
@@ -130,7 +133,15 @@ public static class AudioHelper
         Dictionary<string, int> parentProcs = new Dictionary<string, int>();
         foreach (AudioSession session in currentAudioSessions)
         {
-            string sessionName = session.ToString();
+            string sessionName;
+
+            try{
+                sessionName = session.ToString();
+            } catch (InvalidOperationException ex) {
+                _logger.Debug($"Session exited during loop", ex);
+                continue;
+            }
+
             if (!parentProcs.ContainsKey(sessionName))
                 parentProcs[sessionName] = session.ProcessId;
 
@@ -151,7 +162,14 @@ public static class AudioHelper
 
         foreach (AudioSession session in currentAudioSessions)
         {
-            string sessionName = session.ToString();
+            string sessionName;
+
+            try{
+                sessionName = session.ToString();
+            } catch (InvalidOperationException ex) {
+                _logger.Debug($"Session exited during loop", ex);
+                continue;
+            }
 
             if (session.ProcessId == parentProcs[sessionName])
                 audioProcs.ParentProcs[sessionName] = null;
