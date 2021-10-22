@@ -28,16 +28,13 @@ public static class UacHelper
 
     public static void SetRunAtStartup(bool val)
     {
-        //RegistryKey localMachine = Registry.LocalMachine.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
-        RegistryKey currentUser = Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
+        RegistryKey currentUser = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Run", true);
 
         if (val) {
-            //localMachine.SetValue("AudioLocker", Application.ExecutablePath);
             currentUser.SetValue("AudioLocker", Application.ExecutablePath);
             _logger.Debug("Adding AudioLocker to startup.");
         }
         else {
-            //localMachine.DeleteValue("AudioLocker", false);
             currentUser.DeleteValue("AudioLocker", false);
             _logger.Debug("Removing AudioLocker from startup.");
         }

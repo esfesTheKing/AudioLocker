@@ -39,6 +39,7 @@ public static class AudioLocker
         if (!File.Exists(FileHelper.dataFile))
         {
             _logger.Debug("Data file was not found, creating a new one.");
+            _logger.Debug($"Data file location: {Directory.GetCurrentDirectory()}");
             FileHelper.SaveAppsToDataFile(new ProcContainer {
                 ParentProcs = new Dictionary<string, Proc>(),
                 ChildProcs = new Dictionary<string, Proc>()
