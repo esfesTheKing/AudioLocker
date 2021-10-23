@@ -53,7 +53,7 @@ public class AudioLockerTrayApp : ApplicationContext
     private void OpenSettings(object sender, EventArgs e)
     {
         ProcessStartInfo startInfo = new ProcessStartInfo();
-        startInfo.FileName = $"{Directory.GetCurrentDirectory()}\\{FileHelper.dataFile}";
+        startInfo.FileName = FileHelper.dataFilePath;
         startInfo.UseShellExecute = true;
 
         Process.Start(startInfo);

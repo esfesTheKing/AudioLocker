@@ -58,12 +58,11 @@ public static class UacHelper
 public static class FileHelper
 {
     private static readonly log4net.ILog _logger = log4net.LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
-
-    public const string dataFile = "data.json";
+    public readonly static string dataFilePath = Path.GetDirectoryName(Application.ExecutablePath) + "\\data.json";
 
     public static ProcContainer ReadDataFile()
     {
-        string jsonData = File.ReadAllText(dataFile);
+        string jsonData = File.ReadAllText(dataFilePath);
         return JsonSerializer.Deserialize<ProcContainer>(jsonData);
     }
 
@@ -76,7 +75,7 @@ public static class FileHelper
 
         string jsonString = JsonSerializer.Serialize(audioProcs, options);
         _logger.Info("Saving audio processes to data file.");
-        File.WriteAllText(dataFile, jsonString);
+        File.WriteAllText(dataFilePath, jsonString);
     }
 }
 
