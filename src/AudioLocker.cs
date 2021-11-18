@@ -31,7 +31,11 @@ public static class AudioLocker
             FileHelper.SaveAppsToDataFile(savedAudioProcs);
         }
 
-        AudioHelper.SetAudioProcValues(savedAudioProcs);
+        try {
+            AudioHelper.SetAudioProcValues(savedAudioProcs);
+        } catch (InvalidOperationException e) {
+            _logger.Error("Caught error to not crash the bot", e);
+        }
     }
 
     public static void StartAudioLocker()
@@ -54,7 +58,7 @@ public static class AudioLocker
                 try {
                     AudioLoop();
                 } catch (Exception ex) {
-                    _logger.Error("An error has occurred with the audio loop", ex);
+                    _logger.Error("An unknown error has occurred within the audio loop", ex);
                     throw;
                 }
             }

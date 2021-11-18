@@ -4,7 +4,6 @@ using System;
 
 [assembly: log4net.Config.XmlConfigurator(Watch=true, ConfigFile="App.config")]
 
-// ! Compile command -> dotnet publish -r win-x64 -c Release --self-contained true
 /*
     TODO: Package the program with an installer, so it will copy it self to disk C
 */
