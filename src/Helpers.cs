@@ -182,7 +182,7 @@ public static class AudioHelper
         {
             string sessionName;
 
-            try{
+            try {
                 sessionName = session.ToString();
             } catch (InvalidOperationException ex) {
                 _logger.Debug($"Session exited during loop", ex);
@@ -199,15 +199,22 @@ public static class AudioHelper
             if (!proc.isPersistent)
                 continue;
 
+            int clevel;
+            try {   
+                clevel = (int) AudioUtilities.GetApplicationVolume(session.ProcessId);
+            } catch (Exception ex) {
+                _logger.Error($"Error with getting {sessionName}'s audio level.", ex);
+                continue;
+            }
+
             // Change audio only if current volume is different from the one set in the data file
-            if (proc.vlevel != (int) AudioUtilities.GetApplicationVolume(session.ProcessId)) 
-            {
-                try {
-                    AudioUtilities.SetApplicationVolume(session.ProcessId, proc.vlevel);
-                    _logger.Debug($"Successfuly set {sessionName}'s audio level.");
-                } catch (Exception ex) { 
-                    _logger.Error($"Error with setting {sessionName}'s audio level.", ex);
-                }
+            if (proc.vlevel == clevel) { continue; }
+
+            try {
+                AudioUtilities.SetApplicationVolume(session.ProcessId, proc.vlevel);
+                _logger.Debug($"Successfuly set {sessionName}'s audio level.");
+            } catch (Exception ex) { 
+                _logger.Error($"Error with setting {sessionName}'s audio level.", ex);
             }
         }
     }

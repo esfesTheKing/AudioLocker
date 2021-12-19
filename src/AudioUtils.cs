@@ -29,8 +29,7 @@ public static class AudioUtilities
 
     public static void SetApplicationVolume(int pid, float level) {
         ISimpleAudioVolume volume = GetVolumeObject(pid);
-        if (volume is null)
-        return;
+        if (volume is null) { return; }
 
         Guid guid = Guid.Empty;
         volume.SetMasterVolume(level / 100, guid);
@@ -39,8 +38,7 @@ public static class AudioUtilities
 
     public static void SetApplicationMute(int pid, bool mute) {
         ISimpleAudioVolume volume = GetVolumeObject(pid);
-        if (volume is null)
-        return;
+        if (volume is null) { return; }
 
         Guid guid = Guid.Empty;
         volume.SetMute(mute, guid);
