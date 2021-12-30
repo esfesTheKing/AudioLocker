@@ -105,7 +105,7 @@ public static class AudioHelper
         {
             if(!audioProcs.ParentProcs.ContainsKey(procName)) {
                 _logger.Info($"Added {procName} to AudioProcs.");
-                audioProcs.ParentProcs[procName] = new Proc{
+                audioProcs.ParentProcs[procName] = new Proc {
                     vlevel = 10,
                     isPersistent = true
                 };
