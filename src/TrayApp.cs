@@ -2,7 +2,6 @@ using System.Windows.Forms;
 using System.Diagnostics;
 using System.Reflection;
 using System.Drawing;
-using System.IO;
 using System;
 
 public class AudioLockerTrayApp : ApplicationContext

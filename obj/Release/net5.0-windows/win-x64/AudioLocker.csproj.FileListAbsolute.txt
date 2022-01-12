@@ -220,7 +220,6 @@ D:\Programming\C#\AudioLocker\bin\Release\net5.0-windows\win-x64\dbgshim.dll
 D:\Programming\C#\AudioLocker\bin\Release\net5.0-windows\win-x64\hostfxr.dll
 D:\Programming\C#\AudioLocker\bin\Release\net5.0-windows\win-x64\hostpolicy.dll
 D:\Programming\C#\AudioLocker\bin\Release\net5.0-windows\win-x64\mscordaccore.dll
-D:\Programming\C#\AudioLocker\bin\Release\net5.0-windows\win-x64\mscordaccore_amd64_amd64_5.0.921.35908.dll
 D:\Programming\C#\AudioLocker\bin\Release\net5.0-windows\win-x64\mscordbi.dll
 D:\Programming\C#\AudioLocker\bin\Release\net5.0-windows\win-x64\mscorrc.dll
 D:\Programming\C#\AudioLocker\bin\Release\net5.0-windows\win-x64\ucrtbase.dll
@@ -514,3 +513,4 @@ D:\Programming\C#\AudioLocker\bin\Release\net5.0-windows\win-x64\wpfgfx_cor3.dll
 D:\Programming\C#\AudioLocker\bin\Release\net5.0-windows\win-x64\AudioLocker.dll.config
 D:\Programming\C#\AudioLocker\bin\Release\net5.0-windows\win-x64\log4net.dll
 D:\Programming\C#\AudioLocker\bin\Release\net5.0-windows\win-x64\App.config
+D:\Programming\C#\AudioLocker\bin\Release\net5.0-windows\win-x64\mscordaccore_amd64_amd64_5.0.1321.56516.dll

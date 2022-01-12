@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "mF3ChyF5iuz4prteRbzlQQ+rngbKSlYSJLADy9L3RXljSeDu5FhwTA/Xdsx5l7jGQH3ihGFggiSbhwSdzUnAFw==",
+  "dgSpecHash": "fNgwIlqQaZYSr0o8NblhcLJR1GOf81YCcl5svdcHbxA4EHUvZ0SpUre3m8RNtqVpreFYbavatX4HX9PG4mGc3A==",
   "success": true,
   "projectFilePath": "D:\\Programming\\C#\\AudioLocker\\AudioLocker.csproj",
   "expectedPackageFiles": [
@@ -11,9 +11,10 @@
     "C:\\Users\\ilan\\.nuget\\packages\\system.security.cryptography.protecteddata\\4.5.0\\system.security.cryptography.protecteddata.4.5.0.nupkg.sha512",
     "C:\\Users\\ilan\\.nuget\\packages\\system.security.permissions\\4.5.0\\system.security.permissions.4.5.0.nupkg.sha512",
     "C:\\Users\\ilan\\.nuget\\packages\\system.security.principal.windows\\4.5.0\\system.security.principal.windows.4.5.0.nupkg.sha512",
-    "C:\\Users\\ilan\\.nuget\\packages\\microsoft.netcore.app.runtime.win-x64\\5.0.9\\microsoft.netcore.app.runtime.win-x64.5.0.9.nupkg.sha512",
-    "C:\\Users\\ilan\\.nuget\\packages\\microsoft.windowsdesktop.app.runtime.win-x64\\5.0.9\\microsoft.windowsdesktop.app.runtime.win-x64.5.0.9.nupkg.sha512",
-    "C:\\Users\\ilan\\.nuget\\packages\\microsoft.aspnetcore.app.runtime.win-x64\\5.0.9\\microsoft.aspnetcore.app.runtime.win-x64.5.0.9.nupkg.sha512"
+    "C:\\Users\\ilan\\.nuget\\packages\\microsoft.netcore.app.runtime.win-x64\\5.0.13\\microsoft.netcore.app.runtime.win-x64.5.0.13.nupkg.sha512",
+    "C:\\Users\\ilan\\.nuget\\packages\\microsoft.windowsdesktop.app.runtime.win-x64\\5.0.13\\microsoft.windowsdesktop.app.runtime.win-x64.5.0.13.nupkg.sha512",
+    "C:\\Users\\ilan\\.nuget\\packages\\microsoft.aspnetcore.app.runtime.win-x64\\5.0.13\\microsoft.aspnetcore.app.runtime.win-x64.5.0.13.nupkg.sha512",
+    "C:\\Users\\ilan\\.nuget\\packages\\microsoft.netcore.app.host.win-x64\\5.0.13\\microsoft.netcore.app.host.win-x64.5.0.13.nupkg.sha512"
   ],
   "logs": []
 }
