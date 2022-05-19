@@ -514,3 +514,4 @@ D:\Programming\C#\AudioLocker\bin\Release\net5.0-windows\win-x64\AudioLocker.dll
 D:\Programming\C#\AudioLocker\bin\Release\net5.0-windows\win-x64\log4net.dll
 D:\Programming\C#\AudioLocker\bin\Release\net5.0-windows\win-x64\App.config
 D:\Programming\C#\AudioLocker\bin\Release\net5.0-windows\win-x64\mscordaccore_amd64_amd64_5.0.1321.56516.dll
+D:\Programming\C#\AudioLocker\bin\Release\net5.0-windows\win-x64\System.Management.dll
