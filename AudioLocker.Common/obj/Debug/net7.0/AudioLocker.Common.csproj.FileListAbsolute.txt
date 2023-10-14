@@ -1,0 +1,11 @@
+D:\Programming\C#\AudioLocker - ReWrite\AudioLocker\AudioLocker.Common\bin\Debug\net7.0\AudioLocker.Common.deps.json
+D:\Programming\C#\AudioLocker - ReWrite\AudioLocker\AudioLocker.Common\bin\Debug\net7.0\AudioLocker.Common.dll
+D:\Programming\C#\AudioLocker - ReWrite\AudioLocker\AudioLocker.Common\bin\Debug\net7.0\AudioLocker.Common.pdb
+D:\Programming\C#\AudioLocker - ReWrite\AudioLocker\AudioLocker.Common\obj\Debug\net7.0\AudioLocker.Common.GeneratedMSBuildEditorConfig.editorconfig
+D:\Programming\C#\AudioLocker - ReWrite\AudioLocker\AudioLocker.Common\obj\Debug\net7.0\AudioLocker.Common.AssemblyInfoInputs.cache
+D:\Programming\C#\AudioLocker - ReWrite\AudioLocker\AudioLocker.Common\obj\Debug\net7.0\AudioLocker.Common.AssemblyInfo.cs
+D:\Programming\C#\AudioLocker - ReWrite\AudioLocker\AudioLocker.Common\obj\Debug\net7.0\AudioLocker.Common.csproj.CoreCompileInputs.cache
+D:\Programming\C#\AudioLocker - ReWrite\AudioLocker\AudioLocker.Common\obj\Debug\net7.0\AudioLocker.Common.dll
+D:\Programming\C#\AudioLocker - ReWrite\AudioLocker\AudioLocker.Common\obj\Debug\net7.0\refint\AudioLocker.Common.dll
+D:\Programming\C#\AudioLocker - ReWrite\AudioLocker\AudioLocker.Common\obj\Debug\net7.0\AudioLocker.Common.pdb
+D:\Programming\C#\AudioLocker - ReWrite\AudioLocker\AudioLocker.Common\obj\Debug\net7.0\ref\AudioLocker.Common.dll

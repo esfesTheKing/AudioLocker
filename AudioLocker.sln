@@ -1,0 +1,43 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.6.33815.320
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AudioLocker.BL", "AudioLocker.BL\AudioLocker.BL.csproj", "{2138CEC7-9354-428A-A5A5-A15DCAD43E0F}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AudioLocker.Common", "AudioLocker.Common\AudioLocker.Common.csproj", "{9A8C1777-C048-465D-A8CD-E9D88ACEC272}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AudioLocker.Core", "AudioLocker.Core\AudioLocker.Core.csproj", "{A75FC7C6-CC84-43E5-9977-22C2076AF099}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AudioLocker", "AudioLocker\AudioLocker.csproj", "{707BB6FC-3D60-49C7-9309-D1C5375945B5}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{2138CEC7-9354-428A-A5A5-A15DCAD43E0F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2138CEC7-9354-428A-A5A5-A15DCAD43E0F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2138CEC7-9354-428A-A5A5-A15DCAD43E0F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2138CEC7-9354-428A-A5A5-A15DCAD43E0F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9A8C1777-C048-465D-A8CD-E9D88ACEC272}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9A8C1777-C048-465D-A8CD-E9D88ACEC272}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9A8C1777-C048-465D-A8CD-E9D88ACEC272}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9A8C1777-C048-465D-A8CD-E9D88ACEC272}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A75FC7C6-CC84-43E5-9977-22C2076AF099}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A75FC7C6-CC84-43E5-9977-22C2076AF099}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A75FC7C6-CC84-43E5-9977-22C2076AF099}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A75FC7C6-CC84-43E5-9977-22C2076AF099}.Release|Any CPU.Build.0 = Release|Any CPU
+		{707BB6FC-3D60-49C7-9309-D1C5375945B5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{707BB6FC-3D60-49C7-9309-D1C5375945B5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{707BB6FC-3D60-49C7-9309-D1C5375945B5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{707BB6FC-3D60-49C7-9309-D1C5375945B5}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {472CAB21-BF20-43FE-BBD4-5E00EC67AE04}
+	EndGlobalSection
+EndGlobal

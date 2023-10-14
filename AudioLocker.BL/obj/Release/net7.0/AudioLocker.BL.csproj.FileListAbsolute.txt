@@ -1,0 +1,17 @@
+D:\Programming\C#\AudioLocker - ReWrite\AudioLocker\AudioLocker.BL\bin\Release\net7.0\AudioLocker.BL.deps.json
+D:\Programming\C#\AudioLocker - ReWrite\AudioLocker\AudioLocker.BL\bin\Release\net7.0\AudioLocker.BL.dll
+D:\Programming\C#\AudioLocker - ReWrite\AudioLocker\AudioLocker.BL\bin\Release\net7.0\AudioLocker.BL.pdb
+D:\Programming\C#\AudioLocker - ReWrite\AudioLocker\AudioLocker.BL\bin\Release\net7.0\AudioLocker.Common.dll
+D:\Programming\C#\AudioLocker - ReWrite\AudioLocker\AudioLocker.BL\bin\Release\net7.0\AudioLocker.Core.dll
+D:\Programming\C#\AudioLocker - ReWrite\AudioLocker\AudioLocker.BL\bin\Release\net7.0\AudioLocker.Common.pdb
+D:\Programming\C#\AudioLocker - ReWrite\AudioLocker\AudioLocker.BL\bin\Release\net7.0\AudioLocker.Core.pdb
+D:\Programming\C#\AudioLocker - ReWrite\AudioLocker\AudioLocker.BL\obj\Release\net7.0\AudioLocker.BL.csproj.AssemblyReference.cache
+D:\Programming\C#\AudioLocker - ReWrite\AudioLocker\AudioLocker.BL\obj\Release\net7.0\AudioLocker.BL.GeneratedMSBuildEditorConfig.editorconfig
+D:\Programming\C#\AudioLocker - ReWrite\AudioLocker\AudioLocker.BL\obj\Release\net7.0\AudioLocker.BL.AssemblyInfoInputs.cache
+D:\Programming\C#\AudioLocker - ReWrite\AudioLocker\AudioLocker.BL\obj\Release\net7.0\AudioLocker.BL.AssemblyInfo.cs
+D:\Programming\C#\AudioLocker - ReWrite\AudioLocker\AudioLocker.BL\obj\Release\net7.0\AudioLocker.BL.csproj.CoreCompileInputs.cache
+D:\Programming\C#\AudioLocker - ReWrite\AudioLocker\AudioLocker.BL\obj\Release\net7.0\AudioLocker.BL.csproj.CopyComplete
+D:\Programming\C#\AudioLocker - ReWrite\AudioLocker\AudioLocker.BL\obj\Release\net7.0\AudioLocker.BL.dll
+D:\Programming\C#\AudioLocker - ReWrite\AudioLocker\AudioLocker.BL\obj\Release\net7.0\refint\AudioLocker.BL.dll
+D:\Programming\C#\AudioLocker - ReWrite\AudioLocker\AudioLocker.BL\obj\Release\net7.0\AudioLocker.BL.pdb
+D:\Programming\C#\AudioLocker - ReWrite\AudioLocker\AudioLocker.BL\obj\Release\net7.0\ref\AudioLocker.BL.dll
