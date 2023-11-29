@@ -40,7 +40,12 @@ public class JsonFileConfigurationStorage : FileConfigurationBase
             return null;
         }
 
-        return collection[processName];
+        if (!collection.TryGetValue(processName, out var processConfiguration))
+        {
+            return null;
+        }
+
+        return processConfiguration;
     }
 
     public override void Set(string deviceName, string processName, ProcessConfiguration configuration)
@@ -76,14 +81,30 @@ public class JsonFileConfigurationStorage : FileConfigurationBase
         await WriteToFile(castedProcessConfigurations ?? EMPTY_PROCESS_CONFIGURATIONS);
     }
 
+    private async Task<Dictionary<string, ProcessConfigurationCollection>> ReadFileHandleExceptions(Stream stream)
+    {
+        try
+        {
+            var processConfigurations = await JsonSerializer.DeserializeAsync<Dictionary<string, ProcessConfigurationCollection>>(stream);
+            if (processConfigurations is not null)
+            {
+                return processConfigurations;
+            }
+        }
+        catch (JsonException)
+        {
+        }
+
+        return new Dictionary<string, ProcessConfigurationCollection>();
+    }
+
     protected override async Task ReadFile()
     {
         await WaitForFileToBeAvailable();
 
         using var stream = new FileStream(_filePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
-        var processConfigurations = await JsonSerializer.DeserializeAsync<Dictionary<string, ProcessConfigurationCollection>>(stream);
 
-        _processConfigurations = processConfigurations ?? new Dictionary<string, ProcessConfigurationCollection>();  
+        _processConfigurations = await ReadFileHandleExceptions(stream);  
     }
 
     protected override async Task WriteToFile<T>(T processConfiguration)
