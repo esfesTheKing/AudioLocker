@@ -68,10 +68,12 @@ public class JsonFileConfigurationStorage : FileConfigurationBase
             _processConfigurations[deviceName] = collection;
         }
 
-        if (!collection.TryGetValue(processName, out _))
+        if (collection.ContainsKey(processName))
         {
-            collection.Add(processName, new ProcessConfiguration { VolumeLevel = _defaultVolumeLevel });
+            return;
         }
+
+        collection.Add(processName, new ProcessConfiguration { VolumeLevel = _defaultVolumeLevel });
     }
 
     protected override async Task CreateFile()
