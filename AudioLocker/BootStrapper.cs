@@ -120,6 +120,9 @@ internal class BootStrapper
 
         var deviceName = device.FriendlyName;
         ConfigureSession(logger, storage, session, deviceName);
+
+        // Note: This is a potential race condition, needs further testing
+        storage.Save();
     }
 
     private void SetupMMDevice(MMDevice device, ILogger logger, IConfigurationStorage storage)
@@ -155,7 +158,7 @@ internal class BootStrapper
         storage.Register(deviceName, processName);
 
         var audioSessionEventHandler = new AudioSessionEventHandler(logger, storage, session, deviceName, processName);
-        
+
         var simpleAudioVolumeInterface = session.SimpleAudioVolume;
         audioSessionEventHandler.OnVolumeChanged(simpleAudioVolumeInterface.Volume, simpleAudioVolumeInterface.Mute);
 
