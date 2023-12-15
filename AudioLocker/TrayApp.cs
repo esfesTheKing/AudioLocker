@@ -52,7 +52,7 @@ public class AudioLockerTrayApp : ApplicationContext
 
         if (value)
         {
-            registryKey.SetValue(REGISTRY_KEY_NAME, Application.ExecutablePath);
+            registryKey.SetValue(REGISTRY_KEY_NAME, $"{Application.ExecutablePath} --settingsFilePath=\"{_settingsFile}\"");
             _logger.Info("AudioLocker is now running on startup");
         }
         else
@@ -71,7 +71,7 @@ public class AudioLockerTrayApp : ApplicationContext
             return false;
         }
 
-        var successfullyStartedWithUAC = _uacHelper.StartProcessWithUACRights(EXECTUABLE_PATH, runOnStartup.ToString());
+        var successfullyStartedWithUAC = _uacHelper.StartProcessWithUACRights(EXECTUABLE_PATH, $"--settingsFilePath=\"{_settingsFile}\" --startOnStartup=\"{runOnStartup}\"");
         if (successfullyStartedWithUAC)
         {
             Exit();

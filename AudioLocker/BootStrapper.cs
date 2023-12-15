@@ -3,6 +3,8 @@ using AudioLocker.BL.Configuration;
 using AudioLocker.BL.Loggers;
 using AudioLocker.Core.Configuration.Abstract;
 using AudioLocker.Core.Loggers.Abstract;
+using AudioLocker.StartupArguments;
+using t_StartupArguments = AudioLocker.StartupArguments.StartupArguments;
 using log4net;
 using log4net.Config;
 using NAudio.CoreAudioApi;
@@ -16,35 +18,38 @@ namespace AudioLocker;
 
 internal class BootStrapper
 {
-    private readonly string CONFIGURATION_STORAGE_FILE_PATH = "settings.json";
     private readonly string LOGGER_NAME = "Logger";
-    private readonly int DEFAULT_VOLUME_LEVEL = 10;
 
     public void Run(string[] args)
     {
         var logger = GetLogger();
+        var arguments = ParseArguments(logger, args);
 
-        var thread = new Thread(async () => await InitializeAudioLoop(logger))
-        {
-            IsBackground = true
-        };
+        var thread = new Thread(async () => {
+            await InitializeAudioLoop(logger, arguments);
+        }) { IsBackground = true };
 
         thread.SetApartmentState(ApartmentState.MTA);
         thread.Start();
 
-        InitializeTrayApp(logger, args);
+        InitializeTrayApp(logger, arguments);
     }
 
-    private async Task InitializeAudioLoop(ILogger logger)
+    private t_StartupArguments ParseArguments(ILogger logger, string[] args)
     {
-        var storage = new JsonFileConfigurationStorage(CONFIGURATION_STORAGE_FILE_PATH, DEFAULT_VOLUME_LEVEL);
+        return CommandLineStartupArguments.Parse(logger, args);
+    }
+
+    private async Task InitializeAudioLoop(ILogger logger, t_StartupArguments arguments)
+    {
+        var storage = new JsonFileConfigurationStorage(arguments.SettingsFilePath, arguments.DefaultVolumeLevel);
 
         await storage.Prepare();
 
         var enumerator = new MMDeviceEnumerator();
         foreach (var device in enumerator.EnumerateAudioEndPoints(DataFlow.Render, DeviceState.Active))
         {
-            SetupMMDevice(device, logger, storage);
+            SetupMMDevice(logger, storage, device);
 
             device.AudioSessionManager.OnSessionCreated += (object _, IAudioSessionControl iSession) =>
             {
@@ -64,13 +69,13 @@ internal class BootStrapper
         };
     }
 
-    private void InitializeTrayApp(ILogger logger, string[] args)
+    private void InitializeTrayApp(ILogger logger, t_StartupArguments arguments)
     {
-        var trayApp = new AudioLockerTrayApp(logger, CONFIGURATION_STORAGE_FILE_PATH);
+        var trayApp = new AudioLockerTrayApp(logger, arguments.SettingsFilePath);
 
-        if (args.Length > 0 && bool.TryParse(args[0], out bool runOnStartup))
+        if (arguments.StartOnStartup is not null)
         {
-            var shouldContinueOwnInitialization = trayApp.InitializeRunOnStartup(runOnStartup);
+            var shouldContinueOwnInitialization = trayApp.InitializeRunOnStartup((bool)arguments.StartOnStartup);
             if (!shouldContinueOwnInitialization)
             {
                 return;
@@ -125,7 +130,7 @@ internal class BootStrapper
         storage.Save();
     }
 
-    private void SetupMMDevice(MMDevice device, ILogger logger, IConfigurationStorage storage)
+    private void SetupMMDevice(ILogger logger, IConfigurationStorage storage, MMDevice device)
     {
         var deviceName = device.FriendlyName;
 
