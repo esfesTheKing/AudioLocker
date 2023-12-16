@@ -106,7 +106,7 @@ public class JsonFileConfigurationStorage : FileConfigurationBase
 
         using var stream = new FileStream(_filePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
 
-        _processConfigurations = await ReadFileHandleExceptions(stream);  
+        _processConfigurations = await ReadFileHandleExceptions(stream);
     }
 
     protected override async Task WriteToFile<T>(T processConfiguration)

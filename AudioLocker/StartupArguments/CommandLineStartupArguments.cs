@@ -31,9 +31,9 @@ internal class CommandLineStartupArguments
 
         var startupArguments = new StartupArguments
         {
-            SettingsFilePath=commandLineStartupArgument.SettingsFilePath,
-            StartOnStartup=commandLineStartupArgument.StartOnStartup,
-            DefaultVolumeLevel=commandLineStartupArgument.DefaultVolumeLevel,
+            SettingsFilePath = commandLineStartupArgument.SettingsFilePath,
+            StartOnStartup = commandLineStartupArgument.StartOnStartup,
+            DefaultVolumeLevel = commandLineStartupArgument.DefaultVolumeLevel,
         };
 
         return startupArguments;

@@ -4,13 +4,13 @@ using AudioLocker.BL.Loggers;
 using AudioLocker.Core.Configuration.Abstract;
 using AudioLocker.Core.Loggers.Abstract;
 using AudioLocker.StartupArguments;
-using t_StartupArguments = AudioLocker.StartupArguments.StartupArguments;
 using log4net;
 using log4net.Config;
 using NAudio.CoreAudioApi;
 using NAudio.CoreAudioApi.Interfaces;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
+using t_StartupArguments = AudioLocker.StartupArguments.StartupArguments;
 
 [assembly: XmlConfigurator(Watch = true, ConfigFile = "./App.config")]
 
@@ -19,16 +19,16 @@ namespace AudioLocker;
 internal class BootStrapper
 {
     private readonly string LOGGER_NAME = "Logger";
+    private const uint DEVICE_INVALIDATED_ERORR = 0x88890004;
 
     public void Run(string[] args)
     {
         var logger = GetLogger();
         var arguments = ParseArguments(logger, args);
 
-        var thread = new Thread(async () => {
-            await InitializeAudioLoop(logger, arguments);
-        }) { IsBackground = true };
+        var thread = new Thread(async () => await InitializeAudioLoop(logger, arguments));
 
+        thread.IsBackground = true;
         thread.SetApartmentState(ApartmentState.MTA);
         thread.Start();
 
@@ -114,7 +114,7 @@ internal class BootStrapper
         catch (COMException e)
         {
             var statusCode = unchecked((uint)e.ErrorCode);
-            if (statusCode == 0x88890004)
+            if (statusCode == DEVICE_INVALIDATED_ERORR)
             {
                 return;
             }
