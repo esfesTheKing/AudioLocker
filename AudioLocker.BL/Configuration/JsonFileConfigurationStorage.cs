@@ -1,4 +1,5 @@
 ﻿using AudioLocker.Common.DataTypes;
+using AudioLocker.Common.Extenstions;
 using AudioLocker.Core.ConfigurationStorage.Abstract;
 using System.Collections.Immutable;
 using System.Text;
@@ -14,6 +15,8 @@ public class JsonFileConfigurationStorage : FileConfigurationBase
 
     private Dictionary<string, ProcessConfigurationCollection> _processConfigurations;
     private readonly int _defaultVolumeLevel;
+
+    private readonly SemaphoreSlim _write_semaphore = new(1, 1);
 
     public JsonFileConfigurationStorage(string filePath, int defaultVolumeLevel)
         : base(filePath)
@@ -115,7 +118,11 @@ public class JsonFileConfigurationStorage : FileConfigurationBase
         using var streamWriter = new StreamWriter(stream, Encoding.UTF8);
 
         var data = JsonSerializer.Serialize(processConfiguration, _options);
-        await streamWriter.WriteAsync(data);
+
+        await _write_semaphore.LockAsync(async () =>
+        {
+            await streamWriter.WriteAsync(data);
+        });
     }
 
     public override async Task Prepare()

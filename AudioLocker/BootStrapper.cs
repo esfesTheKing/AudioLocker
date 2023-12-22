@@ -126,7 +126,6 @@ internal class BootStrapper
         var deviceName = device.FriendlyName;
         ConfigureSession(logger, storage, session, deviceName);
 
-        // Note: This is a potential race condition, needs further testing
         storage.Save();
     }
 
