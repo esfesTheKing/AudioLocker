@@ -10,6 +10,8 @@ using NAudio.CoreAudioApi;
 using NAudio.CoreAudioApi.Interfaces;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
+using System.Security.Cryptography;
+using System.Text;
 using t_StartupArguments = AudioLocker.StartupArguments.StartupArguments;
 
 [assembly: XmlConfigurator(Watch = true, ConfigFile = "./App.config")]
@@ -114,12 +116,11 @@ internal class BootStrapper
         catch (COMException e)
         {
             var statusCode = unchecked((uint)e.ErrorCode);
-            if (statusCode == DEVICE_INVALIDATED_ERORR)
+            if (statusCode != DEVICE_INVALIDATED_ERORR)
             {
-                return;
+                logger.Warning("Unknown error has accord while trying to configure new session: ", e);
             }
-
-            logger.Warning("Unknown error has accord while trying to configure new session: ", e);
+            
             return;
         }
 
@@ -134,7 +135,6 @@ internal class BootStrapper
         var deviceName = device.FriendlyName;
 
         var sessions = device.AudioSessionManager.Sessions;
-        var registeredSessions = new List<uint>();
 
         for (int i = 0; i < sessions.Count; ++i)
         {
@@ -144,13 +144,7 @@ internal class BootStrapper
                 continue;
             }
 
-            if (registeredSessions.Contains(session.GetProcessID))
-            {
-                continue;
-            }
-
             ConfigureSession(logger, storage, session, deviceName);
-            registeredSessions.Add(session.GetProcessID);
         }
     }
 
