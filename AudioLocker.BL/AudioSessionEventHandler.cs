@@ -1,13 +1,17 @@
 ﻿using AudioLocker.Core.Configuration.Abstract;
 using AudioLocker.Core.Loggers.Abstract;
+using log4net.Repository.Hierarchy;
 using NAudio.CoreAudioApi;
 using NAudio.CoreAudioApi.Interfaces;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 
 namespace AudioLocker.BL;
 
 public class AudioSessionEventHandler : IAudioSessionEventsHandler
 {
+    private const uint DEVICE_INVALIDATED_ERORR = 0x88890004;
+
     private readonly ILogger _logger;
     private readonly IConfigurationStorage _configurationStorage;
     private readonly AudioSessionControl _session;
@@ -52,6 +56,11 @@ public class AudioSessionEventHandler : IAudioSessionEventsHandler
 
     public void OnVolumeChanged(float volume, bool isMuted)
     {
+        HandleSessionAccessExceptions(() => OnVolumeChangedImplementation(volume));
+    }
+
+    private void OnVolumeChangedImplementation(float volume)
+    {
         var configuration = _configurationStorage.Get(_deviceName, _processName);
         if (configuration is null)
         {
@@ -91,5 +100,24 @@ public class AudioSessionEventHandler : IAudioSessionEventsHandler
 
     public void OnIconPathChanged(string iconPath)
     {
+    }
+    private void HandleSessionAccessExceptions(Action function)
+    {
+        try
+        {
+            function.Invoke();
+        }
+        catch (COMException e)
+        {
+            var statusCode = unchecked((uint)e.ErrorCode);
+            if (statusCode != DEVICE_INVALIDATED_ERORR)
+            {
+                _logger.Warning($"Unknown error encountered: {_deviceName} - {_processName} - {statusCode}", e);
+            }
+
+            _logger.Info($"Unergistering event handler for {_deviceName} - {_processName}");
+
+            _session.UnRegisterEventClient(this);
+        }
     }
 }
