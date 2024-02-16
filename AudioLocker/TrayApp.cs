@@ -25,7 +25,7 @@ public class AudioLockerTrayApp : ApplicationContext
 
         _trayIcon = new NotifyIcon()
         {
-            Icon = Properties.Resources.ApplicationIcon,
+            Icon = Properties.Resources.ApplicationBorderIcon,
             ContextMenuStrip = new ContextMenuStrip()
             {
                 Items = {

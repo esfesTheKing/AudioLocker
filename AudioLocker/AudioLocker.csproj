@@ -7,11 +7,11 @@
     <UseWindowsForms>true</UseWindowsForms>
     <ImplicitUsings>enable</ImplicitUsings>
     <PackageIcon>Application.png</PackageIcon>
-    <ApplicationIcon>Assets\Application.ico</ApplicationIcon>
+    <ApplicationIcon>Assets\Application Border.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Include="Assets\Application.ico" />
+    <Content Include="Assets\Application Border.ico" />
   </ItemGroup>
 
   <ItemGroup>
@@ -64,6 +64,10 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Resources\" />
   </ItemGroup>
 
 </Project>

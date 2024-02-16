@@ -11,7 +11,7 @@
                 await task();
             }
             finally
-            { 
+            {
                 semaphoreSlim.Release();
             }
         }
