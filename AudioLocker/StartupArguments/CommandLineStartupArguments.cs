@@ -5,7 +5,7 @@ namespace AudioLocker.StartupArguments;
 
 internal class CommandLineStartupArguments
 {
-    [Option("settingsFilePath", Required = false, Default = "settings.json")]
+    [Option('s', "settingsFilePath", Required = false, Default = "settings.json")]
     public string SettingsFilePath { get; set; }
 
     [Option("startOnStartup", Required = false, Default = null)]
