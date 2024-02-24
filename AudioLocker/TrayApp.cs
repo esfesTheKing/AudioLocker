@@ -41,7 +41,7 @@ public class AudioLockerTrayApp : ApplicationContext
         };
     }
 
-    private void SetRegistryValue(bool value)
+    private void SetRegistryValue(bool addRegistryKey)
     {
         RegistryKey? registryKey = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Run", true);
         if (registryKey is null)
@@ -50,16 +50,15 @@ public class AudioLockerTrayApp : ApplicationContext
             return;
         }
 
-        if (value)
+        if (addRegistryKey)
         {
-            registryKey.SetValue(REGISTRY_KEY_NAME, $"{Application.ExecutablePath} --settingsFilePath=\"{_settingsFile}\"");
+            registryKey.SetValue(REGISTRY_KEY_NAME, $"\"{EXECTUABLE_PATH}\" -s=\"{_settingsFile}\"");
             _logger.Info("AudioLocker is now running on startup");
+            return;
         }
-        else
-        {
-            registryKey.DeleteValue(REGISTRY_KEY_NAME, false);
-            _logger.Info("AudioLocker is now not running on startup");
-        }
+
+        registryKey.DeleteValue(REGISTRY_KEY_NAME, false);
+        _logger.Info("AudioLocker is now not running on startup");
     }
 
     private bool SetRunOnStartup(bool runOnStartup)
@@ -71,7 +70,7 @@ public class AudioLockerTrayApp : ApplicationContext
             return false;
         }
 
-        var successfullyStartedWithUAC = _uacHelper.StartProcessWithUACRights(EXECTUABLE_PATH, $"--settingsFilePath=\"{_settingsFile}\" --startOnStartup=\"{runOnStartup}\"");
+        var successfullyStartedWithUAC = _uacHelper.StartProcessWithUACRights(EXECTUABLE_PATH, $"-s=\"{_settingsFile}\" --startOnStartup=\"{runOnStartup}\"");
         if (successfullyStartedWithUAC)
         {
             Exit();

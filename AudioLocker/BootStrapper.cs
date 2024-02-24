@@ -10,8 +10,6 @@ using NAudio.CoreAudioApi;
 using NAudio.CoreAudioApi.Interfaces;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
-using System.Security.Cryptography;
-using System.Text;
 using t_StartupArguments = AudioLocker.StartupArguments.StartupArguments;
 
 [assembly: XmlConfigurator(Watch = true, ConfigFile = "./App.config")]
@@ -29,9 +27,9 @@ internal class BootStrapper
         var arguments = ParseArguments(logger, args);
 
         var thread = new Thread(async () => await InitializeAudioLoop(logger, arguments));
-
         thread.IsBackground = true;
         thread.SetApartmentState(ApartmentState.MTA);
+
         thread.Start();
 
         InitializeTrayApp(logger, arguments);
@@ -75,13 +73,9 @@ internal class BootStrapper
     {
         var trayApp = new AudioLockerTrayApp(logger, arguments.SettingsFilePath);
 
-        if (arguments.StartOnStartup is not null)
+        if (arguments.StartOnStartup is not null && !trayApp.InitializeRunOnStartup((bool)arguments.StartOnStartup))
         {
-            var shouldContinueOwnInitialization = trayApp.InitializeRunOnStartup((bool)arguments.StartOnStartup);
-            if (!shouldContinueOwnInitialization)
-            {
-                return;
-            }
+            return;
         }
 
         AppDomain.CurrentDomain.UnhandledException += (object _, UnhandledExceptionEventArgs e) =>
@@ -120,7 +114,7 @@ internal class BootStrapper
             {
                 logger.Warning("Unknown error has accord while trying to configure new session: ", e);
             }
-            
+
             return;
         }
 
