@@ -1,6 +1,5 @@
 ﻿using AudioLocker.Core.Configuration.Abstract;
 using AudioLocker.Core.Loggers.Abstract;
-using log4net.Repository.Hierarchy;
 using NAudio.CoreAudioApi;
 using NAudio.CoreAudioApi.Interfaces;
 using System.Runtime.CompilerServices;
@@ -51,7 +50,7 @@ public class AudioSessionEventHandler : IAudioSessionEventsHandler
 
     private void OnConfigurationChanged()
     {
-        OnVolumeChanged(_session.SimpleAudioVolume.Volume, _session.SimpleAudioVolume.Mute);
+        HandleSessionAccessExceptions(() => OnVolumeChangedImplementation(_session.SimpleAudioVolume.Volume));
     }
 
     public void OnVolumeChanged(float volume, bool isMuted)
