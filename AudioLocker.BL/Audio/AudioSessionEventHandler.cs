@@ -33,12 +33,12 @@ public class AudioSessionEventHandler : IAudioSessionEventsHandler
         _configurationStorage.OnConfigurationChanged += OnConfigurationChanged;
 
         _comExceptionHandler = new COMExceptionHandler(
-            () => { },
-            exception =>
+            onKnownException: () => { },
+            onUnknownException: exception =>
             {
                 _logger.Warning($"Unknown error encountered: {_deviceName} - {_processName}", exception);
             },
-            () =>
+            onCleanup: () =>
             {
                 _logger.Info($"Unergistering event handler for {_deviceName} - {_processName}");
 

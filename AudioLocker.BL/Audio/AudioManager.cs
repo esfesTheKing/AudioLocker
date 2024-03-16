@@ -20,12 +20,12 @@ public class AudioManager
         _storage = storage;
 
         _comExceptionHandler = new COMExceptionHandler(
-            () => { },
-            exception =>
+            onKnownException: () => { },
+            onUnknownException: exception =>
             {
                 _logger.Warning("Unknown error has accord while trying to configure new session: ", exception);
             },
-            () => { }
+            onCleanup: () => { }
         );
     }
 
