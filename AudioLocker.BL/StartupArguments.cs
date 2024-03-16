@@ -1,6 +1,6 @@
-﻿namespace AudioLocker.StartupArguments;
+﻿namespace AudioLocker.BL;
 
-internal class StartupArguments
+public class StartupArguments
 {
     public string SettingsFilePath { get; set; }
 

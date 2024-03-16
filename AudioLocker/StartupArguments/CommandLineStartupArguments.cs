@@ -14,7 +14,7 @@ internal class CommandLineStartupArguments
     [Option("defaultVolumeLevel", Required = false, Default = 10)]
     public int DefaultVolumeLevel { get; set; }
 
-    public static StartupArguments Parse(ILogger logger, string[] args)
+    public static BL.StartupArguments Parse(ILogger logger, string[] args)
     {
         var parserResult = Parser.Default.ParseArguments<CommandLineStartupArguments>(args);
 
@@ -29,7 +29,7 @@ internal class CommandLineStartupArguments
 
         var commandLineStartupArgument = parserResult.Value;
 
-        var startupArguments = new StartupArguments
+        var startupArguments = new BL.StartupArguments
         {
             SettingsFilePath = commandLineStartupArgument.SettingsFilePath,
             StartOnStartup = commandLineStartupArgument.StartOnStartup,

@@ -4,18 +4,15 @@
     <OutputType>WinExe</OutputType>
     <TargetFramework>net7.0-windows</TargetFramework>
     <Nullable>enable</Nullable>
-    <UseWindowsForms>true</UseWindowsForms>
+    <UseWindowsForms>True</UseWindowsForms>
     <ImplicitUsings>enable</ImplicitUsings>
     <PackageIcon>Application.png</PackageIcon>
     <ApplicationIcon>Assets\Application Border.ico</ApplicationIcon>
+    <UseWPF>False</UseWPF>
   </PropertyGroup>
 
   <ItemGroup>
     <Content Include="Assets\Application Border.ico" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Include="StartupArguments\StartupArguments.cs" />
   </ItemGroup>
 
   <ItemGroup>

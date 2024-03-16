@@ -1,4 +1,4 @@
-﻿using AudioLocker.BL;
+﻿using AudioLocker.BL.Audio;
 using AudioLocker.BL.Configuration;
 using AudioLocker.BL.Loggers;
 using AudioLocker.Core.Configuration.Abstract;
@@ -7,10 +7,7 @@ using AudioLocker.StartupArguments;
 using log4net;
 using log4net.Config;
 using NAudio.CoreAudioApi;
-using NAudio.CoreAudioApi.Interfaces;
-using System.Diagnostics;
-using System.Runtime.InteropServices;
-using t_StartupArguments = AudioLocker.StartupArguments.StartupArguments;
+using t_StartupArguments = AudioLocker.BL.StartupArguments;
 
 [assembly: XmlConfigurator(Watch = true, ConfigFile = "./App.config")]
 
@@ -19,14 +16,13 @@ namespace AudioLocker;
 internal class BootStrapper
 {
     private readonly string LOGGER_NAME = "Logger";
-    private const uint DEVICE_INVALIDATED_ERORR = 0x88890004;
 
     public void Run(string[] args)
     {
         var logger = GetLogger();
         var arguments = ParseArguments(logger, args);
 
-        var thread = new Thread(async () => await InitializeAudioLoop(logger, arguments));
+        var thread = new Thread(async () => await InitializeAudioSetup(logger, arguments));
         thread.IsBackground = true;
         thread.SetApartmentState(ApartmentState.MTA);
 
@@ -35,38 +31,25 @@ internal class BootStrapper
         InitializeTrayApp(logger, arguments);
     }
 
-    private t_StartupArguments ParseArguments(ILogger logger, string[] args)
+    private async Task InitializeAudioSetup(ILogger logger, t_StartupArguments arguments)
     {
-        return CommandLineStartupArguments.Parse(logger, args);
-    }
-
-    private async Task InitializeAudioLoop(ILogger logger, t_StartupArguments arguments)
-    {
-        var storage = new JsonFileConfigurationStorage(arguments.SettingsFilePath, arguments.DefaultVolumeLevel);
+        var storage = GetStorage(arguments);
 
         await storage.Prepare();
 
         var enumerator = new MMDeviceEnumerator();
-        foreach (var device in enumerator.EnumerateAudioEndPoints(DataFlow.Render, DeviceState.Active))
-        {
-            SetupMMDevice(logger, storage, device);
+        var audioManager = new AudioManager(logger, storage, enumerator);
 
-            device.AudioSessionManager.OnSessionCreated += (object _, IAudioSessionControl iSession) =>
-            {
-                var session = new AudioSessionControl(iSession);
+        var notificationClient = new MMNotificationClient(logger, enumerator, audioManager);
 
-                OnSessionCreated(logger, storage, device, session);
-            };
+        enumerator.RegisterEndpointNotificationCallback(notificationClient);
 
-            await storage.Save();
-        }
+        await audioManager.Initialize();
+    }
 
-        TaskScheduler.UnobservedTaskException += (object? _, UnobservedTaskExceptionEventArgs e) =>
-        {
-            var exception = e.Exception as Exception;
-            logger.Fatal("Unknown exception has caused the app to crash!", exception);
-            e.SetObserved();
-        };
+    private t_StartupArguments ParseArguments(ILogger logger, string[] args)
+    {
+        return CommandLineStartupArguments.Parse(logger, args);
     }
 
     private void InitializeTrayApp(ILogger logger, t_StartupArguments arguments)
@@ -86,8 +69,8 @@ internal class BootStrapper
 
         TaskScheduler.UnobservedTaskException += (object? _, UnobservedTaskExceptionEventArgs e) =>
         {
-            var exception = e.Exception as Exception;
-            logger.Fatal("Unknown exception has caused the app to crash!", exception);
+            logger.Fatal("Unknown exception has caused the app to crash!", e.Exception);
+
             e.SetObserved();
         };
 
@@ -100,61 +83,10 @@ internal class BootStrapper
         return new Log4NetLogger(log);
     }
 
-    private void OnSessionCreated(ILogger logger, IConfigurationStorage storage, MMDevice device, AudioSessionControl session)
+    private IConfigurationStorage GetStorage(t_StartupArguments arguments)
     {
-        uint pid;
-        try
-        {
-            pid = session.GetProcessID;
-        }
-        catch (COMException e)
-        {
-            var statusCode = unchecked((uint)e.ErrorCode);
-            if (statusCode != DEVICE_INVALIDATED_ERORR)
-            {
-                logger.Warning("Unknown error has accord while trying to configure new session: ", e);
-            }
+        var storage = new JsonFileConfigurationStorage(arguments.SettingsFilePath, arguments.DefaultVolumeLevel);
 
-            return;
-        }
-
-        var deviceName = device.FriendlyName;
-        ConfigureSession(logger, storage, session, deviceName);
-
-        storage.Save();
-    }
-
-    private void SetupMMDevice(ILogger logger, IConfigurationStorage storage, MMDevice device)
-    {
-        var deviceName = device.FriendlyName;
-
-        var sessions = device.AudioSessionManager.Sessions;
-
-        for (int i = 0; i < sessions.Count; ++i)
-        {
-            var session = sessions[i];
-            if (session == null)
-            {
-                continue;
-            }
-
-            ConfigureSession(logger, storage, session, deviceName);
-        }
-    }
-
-    private static void ConfigureSession(ILogger logger, IConfigurationStorage storage, AudioSessionControl session, string deviceName)
-    {
-        var process = Process.GetProcessById((int)session.GetProcessID);
-        var processName = process.ProcessName;
-
-        storage.Register(deviceName, processName);
-
-        var audioSessionEventHandler = new AudioSessionEventHandler(logger, storage, session, deviceName, processName);
-
-        var simpleAudioVolumeInterface = session.SimpleAudioVolume;
-        audioSessionEventHandler.OnVolumeChanged(simpleAudioVolumeInterface.Volume, simpleAudioVolumeInterface.Mute);
-
-        session.RegisterEventClient(audioSessionEventHandler);
-        logger.Info($"New session was configured: {processName}");
+        return storage;
     }
 }
