@@ -6,7 +6,9 @@ using AudioLocker.Core.Loggers.Abstract;
 using AudioLocker.StartupArguments;
 using log4net;
 using log4net.Config;
+using log4net.Repository.Hierarchy;
 using NAudio.CoreAudioApi;
+using System;
 using t_StartupArguments = AudioLocker.BL.StartupArguments;
 
 [assembly: XmlConfigurator(Watch = true, ConfigFile = "./App.config")]
@@ -52,27 +54,32 @@ internal class BootStrapper
         return CommandLineStartupArguments.Parse(logger, args);
     }
 
+    private void InitializeLoggingOfUnhandledExcpetions(ILogger logger)
+    {
+        AppDomain.CurrentDomain.UnhandledException += (object _, UnhandledExceptionEventArgs @event) =>
+        {
+            var exception = (Exception)@event.ExceptionObject;
+            logger.Fatal("Unknown exception has caused the app to crash!", exception);
+        };
+
+        Application.ThreadException += (object _, ThreadExceptionEventArgs @event) =>
+        {
+            logger.Fatal("Unknown exception has caused the app to crash!", @event.Exception);
+        };
+
+        Application.SetUnhandledExceptionMode(UnhandledExceptionMode.CatchException);
+    }
+
     private void InitializeTrayApp(ILogger logger, t_StartupArguments arguments)
     {
+        InitializeLoggingOfUnhandledExcpetions(logger);
+
         var trayApp = new AudioLockerTrayApp(logger, arguments.SettingsFilePath);
 
         if (arguments.StartOnStartup is not null && !trayApp.InitializeRunOnStartup((bool)arguments.StartOnStartup))
         {
             return;
         }
-
-        AppDomain.CurrentDomain.UnhandledException += (object _, UnhandledExceptionEventArgs e) =>
-        {
-            var exception = e.ExceptionObject as Exception;
-            logger.Fatal("Unknown exception has caused the app to crash!", exception);
-        };
-
-        TaskScheduler.UnobservedTaskException += (object? _, UnobservedTaskExceptionEventArgs e) =>
-        {
-            logger.Fatal("Unknown exception has caused the app to crash!", e.Exception);
-
-            e.SetObserved();
-        };
 
         Application.Run(trayApp);
     }
