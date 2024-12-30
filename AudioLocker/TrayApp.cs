@@ -70,7 +70,7 @@ public class AudioLockerTrayApp : ApplicationContext
             return false;
         }
 
-        var successfullyStartedWithUAC = _uacHelper.StartProcessWithUACRights(EXECTUABLE_PATH, $"-s=\"{_settingsFile}\" --startOnStartup=\"{runOnStartup}\"");
+        var successfullyStartedWithUAC = _uacHelper.StartProcessWithUACRights(EXECTUABLE_PATH, "-s", _settingsFile, "--startOnStartup", runOnStartup.ToString());
         if (successfullyStartedWithUAC)
         {
             Exit();
