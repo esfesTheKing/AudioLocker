@@ -40,8 +40,6 @@ public class AudioSessionEventHandler : IAudioSessionEventsHandler
             },
             onCleanup: () =>
             {
-                _logger.Info($"Unergistering event handler for {_deviceName} - {_processName}");
-
                 Dispose();
             }
         );
@@ -117,7 +115,10 @@ public class AudioSessionEventHandler : IAudioSessionEventsHandler
 
     private Task Dispose()
     {
+        _logger.Info($"Unergistering event handler for {_deviceName} - {_processName}");
+
         _configurationStorage.OnConfigurationChanged -= OnConfigurationChanged;
+
         return Task.Run(_session.Dispose);
     }
 }

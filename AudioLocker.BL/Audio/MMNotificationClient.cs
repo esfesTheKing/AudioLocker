@@ -30,7 +30,7 @@ public class MMNotificationClient : IMMNotificationClient
         {
             _logger.Info($"Device's state was set to active: {device.FriendlyName}");
 
-            //_audioManager.SetupMMDevice(device).Wait();
+            OnDeviceAdded(deviceId);
         }
     }
 
