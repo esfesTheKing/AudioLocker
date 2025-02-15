@@ -98,7 +98,7 @@ public class AudioLockerTrayApp : ApplicationContext
     private void OnOpenLogsFolder(object? sender, EventArgs e)
     {
         var appdataPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-        var logsDirectory = Path.Combine(appdataPath, "AudioLocker/logs");
+        var logsDirectory = Path.Combine(appdataPath, "AudioLocker", "logs");
 
         var startInfo = new ProcessStartInfo
         {
