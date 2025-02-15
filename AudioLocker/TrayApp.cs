@@ -97,14 +97,18 @@ public class AudioLockerTrayApp : ApplicationContext
 
     private void OnOpenLogsFolder(object? sender, EventArgs e)
     {
+        var appdataPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+        var logsDirectory = Path.Combine(appdataPath, "AudioLocker/logs");
+
         var startInfo = new ProcessStartInfo
         {
-            FileName = "cmd.exe",
-            Arguments = "/C start %APPDATA%/AudioLocker/logs",
+            FileName = logsDirectory,
             UseShellExecute = true
         };
 
         Process.Start(startInfo);
+
+        _logger.Info($"Opening logs directory: {logsDirectory}");
     }
 
     private void OnExit(object? sender, EventArgs e)
