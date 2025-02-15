@@ -6,9 +6,7 @@ using AudioLocker.Core.Loggers.Abstract;
 using AudioLocker.StartupArguments;
 using log4net;
 using log4net.Config;
-using log4net.Repository.Hierarchy;
 using NAudio.CoreAudioApi;
-using System;
 using t_StartupArguments = AudioLocker.BL.StartupArguments;
 
 [assembly: XmlConfigurator(Watch = true, ConfigFile = "./App.config")]
