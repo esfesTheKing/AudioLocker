@@ -20,6 +20,14 @@ internal class BootStrapper
     public void Run(string[] args)
     {
         var logger = GetLogger();
+
+        using var mutext = new Mutex(true, "AudioLocker", out bool createdNew);
+        if (!createdNew)
+        {
+            logger.Error("Another instance of this app is already running.");
+            return;
+        }
+
         var arguments = ParseArguments(logger, args);
 
         var thread = new Thread(async () => await InitializeAudioSetup(logger, arguments));
@@ -70,6 +78,9 @@ internal class BootStrapper
 
     private void InitializeTrayApp(ILogger logger, t_StartupArguments arguments)
     {
+        Application.SetUnhandledExceptionMode(UnhandledExceptionMode.CatchException);
+        ApplicationConfiguration.Initialize();
+
         InitializeLoggingOfUnhandledExcpetions(logger);
 
         var trayApp = new AudioLockerTrayApp(logger, arguments.SettingsFilePath);
