@@ -85,9 +85,9 @@ internal class BootStrapper
 
         var trayApp = new AudioLockerTrayApp(logger, arguments.SettingsFilePath);
 
-        if (arguments.StartOnStartup is not null && !trayApp.InitializeRunOnStartup((bool)arguments.StartOnStartup))
+        if (arguments.StartOnStartup is not null)
         {
-            return;
+            trayApp.SetRunOnStartup((bool)arguments.StartOnStartup);
         }
 
         Application.Run(trayApp);
@@ -96,6 +96,7 @@ internal class BootStrapper
     private ILogger GetLogger()
     {
         var log = LogManager.GetLogger(LOGGER_NAME);
+
         return new Log4NetLogger(log);
     }
 

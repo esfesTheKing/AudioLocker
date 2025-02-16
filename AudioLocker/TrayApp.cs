@@ -1,4 +1,3 @@
-using AudioLocker.BL.Helpers;
 using AudioLocker.Core.Loggers.Abstract;
 using Microsoft.Win32;
 using System.Diagnostics;
@@ -14,14 +13,11 @@ public class AudioLockerTrayApp : ApplicationContext
     private readonly string _settingsFile;
 
     private readonly NotifyIcon _trayIcon;
-    private readonly UAC _uacHelper;
 
     public AudioLockerTrayApp(ILogger logger, string settingsFile)
     {
         _logger = logger;
         _settingsFile = settingsFile;
-
-        _uacHelper = new UAC(logger);
 
         _trayIcon = new NotifyIcon()
         {
@@ -41,7 +37,7 @@ public class AudioLockerTrayApp : ApplicationContext
         };
     }
 
-    private void SetRegistryValue(bool addRegistryKey)
+    public void SetRunOnStartup(bool addRegistryKey)
     {
         RegistryKey? registryKey = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Run", true);
         if (registryKey is null)
@@ -59,29 +55,6 @@ public class AudioLockerTrayApp : ApplicationContext
 
         registryKey.DeleteValue(REGISTRY_KEY_NAME, false);
         _logger.Info("AudioLocker is now not running on startup");
-    }
-
-    private bool SetRunOnStartup(bool runOnStartup)
-    {
-        var adminPrivilegesAvailable = _uacHelper.AreAdminPrivilegesAvailable();
-        if (adminPrivilegesAvailable)
-        {
-            SetRegistryValue(runOnStartup);
-            return false;
-        }
-
-        var successfullyStartedWithUAC = _uacHelper.StartProcessWithUACRights(EXECTUABLE_PATH, "-s", _settingsFile, "--startOnStartup", runOnStartup.ToString());
-        if (successfullyStartedWithUAC)
-        {
-            Exit();
-        }
-
-        return successfullyStartedWithUAC;
-    }
-
-    public bool InitializeRunOnStartup(bool runOnStartup)
-    {
-        return !SetRunOnStartup(runOnStartup);
     }
 
     private void OnOpenSettings(object? sender, EventArgs e)
