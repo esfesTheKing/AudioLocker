@@ -39,7 +39,7 @@ public class AudioLockerTrayApp : ApplicationContext
 
     public void SetRunOnStartup(bool addRegistryKey)
     {
-        RegistryKey? registryKey = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Run", true);
+        RegistryKey? registryKey = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Run", writable: true);
         if (registryKey is null)
         {
             _logger.Warning("Unable to get the run on startup registry key");
