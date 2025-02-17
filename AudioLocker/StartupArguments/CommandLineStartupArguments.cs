@@ -31,7 +31,7 @@ internal class CommandLineStartupArguments
 
         var startupArguments = new BL.StartupArguments
         {
-            SettingsFilePath = commandLineStartupArgument.SettingsFilePath,
+            SettingsFilePath = Path.GetFullPath(commandLineStartupArgument.SettingsFilePath),
             StartOnStartup = commandLineStartupArgument.StartOnStartup,
             DefaultVolumeLevel = commandLineStartupArgument.DefaultVolumeLevel,
         };

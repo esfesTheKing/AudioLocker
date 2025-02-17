@@ -48,7 +48,7 @@ public class AudioLockerTrayApp : ApplicationContext
 
         if (addRegistryKey)
         {
-            registryKey.SetValue(REGISTRY_KEY_NAME, $"\"{EXECTUABLE_PATH}\" -s=\"{_settingsFile}\"");
+            registryKey.SetValue(REGISTRY_KEY_NAME, string.Join(' ', new List<string> { EXECTUABLE_PATH, "-s", _settingsFile }));
             _logger.Info("AudioLocker is now running on startup");
             return;
         }
