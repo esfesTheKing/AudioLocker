@@ -1,6 +1,8 @@
-﻿using AudioLocker.Core.Loggers.Abstract;
-using NAudio.CoreAudioApi;
-using NAudio.CoreAudioApi.Interfaces;
+﻿using AudioLocker.Core.CoreAudioAPI.MMDeviceAPI.Enums;
+using AudioLocker.Core.CoreAudioAPI.MMDeviceAPI.Implementations;
+using AudioLocker.Core.CoreAudioAPI.MMDeviceAPI.Interfaces;
+using AudioLocker.Core.CoreAudioAPI.MMDeviceAPI.Structs;
+using AudioLocker.Core.Loggers.Abstract;
 
 namespace AudioLocker.BL.Audio;
 
@@ -36,7 +38,7 @@ public class MMNotificationClient : IMMNotificationClient
 
     private bool IsSupportedDevice(MMDevice device)
     {
-        return device.DataFlow == DataFlow.Render;
+        return device.DataFlow == EDataFlow.eRender;
     }
 
     public void OnDeviceAdded(string pwstrDeviceId)
@@ -65,7 +67,7 @@ public class MMNotificationClient : IMMNotificationClient
         Task.Run(() => _audioManager.RemoveSessionHandlers(device));
     }
 
-    public void OnDefaultDeviceChanged(DataFlow flow, Role role, string defaultDeviceId)
+    public void OnDefaultDeviceChanged(EDataFlow dataFlow, ERole role, string defaultDeviceId)
     {
     }
 
