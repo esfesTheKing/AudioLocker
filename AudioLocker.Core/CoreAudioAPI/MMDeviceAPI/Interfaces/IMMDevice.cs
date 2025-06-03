@@ -1,16 +1,16 @@
 ﻿using AudioLocker.Core.CoreAudioAPI.MMDeviceAPI.Enums;
+using Microsoft.VisualStudio.OLE.Interop;
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.Marshalling;
 
 namespace AudioLocker.Core.CoreAudioAPI.MMDeviceAPI.Interfaces;
 
 [GeneratedComInterface]
-[InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
 [Guid("D666063F-1587-4E43-81F1-B948E807363F")]
 public partial interface IMMDevice
 {
-    int Activate(ref Guid interfaceId, ClsCtx clsCtx, IntPtr activationParams, [MarshalAs(UnmanagedType.IUnknown)] out object interfacePointer);
-    int GetId([MarshalAs(UnmanagedType.LPWStr)] out string id);
-    int GetState(out DeviceState state);
-
+    void Activate(ref Guid interfaceId, ClsCtx clsCtx, PROPVARIANT activationParams, out IntPtr interfacePointer);
+    void GetId([MarshalAs(UnmanagedType.LPWStr)] out string id);
+    void GetState(out DeviceState state);
+    void OpenPropertyStore(STGM stgmAccess, IPropertyStore store);
 }

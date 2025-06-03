@@ -6,7 +6,6 @@ namespace AudioLocker.Core.CoreAudioAPI.MMDeviceAPI.Interfaces;
 
 
 [GeneratedComInterface]
-[InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
 [Guid("A95664D2-9614-4F35-A746-DE8DB63617E6")]
 public partial interface IMMDeviceEnumerator
 {
