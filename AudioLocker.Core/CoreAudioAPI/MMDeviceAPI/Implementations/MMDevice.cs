@@ -10,12 +10,15 @@ public partial class MMDevice
 {
     private readonly IMMDevice _device;
     private readonly IPropertyStore _propertyStore;
-    private readonly ISessionManager _sessionManager;
+
+    public readonly IAudioSessionManager2 AudioSessionManager;
 
     public MMDevice(IMMDevice device)
     {
         _device = device;
         _propertyStore = _device.OpenPropertyStore(STGM.Read);
+
+        AudioSessionManager = _device.Activate<IAudioSessionManager2>();
     }
 
     public string Id

@@ -1,5 +1,6 @@
 ﻿using AudioLocker.Core.CoreAudioAPI.MMDeviceAPI.Enums;
 using AudioLocker.Core.CoreAudioAPI.MMDeviceAPI.Implementations;
+using AudioLocker.Core.CoreAudioAPI.MMDeviceAPI.Interfaces;
 
 
 
@@ -14,5 +15,14 @@ foreach(var device in collection)
     Console.WriteLine(device.Id);
     Console.WriteLine(device.State);
     Console.WriteLine(device.FriendlyName);
+    var sessionEnumerator = device.AudioSessionManager.GetSessionEnumerator();
 
+    var newCollection = new AudioSessionCollection(sessionEnumerator);
+
+    foreach(var session in newCollection)
+    {
+        var newSession = (IAudioSessionControl2)session;
+        Console.WriteLine(newSession.GetDisplayName());
+        Console.WriteLine(newSession.GetProcessId());
+    }
 }
