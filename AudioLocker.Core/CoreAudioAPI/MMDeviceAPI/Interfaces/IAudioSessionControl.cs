@@ -19,8 +19,6 @@ public partial interface IAudioSessionControl
     void SetIconPath([MarshalAs(UnmanagedType.LPWStr)] string Value, ref Guid EventContext);
     Guid GetGroupingParam();
     void SetGroupingParam(ref Guid Override, ref Guid EventContext);
-    //IAudioSessionEvents
-    void RegisterAudioSessionNotification([MarshalAs(UnmanagedType.Interface)] object NewNotifications);
-    void UnregisterAudioSessionNotification([MarshalAs(UnmanagedType.Interface)] object NewNotifications);
-
+    void RegisterAudioSessionNotification(IAudioSessionEvents NewNotifications);
+    void UnregisterAudioSessionNotification(IAudioSessionEvents NewNotifications);
 }

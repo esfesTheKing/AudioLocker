@@ -36,14 +36,15 @@ public partial class MMDevice
         get => GetPropertyValue(PropertyKeys.PKEY_Device_FriendlyName);
     }
 
+    public string DeviceFriendlyName
+    {
+        get => GetPropertyValue(PropertyKeys.PKEY_DeviceInterface_FriendlyName);
+    }
+
     private string GetPropertyValue(PropertyKey key)
     {
         var value = _propertyStore.GetValue(ref key);
-        if (value.pwszVal == IntPtr.Zero)
-        {
-            return "Unknown";
-        }
 
-        return Marshal.PtrToStringAuto(value.pwszVal)!;
+        return Marshal.PtrToStringAuto(value.pwszVal) ?? "Unknown";
     }
 }

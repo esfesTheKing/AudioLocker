@@ -1,7 +1,7 @@
 ﻿using AudioLocker.Core.CoreAudioAPI.MMDeviceAPI.Enums;
 using AudioLocker.Core.CoreAudioAPI.MMDeviceAPI.Implementations;
 using AudioLocker.Core.CoreAudioAPI.MMDeviceAPI.Interfaces;
-
+using System.Diagnostics;
 
 
 Console.WriteLine("Hello, World!");
@@ -22,7 +22,7 @@ foreach(var device in collection)
     foreach(var session in newCollection)
     {
         var newSession = (IAudioSessionControl2)session;
-        Console.WriteLine(newSession.GetDisplayName());
+        Console.WriteLine(Process.GetProcessById((int)newSession.GetProcessId()).ProcessName);
         Console.WriteLine(newSession.GetProcessId());
     }
 }
