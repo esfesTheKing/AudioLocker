@@ -24,5 +24,6 @@ foreach(var device in collection)
         var newSession = (IAudioSessionControl2)session;
         Console.WriteLine(Process.GetProcessById((int)newSession.GetProcessId()).ProcessName);
         Console.WriteLine(newSession.GetProcessId());
+        Console.WriteLine(newSession.GetState());
     }
 }

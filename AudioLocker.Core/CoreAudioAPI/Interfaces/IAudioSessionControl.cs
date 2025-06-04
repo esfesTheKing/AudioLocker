@@ -1,4 +1,5 @@
-﻿using System.Runtime.InteropServices;
+﻿using AudioLocker.Core.CoreAudioAPI.Enums;
+using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.Marshalling;
 
 namespace AudioLocker.Core.CoreAudioAPI.Interfaces;
@@ -7,9 +8,7 @@ namespace AudioLocker.Core.CoreAudioAPI.Interfaces;
 [Guid("F4B1A599-7266-4319-A8CA-E70ACB11E8CD")]
 public partial interface IAudioSessionControl
 {
-    //return: AudioSessionState
-    [return: MarshalAs(UnmanagedType.Interface)]
-    object GetState();
+    AudioSessionState GetState();
     [return: MarshalAs(UnmanagedType.LPWStr)]
     string GetDisplayName();
     void SetDisplayName([MarshalAs(UnmanagedType.LPWStr)] string Value, ref Guid EventContext);
