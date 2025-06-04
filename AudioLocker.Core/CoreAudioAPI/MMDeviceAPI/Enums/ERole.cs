@@ -1,5 +1,6 @@
 ﻿namespace AudioLocker.Core.CoreAudioAPI.MMDeviceAPI.Enums;
 
+// https://learn.microsoft.com/en-us/windows/win32/api/mmdeviceapi/ne-mmdeviceapi-erole
 public enum ERole
 {
     eConsole = 0,

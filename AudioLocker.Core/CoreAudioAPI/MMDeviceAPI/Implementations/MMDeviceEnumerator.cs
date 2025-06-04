@@ -22,7 +22,7 @@ public partial class MMDeviceEnumerator
             CoCreateInstance(
                 typeof(MMDeviceEnumerator).GUID, 
                 IntPtr.Zero, 
-                (int)CLSCTX.ALL, 
+                (int)CLSCTX.CLSCTX_ALL, 
                 typeof(IMMDeviceEnumerator).GUID, 
                 out IntPtr obj
             )

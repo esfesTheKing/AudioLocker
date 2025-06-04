@@ -22,7 +22,7 @@ public static class IMMDeviceExtension
     public static T Activate<T>(this IMMDevice device)
     {
         var iid = typeof(T).GUID;
-        var obj = device.Activate(ref iid, CLSCTX.ALL, IntPtr.Zero);
+        var obj = device.Activate(ref iid, CLSCTX.CLSCTX_ALL, IntPtr.Zero);
 
         return (T)obj;
     }

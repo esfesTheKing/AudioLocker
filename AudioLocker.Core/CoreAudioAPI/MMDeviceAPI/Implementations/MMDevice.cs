@@ -16,7 +16,7 @@ public partial class MMDevice
     public MMDevice(IMMDevice device)
     {
         _device = device;
-        _propertyStore = _device.OpenPropertyStore(STGM.Read);
+        _propertyStore = _device.OpenPropertyStore(STGM.STGM_READ);
 
         AudioSessionManager = _device.Activate<IAudioSessionManager2>();
     }

@@ -7,7 +7,7 @@ using System.Diagnostics;
 Console.WriteLine("Hello, World!");
 var enumerator = new MMDeviceEnumerator();
 
-var collection = enumerator.EnumerateAudioEndPoints(EDataFlow.eRender, DeviceState.Active);
+var collection = enumerator.EnumerateAudioEndPoints(EDataFlow.eRender, DeviceState.DEVICE_STATE_ACTIVE);
 
 foreach(var device in collection)
 {

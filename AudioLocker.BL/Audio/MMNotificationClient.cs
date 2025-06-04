@@ -28,7 +28,7 @@ public class MMNotificationClient : IMMNotificationClient
             return;
         }
 
-        if (newState == DeviceState.Active)
+        if (newState == DeviceState.DEVICE_STATE_ACTIVE)
         {
             _logger.Info($"Device's state was set to active: {device.FriendlyName}");
 
