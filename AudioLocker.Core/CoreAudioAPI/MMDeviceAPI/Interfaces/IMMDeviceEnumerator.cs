@@ -9,9 +9,9 @@ namespace AudioLocker.Core.CoreAudioAPI.MMDeviceAPI.Interfaces;
 [Guid("A95664D2-9614-4F35-A746-DE8DB63617E6")]
 public partial interface IMMDeviceEnumerator
 {
-    int EnumAudioEndpoints(EDataFlow dataFlow, DeviceState stateMask, out IMMDeviceCollection deviceEnumerator);
-    int GetDefaultAudioEndpoint(EDataFlow dataFlow, ERole role, out IMMDevice device);
-    int GetDevice([MarshalAs(UnmanagedType.LPWStr)] string id, out IMMDevice device);
+    IMMDeviceCollection EnumAudioEndpoints(EDataFlow dataFlow, DeviceState stateMask);
+    IMMDevice GetDefaultAudioEndpoint(EDataFlow dataFlow, ERole role);
+    IMMDevice GetDevice([MarshalAs(UnmanagedType.LPWStr)] string id);
     int RegisterEndpointNotificationCallback(IMMNotificationClient client);
     int UnregisterEndpointNotificationCallback(IMMNotificationClient client);
 }

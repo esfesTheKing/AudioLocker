@@ -1,30 +1,46 @@
 ﻿using AudioLocker.Core.CoreAudioAPI.MMDeviceAPI.Enums;
 using AudioLocker.Core.CoreAudioAPI.MMDeviceAPI.Interfaces;
-using System.Runtime.InteropServices.Marshalling;
+using AudioLocker.Core.CoreAudioAPI.MMDeviceAPI.Structs;
+using System.Runtime.InteropServices;
+
 
 namespace AudioLocker.Core.CoreAudioAPI.MMDeviceAPI.Implementations;
 
-public partial class MMDevice(IMMDevice device)
+public partial class MMDevice
 {
-    private readonly IMMDevice _device = device;
+    private readonly IMMDevice _device;
+    private readonly IPropertyStore _propertyStore;
+    private readonly ISessionManager _sessionManager;
+
+    public MMDevice(IMMDevice device)
+    {
+        _device = device;
+        _propertyStore = _device.OpenPropertyStore(STGM.Read);
+    }
 
     public string Id
     {
-        get
-        {
-            _device.GetId(out string id);
-
-            return id;
-        }
+        get => _device.GetId();
     }
 
     public DeviceState State
     {
-        get
-        {
-            _device.GetState(out DeviceState state);
+        get => _device.GetState();
+    }
 
-            return state;
+    public string FriendlyName
+    {
+        get => GetPropertyValue(PropertyKeys.PKEY_Device_FriendlyName);
+    }
+
+    private string GetPropertyValue(PropertyKey key)
+    {
+        var value = _propertyStore.GetValue(ref key);
+        if (value.pwszVal == IntPtr.Zero)
+        {
+            return "Unknown";
         }
+
+        return Marshal.PtrToStringAuto(value.pwszVal)!;
     }
 }

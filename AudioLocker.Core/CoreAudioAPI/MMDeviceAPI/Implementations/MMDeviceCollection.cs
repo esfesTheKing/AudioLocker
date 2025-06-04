@@ -9,19 +9,14 @@ public class MMDeviceCollection(IMMDeviceCollection collection) : IEnumerable<MM
 
     public int Count
     {
-        get
-        {
-            _collection.GetCount(out int deviceCount);
-
-            return deviceCount;
-        }
+        get => _collection.GetCount();
     }
 
     public MMDevice this[int index]
     {
         get
         {
-            _collection.Item(index, out IMMDevice device);
+            IMMDevice device = _collection.Item(index);
 
             return new MMDevice(device);
         }

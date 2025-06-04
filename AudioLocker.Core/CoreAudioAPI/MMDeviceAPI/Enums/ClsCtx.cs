@@ -1,6 +1,6 @@
 ﻿namespace AudioLocker.Core.CoreAudioAPI.MMDeviceAPI.Enums;
 
-public enum ClsCtx
+public enum CLSCTX
 {
     INPROC_SERVER = 0x1,
     INPROC_HANDLER = 0x2,
@@ -28,5 +28,6 @@ public enum ClsCtx
     ACTIVATE_AAA_AS_IU = 0x800000,
     RESERVED6 = 0x1000000,
     ACTIVATE_ARM32_SERVER = 0x2000000,
+    ALL = INPROC_SERVER | INPROC_HANDLER | LOCAL_SERVER | REMOTE_SERVER,
     ALLOW_LOWER_TRUST_REGISTRATION,
 }

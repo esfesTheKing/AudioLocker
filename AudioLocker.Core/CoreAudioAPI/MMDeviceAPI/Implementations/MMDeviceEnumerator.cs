@@ -2,18 +2,11 @@
 using AudioLocker.Core.CoreAudioAPI.MMDeviceAPI.Interfaces;
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.Marshalling;
-using System.Security.Claims;
-using System.Security.Cryptography;
 
 namespace AudioLocker.Core.CoreAudioAPI.MMDeviceAPI.Implementations;
 
-//[GeneratedComClass]
-//[Guid("BCDE0395-E52F-467C-8E3D-C4579291692E")]
-//public partial class MMDeviceEnumeratorCOM
-//{
 
-//}
-
+[Guid("BCDE0395-E52F-467C-8E3D-C4579291692E")]
 public partial class MMDeviceEnumerator
 {
     [LibraryImport("Ole32")]
@@ -27,10 +20,10 @@ public partial class MMDeviceEnumerator
 
         Marshal.ThrowExceptionForHR(
             CoCreateInstance(
-                new Guid("BCDE0395-E52F-467C-8E3D-C4579291692E"), 
+                typeof(MMDeviceEnumerator).GUID, 
                 IntPtr.Zero, 
-                (int)ClsCtx.INPROC_SERVER, 
-                new Guid("A95664D2-9614-4F35-A746-DE8DB63617E6"), 
+                (int)CLSCTX.ALL, 
+                typeof(IMMDeviceEnumerator).GUID, 
                 out IntPtr obj
             )
         );
@@ -40,14 +33,14 @@ public partial class MMDeviceEnumerator
 
     public MMDevice GetDevice(string id)
     {
-        _enumerator.GetDevice(id, out IMMDevice device);
+        IMMDevice device = _enumerator.GetDevice(id);
 
         return new MMDevice(device);
     }
 
     public MMDeviceCollection EnumerateAudioEndPoints(EDataFlow dataFlow, DeviceState deviceState)
     {
-        _enumerator.EnumAudioEndpoints(dataFlow, deviceState, out IMMDeviceCollection deviceCollection);
+        IMMDeviceCollection deviceCollection = _enumerator.EnumAudioEndpoints(dataFlow, deviceState);
 
         return new MMDeviceCollection(deviceCollection);
     }

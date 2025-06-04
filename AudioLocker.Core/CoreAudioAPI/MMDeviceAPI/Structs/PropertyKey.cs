@@ -1,9 +1,7 @@
-﻿using System.Runtime.InteropServices;
+﻿namespace AudioLocker.Core.CoreAudioAPI.MMDeviceAPI.Structs;
 
-namespace AudioLocker.Core.CoreAudioAPI.MMDeviceAPI.Structs;
-
-public struct PropertyKey
+public struct PropertyKey(Guid fmtid, int pid)
 {
-    public Guid fmtid;
-    public int pid;
+    public Guid fmtid = fmtid;
+    public int pid = pid;
 }

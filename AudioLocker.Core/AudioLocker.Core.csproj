@@ -15,10 +15,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.VisualStudio.OLE.Interop" Version="17.14.40260" />
-  </ItemGroup>
-
-  <ItemGroup>
 	  <ProjectReference Include="..\AudioLocker.Common\AudioLocker.Common.csproj" />
   </ItemGroup>
 	

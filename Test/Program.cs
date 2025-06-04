@@ -1,6 +1,4 @@
-﻿// See https://aka.ms/new-console-template for more information
-using System.Runtime.CompilerServices;
-using AudioLocker.Core.CoreAudioAPI.MMDeviceAPI.Enums;
+﻿using AudioLocker.Core.CoreAudioAPI.MMDeviceAPI.Enums;
 using AudioLocker.Core.CoreAudioAPI.MMDeviceAPI.Implementations;
 
 
@@ -14,4 +12,7 @@ foreach(var device in collection)
 {
     Console.WriteLine(device);
     Console.WriteLine(device.Id);
+    Console.WriteLine(device.State);
+    Console.WriteLine(device.FriendlyName);
+
 }
