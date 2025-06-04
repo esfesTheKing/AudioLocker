@@ -1,7 +1,8 @@
-﻿using AudioLocker.Core.CoreAudioAPI.MMDeviceAPI.Enums;
+﻿using AudioLocker.Core.CoreAudioAPI.Enums;
+using AudioLocker.Core.CoreAudioAPI.Implementations;
 using AudioLocker.Core.CoreAudioAPI.MMDeviceAPI.Implementations;
 using AudioLocker.Core.CoreAudioAPI.MMDeviceAPI.Interfaces;
-using AudioLocker.Core.CoreAudioAPI.MMDeviceAPI.Structs;
+using AudioLocker.Core.CoreAudioAPI.Structs;
 using AudioLocker.Core.Loggers.Abstract;
 
 namespace AudioLocker.BL.Audio;

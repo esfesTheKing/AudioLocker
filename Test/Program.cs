@@ -1,6 +1,6 @@
-﻿using AudioLocker.Core.CoreAudioAPI.MMDeviceAPI.Enums;
-using AudioLocker.Core.CoreAudioAPI.MMDeviceAPI.Implementations;
-using AudioLocker.Core.CoreAudioAPI.MMDeviceAPI.Interfaces;
+﻿using AudioLocker.Core.CoreAudioAPI.Enums;
+using AudioLocker.Core.CoreAudioAPI.Implementations;
+using AudioLocker.Core.CoreAudioAPI.Interfaces;
 using System.Diagnostics;
 
 
