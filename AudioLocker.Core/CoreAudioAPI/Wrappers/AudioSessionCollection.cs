@@ -1,7 +1,7 @@
 ﻿using AudioLocker.Core.CoreAudioAPI.Interfaces;
 using System.Collections;
 
-namespace AudioLocker.Core.CoreAudioAPI.Implementations;
+namespace AudioLocker.Core.CoreAudioAPI.Wrappers;
 
 public class AudioSessionCollection(IAudioSessionEnumerator enumerator) : IEnumerable<IAudioSessionControl>
 {

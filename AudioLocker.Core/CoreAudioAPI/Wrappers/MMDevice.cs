@@ -4,21 +4,23 @@ using AudioLocker.Core.CoreAudioAPI.Structs;
 using System.Runtime.InteropServices;
 
 
-namespace AudioLocker.Core.CoreAudioAPI.Implementations;
+namespace AudioLocker.Core.CoreAudioAPI.Wrappers;
 
 public partial class MMDevice
 {
     private readonly IMMDevice _device;
     private readonly IPropertyStore _propertyStore;
 
-    public readonly IAudioSessionManager2 AudioSessionManager;
+    public readonly AudioSessionManager AudioSessionManager;
 
     public MMDevice(IMMDevice device)
     {
         _device = device;
         _propertyStore = _device.OpenPropertyStore(STGM.STGM_READ);
 
-        AudioSessionManager = _device.Activate<IAudioSessionManager2>();
+        var sessionManager = _device.Activate<IAudioSessionManager2>();
+
+        AudioSessionManager = new AudioSessionManager(sessionManager);
     }
 
     public string Id
@@ -39,6 +41,11 @@ public partial class MMDevice
     public string DeviceFriendlyName
     {
         get => GetPropertyValue(PropertyKeys.PKEY_DeviceInterface_FriendlyName);
+    }
+
+    public EDataFlow DataFlow
+    {
+        get => ((IMMEndpoint)_device).GetDataFlow();
     }
 
     private string GetPropertyValue(PropertyKey key)
