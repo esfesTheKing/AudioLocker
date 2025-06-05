@@ -1,6 +1,5 @@
 ﻿using AudioLocker.Core.CoreAudioAPI.Enums;
 using AudioLocker.Core.CoreAudioAPI.Wrappers;
-using AudioLocker.Core.CoreAudioAPI.Interfaces;
 using System.Diagnostics;
 
 
@@ -21,9 +20,10 @@ foreach(var device in collection)
 
     foreach(var session in sessionCollection)
     {
-        var newSession = (IAudioSessionControl2)session;
-        Console.WriteLine(Process.GetProcessById((int)newSession.GetProcessId()).ProcessName);
-        Console.WriteLine(newSession.GetProcessId());
-        Console.WriteLine(newSession.GetState());
+        //var newSession = (IAudioSessionControl2)session;
+        Console.WriteLine(Process.GetProcessById((int)session.ProcessId).ProcessName);
+        Console.WriteLine(session.ProcessId);
+        session.SimpleAudioVolume.SetVolume(10f / 100f);
+        //Console.WriteLine(newSession.GetState());
     }
 }
