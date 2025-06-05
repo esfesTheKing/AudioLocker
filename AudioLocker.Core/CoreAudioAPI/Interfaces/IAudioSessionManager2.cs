@@ -9,4 +9,6 @@ namespace AudioLocker.Core.CoreAudioAPI.Interfaces;
 public partial interface IAudioSessionManager2 : IAudioSessionManager
 {
     IAudioSessionEnumerator GetSessionEnumerator();
+    void RegisterSessionNotification(IAudioSessionNotification SessionNotification);
+    void UnregisterSessionNotification(IAudioSessionNotification SessionNotification);
 }
