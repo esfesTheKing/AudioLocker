@@ -3,10 +3,12 @@ using AudioLocker.Core.CoreAudioAPI.Wrappers;
 using AudioLocker.Core.CoreAudioAPI.Interfaces;
 using AudioLocker.Core.CoreAudioAPI.Structs;
 using AudioLocker.Core.Loggers.Abstract;
+using System.Runtime.InteropServices.Marshalling;
 
 namespace AudioLocker.BL.Audio;
 
-public class MMNotificationClient : IMMNotificationClient
+[GeneratedComClass]
+public partial class MMNotificationClient : IMMNotificationClient
 {
     private readonly MMDeviceEnumerator _enumerator;
     private readonly AudioManager _audioManager;

@@ -1,8 +1,8 @@
 ﻿using AudioLocker.Core.Configuration.Abstract;
-//using AudioLocker.Core.CoreAudioAPI.Enums;
-//using AudioLocker.Core.CoreAudioAPI.Wrappers;
+using AudioLocker.Core.CoreAudioAPI.Enums;
+using AudioLocker.Core.CoreAudioAPI.Wrappers;
 using AudioLocker.Core.Loggers.Abstract;
-using NAudio.CoreAudioApi;
+//using NAudio.CoreAudioApi;
 using System.Diagnostics;
 
 namespace AudioLocker.BL.Audio;
@@ -33,9 +33,8 @@ public class AudioManager
 
     public async Task Initialize()
     {
-        //foreach (var device in _enumerator.EnumerateAudioEndPoints(EDataFlow.eRender, DeviceState.DEVICE_STATE_ACTIVE))
-        foreach (var device in _enumerator.EnumerateAudioEndPoints(DataFlow.Render, DeviceState.Active))
-            {
+        foreach (var device in _enumerator.EnumerateAudioEndPoints(EDataFlow.eRender, DeviceState.DEVICE_STATE_ACTIVE))
+        {
             await SetupMMDevice(device);
         }
     }
@@ -89,7 +88,7 @@ public class AudioManager
 
     private void ConfigureSession(AudioSessionControl session, string deviceName)
     {
-        var process = Process.GetProcessById((int)session.GetProcessID);
+        var process = Process.GetProcessById((int)session.ProcessId);
         var processName = process.ProcessName;
 
         _storage.Register(deviceName, processName);

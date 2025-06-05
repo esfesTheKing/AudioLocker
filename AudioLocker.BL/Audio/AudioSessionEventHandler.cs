@@ -1,12 +1,15 @@
 ﻿using AudioLocker.Core.Configuration.Abstract;
+using AudioLocker.Core.CoreAudioAPI.Enums;
+using AudioLocker.Core.CoreAudioAPI.Wrappers;
+using AudioLocker.Core.CoreAudioAPI.Wrappers.Interfaces;
 using AudioLocker.Core.Loggers.Abstract;
-using NAudio.CoreAudioApi;
-using NAudio.CoreAudioApi.Interfaces;
+//using NAudio.CoreAudioApi;
+//using NAudio.CoreAudioApi.Interfaces;
 using System.Runtime.CompilerServices;
 
 namespace AudioLocker.BL.Audio;
 
-public class AudioSessionEventHandler : IAudioSessionEventsHandler
+public class AudioSessionEventHandler : IAudioSessionEventsHandler, IDisposable
 {
     private readonly ILogger _logger;
     private readonly IConfigurationStorage _configurationStorage;
@@ -113,12 +116,14 @@ public class AudioSessionEventHandler : IAudioSessionEventsHandler
     {
     }
 
-    private Task Dispose()
+    public void Dispose()
     {
         _logger.Info($"Unergistering event handler for {_deviceName} - {_processName}");
 
         _configurationStorage.OnConfigurationChanged -= OnConfigurationChanged;
 
-        return Task.Run(_session.Dispose);
+        _session.Dispose();
+
+        GC.SuppressFinalize(this);
     }
 }
