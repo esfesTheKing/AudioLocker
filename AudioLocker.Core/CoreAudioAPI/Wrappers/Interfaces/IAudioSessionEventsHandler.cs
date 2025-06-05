@@ -1,6 +1,4 @@
 ﻿using AudioLocker.Core.CoreAudioAPI.Enums;
-using System.Runtime.InteropServices;
-
 namespace AudioLocker.Core.CoreAudioAPI.Wrappers.Interfaces;
 
 public interface IAudioSessionEventsHandler
@@ -15,7 +13,7 @@ public interface IAudioSessionEventsHandler
 
     void OnSessionDisconnected(AudioSessionDisconnectReason DisconnectReason);
 
-    void OnSimpleVolumeChanged(float NewVolume, bool NewMute);
+    void OnVolumeChanged(float NewVolume, bool NewMute);
 
     void OnStateChanged(AudioSessionState NewState);
 }

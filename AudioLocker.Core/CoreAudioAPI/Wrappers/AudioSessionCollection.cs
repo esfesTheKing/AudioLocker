@@ -3,7 +3,7 @@ using System.Collections;
 
 namespace AudioLocker.Core.CoreAudioAPI.Wrappers;
 
-public class AudioSessionCollection(IAudioSessionEnumerator enumerator) : IEnumerable<IAudioSessionControl>
+public class AudioSessionCollection(IAudioSessionEnumerator enumerator) : IEnumerable<AudioSessionControl>
 {
     private readonly IAudioSessionEnumerator _enumerator = enumerator;
 
@@ -12,17 +12,17 @@ public class AudioSessionCollection(IAudioSessionEnumerator enumerator) : IEnume
         get => _enumerator.GetCount();
     }
 
-    public IAudioSessionControl this[int index]
+    public AudioSessionControl this[int index]
     {
         get
         {
             IAudioSessionControl session = _enumerator.GetSession(index);
 
-            return session;
+            return new AudioSessionControl(session);
         }
     }
 
-    public IEnumerator<IAudioSessionControl> GetEnumerator()
+    public IEnumerator<AudioSessionControl> GetEnumerator()
     {
         for (int index = 0; index < Count; index++)
         {

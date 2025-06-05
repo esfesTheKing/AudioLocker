@@ -44,5 +44,10 @@ public partial class MMDeviceEnumerator
 
         return new MMDeviceCollection(deviceCollection);
     }
+
+    public void RegisterEndpointNotificationCallback(IMMNotificationClient notificationClient)
+    {
+        _enumerator.RegisterEndpointNotificationCallback(notificationClient);
+    }
 }
 

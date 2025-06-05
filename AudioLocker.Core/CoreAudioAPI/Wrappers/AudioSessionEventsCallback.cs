@@ -38,7 +38,7 @@ public partial class AudioSessionEventsCallback(IAudioSessionEventsHandler handl
 
     public void OnSimpleVolumeChanged(float NewVolume, [MarshalAs(UnmanagedType.Bool)] bool NewMute, ref Guid EventContext)
     {
-        _handler.OnSimpleVolumeChanged(NewVolume, NewMute);
+        _handler.OnVolumeChanged(NewVolume, NewMute);
     }
 
     public void OnStateChanged(AudioSessionState NewState)
