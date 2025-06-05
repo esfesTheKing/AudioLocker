@@ -1,5 +1,5 @@
 ﻿using AudioLocker.Core.CoreAudioAPI.Enums;
-using AudioLocker.Core.CoreAudioAPI.Implementations;
+using AudioLocker.Core.CoreAudioAPI.Wrappers;
 using AudioLocker.Core.CoreAudioAPI.Interfaces;
 using AudioLocker.Core.CoreAudioAPI.Structs;
 using AudioLocker.Core.Loggers.Abstract;

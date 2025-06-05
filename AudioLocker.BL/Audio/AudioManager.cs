@@ -1,6 +1,6 @@
 ﻿using AudioLocker.Core.Configuration.Abstract;
-//using AudioLocker.Core.CoreAudioAPI.MMDeviceAPI.Enums;
-//using AudioLocker.Core.CoreAudioAPI.MMDeviceAPI.Implementations;
+//using AudioLocker.Core.CoreAudioAPI.Enums;
+//using AudioLocker.Core.CoreAudioAPI.Wrappers;
 using AudioLocker.Core.Loggers.Abstract;
 using NAudio.CoreAudioApi;
 using System.Diagnostics;
@@ -33,8 +33,9 @@ public class AudioManager
 
     public async Task Initialize()
     {
+        //foreach (var device in _enumerator.EnumerateAudioEndPoints(EDataFlow.eRender, DeviceState.DEVICE_STATE_ACTIVE))
         foreach (var device in _enumerator.EnumerateAudioEndPoints(DataFlow.Render, DeviceState.Active))
-        {
+            {
             await SetupMMDevice(device);
         }
     }
