@@ -66,7 +66,7 @@ public class AudioSessionEventHandler : IAudioSessionEventsHandler, IDisposable
 
     private void OnConfigurationChanged()
     {
-        _comExceptionHandler.HandleSessionAccessExceptions(() => OnVolumeChangedImplementation(_session.SimpleAudioVolume.Volume));
+        _comExceptionHandler.HandleSessionAccessExceptions(() => OnVolumeChanged(_session.SimpleAudioVolume.Volume));
     }
 
     public void OnVolumeChanged(float volume, bool isMuted)
@@ -80,21 +80,16 @@ public class AudioSessionEventHandler : IAudioSessionEventsHandler, IDisposable
             {
                 if (task.IsCompletedSuccessfully)
                 {
-                    OnVolumeChangedImplementation(volume);
+                    OnVolumeChanged(volume);
                 }
             });
         });
     }
 
-    private void OnVolumeChangedImplementation(float volume)
+    private void OnVolumeChanged(float volume)
     {
         var configuration = _configurationStorage.Get(_deviceName, _processName);
-        if (configuration is null)
-        {
-            return;
-        }
-
-        if (configuration.IsManual)
+        if (configuration?.IsManual ?? true)
         {
             return;
         }
@@ -105,7 +100,7 @@ public class AudioSessionEventHandler : IAudioSessionEventsHandler, IDisposable
         }
 
         _session.SimpleAudioVolume.Volume = GetVolumeLevelPercentage(configuration.VolumeLevel);
-        _logger.Info($"{_processName}: volume level was set from {GetVolumeLevel(volume)} to {configuration.VolumeLevel}");
+        _logger.Info($"[{_deviceName}] {_processName}: volume level was set from {GetVolumeLevel(volume)} to {configuration.VolumeLevel}");
     }
 
     public void OnSessionDisconnected(AudioSessionDisconnectReason disconnectReason)
