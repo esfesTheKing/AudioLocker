@@ -76,7 +76,7 @@ public class AudioSessionEventHandler : IAudioSessionEventsHandler, IDisposable
             _token?.Cancel();
             _token = new CancellationTokenSource();
 
-            Task.Delay(50, _token.Token).ContinueWith(task =>
+            Task.Delay(10, _token.Token).ContinueWith(task =>
             {
                 if (task.IsCompletedSuccessfully)
                 {
