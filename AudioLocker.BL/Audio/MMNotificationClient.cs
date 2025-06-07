@@ -65,8 +65,8 @@ public partial class MMNotificationClient : IMMNotificationClient
         }
 
         _logger.Info($"Device has disconnected: {device.FriendlyName}");
-
-        Task.Run(() => _audioManager.RemoveSessionHandlers(device));
+         _audioManager.RemoveSessionHandlers(device);
+        //Task.Run(() => _audioManager.RemoveSessionHandlers(device));
     }
 
     public void OnDefaultDeviceChanged(EDataFlow dataFlow, ERole role, string defaultDeviceId)

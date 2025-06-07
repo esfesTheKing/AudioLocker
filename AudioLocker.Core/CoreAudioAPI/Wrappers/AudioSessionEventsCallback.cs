@@ -11,6 +11,8 @@ public partial class AudioSessionEventsCallback(IAudioSessionEventsHandler handl
 {
     private readonly IAudioSessionEventsHandler _handler = handler;
 
+    internal Action? OnSessionDisconnect;
+
     public void OnChannelVolumeChanged(uint ChannelCount, nint NewChannelVolumeArray, uint ChangedChannel, ref Guid EventContext)
     {
         _handler.OnChannelVolumeChanged(ChannelCount, NewChannelVolumeArray, ChangedChannel);
@@ -34,6 +36,7 @@ public partial class AudioSessionEventsCallback(IAudioSessionEventsHandler handl
     public void OnSessionDisconnected(AudioSessionDisconnectReason DisconnectReason)
     {
         _handler.OnSessionDisconnected(DisconnectReason);
+        OnSessionDisconnect?.Invoke();
     }
 
     public void OnSimpleVolumeChanged(float NewVolume, [MarshalAs(UnmanagedType.Bool)] bool NewMute, ref Guid EventContext)
@@ -43,6 +46,11 @@ public partial class AudioSessionEventsCallback(IAudioSessionEventsHandler handl
 
     public void OnStateChanged(AudioSessionState NewState)
     {
+        if (NewState is AudioSessionState.AudioSessionStateExpired)
+        {
+            OnSessionDisconnect?.Invoke();
+        }
+
         _handler.OnStateChanged(NewState);
     }
 }

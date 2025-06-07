@@ -22,7 +22,7 @@ internal class BootStrapper
     {
         var logger = GetLogger();
 
-        using var mutext = new Mutex(true, "AudioLocker", out bool createdNew);
+        using var mutext = new Mutex(true, Constants.APP_NAME, out bool createdNew);
         if (!createdNew)
         {
             logger.Error("Another instance of this app is already running.");
