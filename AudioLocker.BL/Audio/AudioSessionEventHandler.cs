@@ -17,6 +17,8 @@ public class AudioSessionEventHandler : IAudioSessionEventsHandler, IDisposable
     private readonly string _deviceName;
     private readonly string _processName;
 
+    private CancellationTokenSource? _token;
+
     private readonly COMExceptionHandler _comExceptionHandler;
 
     public AudioSessionEventHandler(
@@ -69,7 +71,19 @@ public class AudioSessionEventHandler : IAudioSessionEventsHandler, IDisposable
 
     public void OnVolumeChanged(float volume, bool isMuted)
     {
-        _comExceptionHandler.HandleSessionAccessExceptions(() => OnVolumeChangedImplementation(volume));
+        _comExceptionHandler.HandleSessionAccessExceptions(() => 
+        {
+            _token?.Cancel();
+            _token = new CancellationTokenSource();
+
+            Task.Delay(50, _token.Token).ContinueWith(task =>
+            {
+                if (task.IsCompletedSuccessfully)
+                {
+                    OnVolumeChangedImplementation(volume);
+                }
+            });
+        });
     }
 
     private void OnVolumeChangedImplementation(float volume)
