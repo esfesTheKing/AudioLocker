@@ -1,5 +1,4 @@
-﻿using AudioLocker.Core.CoreAudioAPI.Enums;
-using AudioLocker.Core.CoreAudioAPI.Interfaces;
+﻿using AudioLocker.Core.CoreAudioAPI.Interfaces;
 using AudioLocker.Core.CoreAudioAPI.Wrappers.Interfaces;
 using System.Diagnostics;
 
@@ -20,7 +19,7 @@ public class AudioSessionControl : IDisposable
     }
 
     public AudioSessionControl(IAudioSessionControl audioSession)
-        : this ((IAudioSessionControl2)audioSession)
+        : this((IAudioSessionControl2)audioSession)
     { }
     public AudioSessionControl(IAudioSessionControl2 audioSession)
     {

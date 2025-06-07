@@ -1,5 +1,4 @@
-﻿using AudioLocker.Core.CoreAudioAPI.Enums;
-using System.Runtime.InteropServices;
+﻿using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.Marshalling;
 
 namespace AudioLocker.Core.CoreAudioAPI.Interfaces;

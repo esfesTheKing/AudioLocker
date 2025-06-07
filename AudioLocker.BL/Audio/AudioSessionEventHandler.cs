@@ -71,7 +71,7 @@ public class AudioSessionEventHandler : IAudioSessionEventsHandler, IDisposable
 
     public void OnVolumeChanged(float volume, bool isMuted)
     {
-        _comExceptionHandler.HandleSessionAccessExceptions(() => 
+        _comExceptionHandler.HandleSessionAccessExceptions(() =>
         {
             _token?.Cancel();
             _token = new CancellationTokenSource();

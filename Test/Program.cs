@@ -8,7 +8,7 @@ var enumerator = new MMDeviceEnumerator();
 
 var collection = enumerator.EnumerateAudioEndPoints(EDataFlow.eRender, DeviceState.DEVICE_STATE_ACTIVE);
 
-foreach(var device in collection)
+foreach (var device in collection)
 {
     Console.WriteLine(device);
     Console.WriteLine(device.Id);
@@ -18,7 +18,7 @@ foreach(var device in collection)
     Console.WriteLine();
     var sessionCollection = device.AudioSessionManager.Sessions;
 
-    foreach(var session in sessionCollection)
+    foreach (var session in sessionCollection)
     {
         //var newSession = (IAudioSessionControl2)session;
         Console.WriteLine(Process.GetProcessById((int)session.ProcessId).ProcessName);

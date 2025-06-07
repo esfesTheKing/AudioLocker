@@ -1,7 +1,7 @@
 ﻿namespace AudioLocker.Core.CoreAudioAPI.Enums;
 
 // https://learn.microsoft.com/en-us/windows/win32/api/wtypesbase/ne-wtypesbase-clsctx
-public enum CLSCTX: uint
+public enum CLSCTX : uint
 {
     CLSCTX_INPROC_SERVER = 0x1,
     CLSCTX_INPROC_HANDLER = 0x2,
@@ -31,5 +31,5 @@ public enum CLSCTX: uint
     CLSCTX_ACTIVATE_ARM32_SERVER = 0x2000000,
     CLSCTX_ALLOW_LOWER_TRUST_REGISTRATION,
     CLSCTX_PS_DLL = 0x80000000,
-    CLSCTX_ALL = CLSCTX_INPROC_SERVER | CLSCTX_INPROC_HANDLER | CLSCTX_LOCAL_SERVER| CLSCTX_REMOTE_SERVER,
+    CLSCTX_ALL = CLSCTX_INPROC_SERVER | CLSCTX_INPROC_HANDLER | CLSCTX_LOCAL_SERVER | CLSCTX_REMOTE_SERVER,
 }

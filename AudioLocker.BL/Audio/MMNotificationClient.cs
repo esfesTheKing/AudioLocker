@@ -1,7 +1,7 @@
 ﻿using AudioLocker.Core.CoreAudioAPI.Enums;
-using AudioLocker.Core.CoreAudioAPI.Wrappers;
 using AudioLocker.Core.CoreAudioAPI.Interfaces;
 using AudioLocker.Core.CoreAudioAPI.Structs;
+using AudioLocker.Core.CoreAudioAPI.Wrappers;
 using AudioLocker.Core.Loggers.Abstract;
 using System.Runtime.InteropServices.Marshalling;
 
@@ -65,7 +65,7 @@ public partial class MMNotificationClient : IMMNotificationClient
         }
 
         _logger.Info($"Device has disconnected: {device.FriendlyName}");
-         _audioManager.RemoveSessionHandlers(device);
+        _audioManager.RemoveSessionHandlers(device);
         //Task.Run(() => _audioManager.RemoveSessionHandlers(device));
     }
 

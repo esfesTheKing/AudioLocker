@@ -20,10 +20,10 @@ public partial class MMDeviceEnumerator
 
         Marshal.ThrowExceptionForHR(
             CoCreateInstance(
-                typeof(MMDeviceEnumerator).GUID, 
-                IntPtr.Zero, 
-                (int)CLSCTX.CLSCTX_ALL, 
-                typeof(IMMDeviceEnumerator).GUID, 
+                typeof(MMDeviceEnumerator).GUID,
+                IntPtr.Zero,
+                (int)CLSCTX.CLSCTX_ALL,
+                typeof(IMMDeviceEnumerator).GUID,
                 out IntPtr obj
             )
         );

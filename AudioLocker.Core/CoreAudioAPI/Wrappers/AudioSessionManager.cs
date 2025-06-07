@@ -30,7 +30,7 @@ public class AudioSessionManager : IDisposable
     public AudioSessionManager(IAudioSessionManager2 sessionManager)
     {
         _sessionManager = sessionManager;
-        _notification =  new AudioSessionNotification(this);
+        _notification = new AudioSessionNotification(this);
 
         _sessionManager.RegisterSessionNotification(_notification);
         _sessions = new AudioSessionCollection(_sessionManager.GetSessionEnumerator());
@@ -48,7 +48,7 @@ public class AudioSessionManager : IDisposable
         _sessions.Add(newSession);
     }
 
-    private void DisposeSessions() 
+    private void DisposeSessions()
     {
         foreach (var session in _sessions)
         {

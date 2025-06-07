@@ -1,5 +1,4 @@
-﻿using AudioLocker.Core.CoreAudioAPI.Enums;
-using AudioLocker.Core.CoreAudioAPI.Interfaces;
+﻿using AudioLocker.Core.CoreAudioAPI.Interfaces;
 using System.Collections;
 
 namespace AudioLocker.Core.CoreAudioAPI.Wrappers;
@@ -47,7 +46,7 @@ public class AudioSessionCollection : ICollection<AudioSessionControl>
 
     private void OnSessionDisconnect(object sender) => Remove((AudioSessionControl)sender);
 
-    public void Add(AudioSessionControl item) 
+    public void Add(AudioSessionControl item)
     {
         item.OnSessionDisconnect += OnSessionDisconnect;
 
