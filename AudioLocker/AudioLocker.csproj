@@ -9,8 +9,9 @@
     <PackageIcon>Application.png</PackageIcon>
     <ApplicationIcon>Assets\Application Border.ico</ApplicationIcon>
     <UseWPF>False</UseWPF>
-	<!-->PublishAot>true</PublishAot>
-	<_SuppressWinFormsTrimError>true</_SuppressWinFormsTrimError-->
+	<PublishAot>true</PublishAot>
+	<_SuppressWinFormsTrimError>true</_SuppressWinFormsTrimError>
+	  <CustomResourceTypesSupport>true</CustomResourceTypesSupport>
   </PropertyGroup>
 
   <ItemGroup>

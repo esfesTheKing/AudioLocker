@@ -6,8 +6,8 @@ public interface IConfigurationStorage
 {
     event Action OnConfigurationChanged;
 
-    ProcessConfiguration? Get(string deviceName, string processName);
-    void Set(string deviceName, string processName, ProcessConfiguration configuration);
+    ProcessAudioConfiguration? Get(string deviceName, string processName);
+    void Set(string deviceName, string processName, ProcessAudioConfiguration configuration);
 
     Task Prepare();
     Task Reload();

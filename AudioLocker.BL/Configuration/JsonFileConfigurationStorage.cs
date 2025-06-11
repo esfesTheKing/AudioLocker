@@ -1,107 +1,61 @@
 ﻿using AudioLocker.Common.DataTypes;
 using AudioLocker.Common.Extenstions;
 using AudioLocker.Core.ConfigurationStorage.Abstract;
-using System.Collections.Immutable;
 using System.Text;
 using System.Text.Json;
 
 namespace AudioLocker.BL.Configuration;
 
-public class JsonFileConfigurationStorage : FileConfigurationBase
+public class JsonFileConfigurationStorage(string filePath, int defaultVolumeLevel) : FileConfigurationStorage<GeneralAudioConfiguration>(filePath)
 {
-    private static readonly ImmutableDictionary<string, ProcessConfigurationCollection> EMPTY_PROCESS_CONFIGURATIONS = ImmutableDictionary<string, ProcessConfigurationCollection>.Empty;
+    private static readonly GeneralAudioConfiguration EMPTY_GENERAL_AUDIO_CONFIGURATION = new GeneralAudioConfiguration();
 
-    private readonly JsonSerializerOptions _options = new() { WriteIndented = true };
+    private GeneralAudioConfiguration _generalAudioConfiguration = new GeneralAudioConfiguration();
+    private readonly int _defaultVolumeLevel = defaultVolumeLevel;
+    private readonly SemaphoreSlim _writeSemaphore = new SemaphoreSlim(1, 1);
 
-    private Dictionary<string, ProcessConfigurationCollection> _processConfigurations;
-    private readonly int _defaultVolumeLevel;
-
-    private readonly SemaphoreSlim _write_semaphore = new(1, 1);
-
-    public JsonFileConfigurationStorage(string filePath, int defaultVolumeLevel)
-        : base(filePath)
+    public override ProcessAudioConfiguration? Get(string deviceName, string processName)
     {
-        _defaultVolumeLevel = defaultVolumeLevel;
-        _processConfigurations = new Dictionary<string, ProcessConfigurationCollection>();
-    }
-
-    private ProcessConfigurationCollection? GetConfiguration(string deviceName)
-    {
-        if (_processConfigurations.TryGetValue(deviceName, out var processConfiguration))
-        {
-            return processConfiguration;
-        }
-
-        return null;
-    }
-
-    public override ProcessConfiguration? Get(string deviceName, string processName)
-    {
-        var collection = GetConfiguration(deviceName);
-        if (collection is null)
+        _generalAudioConfiguration.TryGetValue(deviceName, out var deviceConfiguration);
+        if (deviceConfiguration is null)
         {
             return null;
         }
 
-        if (!collection.TryGetValue(processName, out var processConfiguration))
-        {
-            return null;
-        }
+        deviceConfiguration.TryGetValue(processName, out var generalAudioConfiguration);
 
-        return processConfiguration;
+        return generalAudioConfiguration;
     }
 
-    public override void Set(string deviceName, string processName, ProcessConfiguration configuration)
+    public override void Set(string deviceName, string processName, ProcessAudioConfiguration configuration)
     {
-        var collection = GetConfiguration(deviceName);
-        if (collection is null)
+        _generalAudioConfiguration.TryGetValue(deviceName, out var deviceConfiguration);
+        if (deviceConfiguration is null)
         {
             return;
         }
 
-        collection.Add(processName, configuration);
+        deviceConfiguration.Add(processName, configuration);
     }
 
     public override void Register(string deviceName, string processName)
     {
-        ProcessConfigurationCollection collection;
-        if (!_processConfigurations.TryGetValue(deviceName, out collection!))
+        DeviceAudioConfiguration? deviceConfiguration;
+        if (!_generalAudioConfiguration.TryGetValue(deviceName, out deviceConfiguration))
         {
-            collection = new ProcessConfigurationCollection();
-            _processConfigurations[deviceName] = collection;
+            deviceConfiguration = new DeviceAudioConfiguration();
+            _generalAudioConfiguration[deviceName] = deviceConfiguration;
         }
 
-        if (collection.ContainsKey(processName))
+        if (deviceConfiguration.ContainsKey(processName))
         {
             return;
         }
 
-        collection.Add(processName, new ProcessConfiguration { VolumeLevel = _defaultVolumeLevel });
+        deviceConfiguration.Add(processName, new ProcessAudioConfiguration { VolumeLevel = _defaultVolumeLevel });
     }
 
-    protected override async Task CreateFile()
-    {
-        var castedProcessConfigurations = (IReadOnlyDictionary<string, ProcessConfigurationCollection>?)_processConfigurations;
-
-        await WriteToFile(castedProcessConfigurations ?? EMPTY_PROCESS_CONFIGURATIONS);
-    }
-
-    private async Task<Dictionary<string, ProcessConfigurationCollection>> ReadFileHandleExceptions(Stream stream)
-    {
-        try
-        {
-            var processConfigurations = await JsonSerializer.DeserializeAsync<Dictionary<string, ProcessConfigurationCollection>>(stream);
-            if (processConfigurations is not null)
-            {
-                return processConfigurations;
-            }
-        }
-        catch (JsonException)
-        {
-        }
-
-        return new Dictionary<string, ProcessConfigurationCollection>();
-    }
+    protected override async Task CreateFile() => await WriteToFile(_generalAudioConfiguration ?? EMPTY_GENERAL_AUDIO_CONFIGURATION);
 
     protected override async Task ReadFile()
     {
@@ -109,17 +63,26 @@ public class JsonFileConfigurationStorage : FileConfigurationBase
 
         using var stream = new FileStream(_filePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
 
-        _processConfigurations = await ReadFileHandleExceptions(stream);
+        GeneralAudioConfiguration? processConfigurations = null;
+        try
+        {
+            processConfigurations = await JsonSerializer.DeserializeAsync(stream, GeneralAudioConfigurationSerializationContext.Default.GeneralAudioConfiguration);
+        }
+        catch (JsonException)
+        {
+        }
+
+        _generalAudioConfiguration = processConfigurations ?? new GeneralAudioConfiguration();
     }
 
-    protected override async Task WriteToFile<T>(T processConfiguration)
+    protected override async Task WriteToFile(GeneralAudioConfiguration processConfiguration)
     {
-        var stream = File.OpenWrite(_filePath);
+        using var stream = File.OpenWrite(_filePath);
         using var streamWriter = new StreamWriter(stream, Encoding.UTF8);
 
-        var data = JsonSerializer.Serialize(processConfiguration, _options);
+        var data = JsonSerializer.Serialize(processConfiguration, GeneralAudioConfigurationSerializationContext.Default.GeneralAudioConfiguration);
 
-        await _write_semaphore.LockAsync(async () =>
+        await _writeSemaphore.LockAsync(async () =>
         {
             await streamWriter.WriteAsync(data);
         });
@@ -142,6 +105,6 @@ public class JsonFileConfigurationStorage : FileConfigurationBase
 
     public override async Task Save()
     {
-        await WriteToFile(_processConfigurations);
+        await WriteToFile(_generalAudioConfiguration);
     }
 }
