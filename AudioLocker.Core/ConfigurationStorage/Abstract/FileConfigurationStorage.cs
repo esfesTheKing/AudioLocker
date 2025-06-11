@@ -1,5 +1,4 @@
 ﻿using AudioLocker.Common.DataTypes;
-using AudioLocker.Core.Configuration.Abstract;
 
 namespace AudioLocker.Core.ConfigurationStorage.Abstract;
 

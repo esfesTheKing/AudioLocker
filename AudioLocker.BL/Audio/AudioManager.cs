@@ -1,4 +1,5 @@
-﻿using AudioLocker.Core.Configuration.Abstract;
+﻿using AudioLocker.Core.ConfigurationStorage.Abstract;
+
 //using AudioLocker.Core.CoreAudioAPI.MMDeviceAPI.Enums;
 //using AudioLocker.Core.CoreAudioAPI.MMDeviceAPI.Implementations;
 using AudioLocker.Core.Loggers.Abstract;
