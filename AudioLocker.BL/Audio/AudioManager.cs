@@ -2,7 +2,7 @@
 using AudioLocker.Core.CoreAudioAPI.Enums;
 using AudioLocker.Core.CoreAudioAPI.Wrappers;
 using AudioLocker.Core.Loggers.Abstract;
-//using NAudio.CoreAudioApi;
+
 using System.Diagnostics;
 
 namespace AudioLocker.BL.Audio;
