@@ -1,9 +1,8 @@
-﻿using AudioLocker.Core.ConfigurationStorage.Abstract;
-
-//using AudioLocker.Core.CoreAudioAPI.MMDeviceAPI.Enums;
-//using AudioLocker.Core.CoreAudioAPI.MMDeviceAPI.Implementations;
+﻿using AudioLocker.Core.Configuration.Abstract;
+using AudioLocker.Core.CoreAudioAPI.Enums;
+using AudioLocker.Core.CoreAudioAPI.Wrappers;
 using AudioLocker.Core.Loggers.Abstract;
-using NAudio.CoreAudioApi;
+
 using System.Diagnostics;
 
 namespace AudioLocker.BL.Audio;
@@ -34,7 +33,7 @@ public class AudioManager
 
     public async Task Initialize()
     {
-        foreach (var device in _enumerator.EnumerateAudioEndPoints(DataFlow.Render, DeviceState.Active))
+        foreach (var device in _enumerator.EnumerateAudioEndPoints(EDataFlow.eRender, DeviceState.DEVICE_STATE_ACTIVE))
         {
             await SetupMMDevice(device);
         }
@@ -59,23 +58,15 @@ public class AudioManager
 
         var sessions = device.AudioSessionManager.Sessions;
 
-        for (int i = 0; i < sessions.Count; ++i)
+        foreach (var session in sessions)
         {
-            var session = sessions[i];
-            if (session is null)
-            {
-                continue;
-            }
-
             _comExceptionHandler.HandleSessionAccessExceptions(() => ConfigureSession(session, deviceName));
         }
 
         await _storage.Save();
 
-        device.AudioSessionManager.OnSessionCreated += (_, newSession) =>
+        device.AudioSessionManager.OnSessionCreated += (_, session) =>
         {
-            var session = new AudioSessionControl(newSession);
-
             _comExceptionHandler.HandleSessionAccessExceptionsAsync(async () =>
             {
                 ConfigureSession(session, deviceName);
@@ -89,15 +80,17 @@ public class AudioManager
 
     private void ConfigureSession(AudioSessionControl session, string deviceName)
     {
-        var process = Process.GetProcessById((int)session.GetProcessID);
+        var process = Process.GetProcessById((int)session.ProcessId);
         var processName = process.ProcessName;
+
+        _logger.Debug($"{processName} - {(int)session.ProcessId}");
 
         _storage.Register(deviceName, processName);
 
         var audioSessionEventHandler = new AudioSessionEventHandler(_logger, _storage, session, deviceName, processName);
 
-        var simpleAudioVolumeInterface = session.SimpleAudioVolume;
-        audioSessionEventHandler.OnVolumeChanged(simpleAudioVolumeInterface.Volume, simpleAudioVolumeInterface.Mute);
+        var simpleAudioVolume = session.SimpleAudioVolume;
+        audioSessionEventHandler.OnVolumeChanged(simpleAudioVolume.Volume, simpleAudioVolume.Mute);
 
         session.RegisterEventClient(audioSessionEventHandler);
         _logger.Info($"New session was configured: {processName}");
