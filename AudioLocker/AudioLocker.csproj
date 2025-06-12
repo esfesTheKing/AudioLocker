@@ -10,8 +10,10 @@
     <ApplicationIcon>Assets\Application Border.ico</ApplicationIcon>
     <UseWPF>False</UseWPF>
 	<PublishAot>true</PublishAot>
+	<PublishTrimmed>true</PublishTrimmed>
+	<TrimmerSingleWarn>false</TrimmerSingleWarn>
 	<_SuppressWinFormsTrimError>true</_SuppressWinFormsTrimError>
-	  <CustomResourceTypesSupport>true</CustomResourceTypesSupport>
+	<CustomResourceTypesSupport>true</CustomResourceTypesSupport>
   </PropertyGroup>
 
   <ItemGroup>

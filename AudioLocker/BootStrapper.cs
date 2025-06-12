@@ -7,7 +7,7 @@ using AudioLocker.Core.Loggers.Abstract;
 using AudioLocker.StartupArguments;
 using log4net;
 using log4net.Config;
-
+using System.Runtime.Versioning;
 using t_StartupArguments = AudioLocker.BL.StartupArguments;
 
 [assembly: XmlConfigurator(Watch = true, ConfigFile = "./App.config")]
@@ -94,6 +94,7 @@ internal class BootStrapper
         Application.Run(trayApp);
     }
 
+    [SupportedOSPlatform("Windows")]
     private ILogger GetLogger()
     {
         var log = LogManager.GetLogger(LOGGER_NAME);
