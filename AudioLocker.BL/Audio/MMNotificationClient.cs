@@ -8,19 +8,12 @@ using System.Runtime.InteropServices.Marshalling;
 namespace AudioLocker.BL.Audio;
 
 [GeneratedComClass]
-public partial class MMNotificationClient : IMMNotificationClient
+public partial class MMNotificationClient(ILogger logger, MMDeviceEnumerator enumerator, AudioManager audioManager) : IMMNotificationClient
 {
-    private readonly MMDeviceEnumerator _enumerator;
-    private readonly AudioManager _audioManager;
+    private readonly MMDeviceEnumerator _enumerator = enumerator;
+    private readonly AudioManager _audioManager = audioManager;
 
-    private readonly ILogger _logger;
-
-    public MMNotificationClient(ILogger logger, MMDeviceEnumerator enumerator, AudioManager audioManager)
-    {
-        _logger = logger;
-        _enumerator = enumerator;
-        _audioManager = audioManager;
-    }
+    private readonly ILogger _logger = logger;
 
     public void OnDeviceStateChanged(string deviceId, DeviceState newState)
     {
@@ -66,7 +59,6 @@ public partial class MMNotificationClient : IMMNotificationClient
 
         _logger.Info($"Device has disconnected: {device.FriendlyName}");
         _audioManager.RemoveSessionHandlers(device);
-        //Task.Run(() => _audioManager.RemoveSessionHandlers(device));
     }
 
     public void OnDefaultDeviceChanged(EDataFlow dataFlow, ERole role, string defaultDeviceId)

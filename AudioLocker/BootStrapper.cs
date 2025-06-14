@@ -63,13 +63,13 @@ internal class BootStrapper
 
     private void InitializeLoggingOfUnhandledExcpetions(ILogger logger)
     {
-        AppDomain.CurrentDomain.UnhandledException += (object _, UnhandledExceptionEventArgs @event) =>
+        AppDomain.CurrentDomain.UnhandledException += (_, @event) =>
         {
             var exception = (Exception)@event.ExceptionObject;
             logger.Fatal("Unknown exception has caused the app to crash!", exception);
         };
 
-        Application.ThreadException += (object _, ThreadExceptionEventArgs @event) =>
+        Application.ThreadException += (_, @event) =>
         {
             logger.Fatal("Unknown exception has caused the app to crash!", @event.Exception);
         };

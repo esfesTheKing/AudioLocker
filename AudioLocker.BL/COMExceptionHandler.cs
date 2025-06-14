@@ -2,21 +2,14 @@
 
 namespace AudioLocker.BL;
 
-internal class COMExceptionHandler
+internal class COMExceptionHandler(Action onKnownException, Action<Exception> onUnknownException, Action onCleanup)
 {
     private const uint DEVICE_INVALIDATED_ERORR = 0x88890004;
     private const uint INVALID_HANDLE = 0x80070006;
 
-    private readonly Action _onKnownException;
-    private readonly Action<Exception> _onUnknownException;
-    private readonly Action _onCleanup;
-
-    public COMExceptionHandler(Action onKnownException, Action<Exception> onUnknownException, Action onCleanup)
-    {
-        _onKnownException = onKnownException;
-        _onUnknownException = onUnknownException;
-        _onCleanup = onCleanup;
-    }
+    private readonly Action _onKnownException = onKnownException;
+    private readonly Action<Exception> _onUnknownException = onUnknownException;
+    private readonly Action _onCleanup = onCleanup;
 
     public void HandleSessionAccessExceptions(Action function)
     {

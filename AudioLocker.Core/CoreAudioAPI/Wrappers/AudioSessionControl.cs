@@ -29,11 +29,6 @@ public class AudioSessionControl : IDisposable
         SimpleAudioVolume = new SimpleAudioVolume((ISimpleAudioVolume)audioSession);
     }
 
-    ~AudioSessionControl()
-    {
-        Dispose();
-    }
-
     public void RegisterEventClient(IAudioSessionEventsHandler eventClient)
     {
         UnRegisterEventClient();
@@ -62,6 +57,8 @@ public class AudioSessionControl : IDisposable
     public void Dispose()
     {
         UnRegisterEventClient();
+        OnSessionDisconnect?.Invoke(this);
+
         GC.SuppressFinalize(this);
     }
 }
