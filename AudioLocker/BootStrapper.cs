@@ -47,13 +47,13 @@ internal class BootStrapper
         await storage.Prepare();
 
         var enumerator = new MMDeviceEnumerator();
-        var audioManager = new AudioManager(logger, storage, enumerator);
+        var deviceConfigurationHandler = new DeviceConfigurationHandler(logger, storage, enumerator);
 
-        var notificationClient = new MMNotificationClient(logger, enumerator, audioManager);
+        var notificationClient = new MMNotificationClient(logger, enumerator, deviceConfigurationHandler);
 
-        enumerator.RegisterEndpointNotificationCallback(notificationClient);
+        enumerator.RegisterNotificationCallback(notificationClient);
 
-        await audioManager.Initialize();
+        deviceConfigurationHandler.Initialize();
     }
 
     private t_StartupArguments ParseArguments(ILogger logger, string[] args)

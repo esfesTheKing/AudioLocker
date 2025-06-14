@@ -45,9 +45,14 @@ public partial class MMDeviceEnumerator
         return new MMDeviceCollection(deviceCollection);
     }
 
-    public void RegisterEndpointNotificationCallback(IMMNotificationClient notificationClient)
+    public void RegisterNotificationCallback(IMMNotificationClient notificationClient)
     {
         _enumerator.RegisterEndpointNotificationCallback(notificationClient);
+    }
+
+    public void UnregisterNotificationCallback(IMMNotificationClient notificationClient)
+    {
+        _enumerator.UnregisterEndpointNotificationCallback(notificationClient);
     }
 }
 

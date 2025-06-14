@@ -7,23 +7,16 @@ using System.Text.Json;
 
 namespace AudioLocker.BL.Configuration;
 
-public class JsonFileConfigurationStorage : FileConfigurationBase
+public class JsonFileConfigurationStorage(string filePath, int defaultVolumeLevel) : FileConfigurationBase(filePath)
 {
-    private static readonly ImmutableDictionary<string, ProcessConfigurationCollection> EMPTY_PROCESS_CONFIGURATIONS = ImmutableDictionary<string, ProcessConfigurationCollection>.Empty;
+    private readonly int _defaultVolumeLevel = defaultVolumeLevel;
 
+    private static readonly ImmutableDictionary<string, ProcessConfigurationCollection> EMPTY_PROCESS_CONFIGURATIONS = ImmutableDictionary<string, ProcessConfigurationCollection>.Empty;
     private readonly JsonSerializerOptions _options = new() { WriteIndented = true };
 
-    private Dictionary<string, ProcessConfigurationCollection> _processConfigurations;
-    private readonly int _defaultVolumeLevel;
+    private Dictionary<string, ProcessConfigurationCollection> _processConfigurations = new Dictionary<string, ProcessConfigurationCollection>();
 
     private readonly SemaphoreSlim _write_semaphore = new(1, 1);
-
-    public JsonFileConfigurationStorage(string filePath, int defaultVolumeLevel)
-        : base(filePath)
-    {
-        _defaultVolumeLevel = defaultVolumeLevel;
-        _processConfigurations = new Dictionary<string, ProcessConfigurationCollection>();
-    }
 
     private ProcessConfigurationCollection? GetConfiguration(string deviceName)
     {

@@ -46,7 +46,7 @@ public class AudioManager
         for (int i = 0; i < sessions.Count; i++)
         {
             var session = sessions[i];
-            session.Dispose();
+            session.UnRegisterEventClient();
         }
     }
 

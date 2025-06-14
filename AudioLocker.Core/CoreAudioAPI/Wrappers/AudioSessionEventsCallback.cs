@@ -46,7 +46,7 @@ public partial class AudioSessionEventsCallback(IAudioSessionEventsHandler handl
 
     public void OnStateChanged(AudioSessionState NewState)
     {
-        if (NewState is AudioSessionState.AudioSessionStateExpired)
+        if (NewState == AudioSessionState.AudioSessionStateExpired)
         {
             OnSessionDisconnect?.Invoke();
         }
