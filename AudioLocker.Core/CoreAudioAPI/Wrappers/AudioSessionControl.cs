@@ -1,6 +1,5 @@
 ﻿using AudioLocker.Core.CoreAudioAPI.Interfaces;
 using AudioLocker.Core.CoreAudioAPI.Wrappers.Interfaces;
-using System.Diagnostics;
 
 namespace AudioLocker.Core.CoreAudioAPI.Wrappers;
 
@@ -18,15 +17,25 @@ public class AudioSessionControl : IDisposable
         get => _audioSession.GetProcessId();
     }
 
+    public string SessionInstanceIdentifier
+    {
+        get => _audioSession.GetSessionInstanceIdentifier();
+    }
+
     public AudioSessionControl(IAudioSessionControl audioSession)
         : this((IAudioSessionControl2)audioSession)
     { }
+
     public AudioSessionControl(IAudioSessionControl2 audioSession)
     {
         _audioSession = audioSession;
 
-        Debug.Assert(audioSession is ISimpleAudioVolume);
         SimpleAudioVolume = new SimpleAudioVolume((ISimpleAudioVolume)audioSession);
+    }
+
+    public override int GetHashCode()
+    {
+        return SessionInstanceIdentifier.GetHashCode();
     }
 
     public void RegisterEventClient(IAudioSessionEventsHandler eventClient)
@@ -37,11 +46,6 @@ public class AudioSessionControl : IDisposable
         _eventsCallback.OnSessionDisconnect += OnSessionDisconnectCallback;
 
         _audioSession.RegisterAudioSessionNotification(_eventsCallback);
-    }
-
-    private void OnSessionDisconnectCallback()
-    {
-        OnSessionDisconnect?.Invoke(this);
     }
 
     public void UnRegisterEventClient()
@@ -60,5 +64,10 @@ public class AudioSessionControl : IDisposable
         OnSessionDisconnect?.Invoke(this);
 
         GC.SuppressFinalize(this);
+    }
+
+    private void OnSessionDisconnectCallback()
+    {
+        OnSessionDisconnect?.Invoke(this);
     }
 }

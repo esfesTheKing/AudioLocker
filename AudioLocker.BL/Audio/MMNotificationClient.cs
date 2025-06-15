@@ -40,7 +40,7 @@ public partial class MMNotificationClient(
                 _logger.Info($"[{device.FriendlyName}]: Device's state was set to inactive");
                 OnDeviceRemoved(deviceId);
                 break;
-        };
+        }
     }
 
     public void OnDeviceAdded(string pwstrDeviceId)

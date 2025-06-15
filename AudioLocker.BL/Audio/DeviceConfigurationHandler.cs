@@ -96,13 +96,11 @@ public class DeviceConfigurationHandler: IDisposable
         _storage.Register(deviceName, process.ProcessName);
 
         var audioSessionEventHandler = new AudioSessionEventHandler(_logger, _storage, session, deviceName, process.ProcessName);
-
-        var simpleAudioVolume = session.SimpleAudioVolume;
-        audioSessionEventHandler.OnVolumeChanged(simpleAudioVolume.Volume, simpleAudioVolume.Mute);
+        audioSessionEventHandler.OnConfigurationChanged();
 
         session.RegisterEventClient(audioSessionEventHandler);
-        _logger.Info($"New session was configured: {process.ProcessName}");
-
         await _storage.Save();
+
+        _logger.Info($"[{deviceName}]: Finished configuring {process.ProcessName}");
     }
 }

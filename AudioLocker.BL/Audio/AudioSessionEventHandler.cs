@@ -84,7 +84,7 @@ public class AudioSessionEventHandler : IAudioSessionEventsHandler, IDisposable
         GC.SuppressFinalize(this);
     }
 
-    private void OnConfigurationChanged()
+    internal void OnConfigurationChanged()
     {
         _comExceptionHandler.HandleSessionAccessExceptions(() => OnVolumeChanged(_session.SimpleAudioVolume.Volume));
     }
