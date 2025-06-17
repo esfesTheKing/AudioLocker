@@ -1,4 +1,5 @@
 using AudioLocker.Core.Loggers.Abstract;
+using AudioLocker.Properties;
 using Microsoft.Win32;
 using System.Diagnostics;
 
@@ -20,7 +21,7 @@ public class AudioLockerTrayApp : ApplicationContext
 
         _trayIcon = new NotifyIcon()
         {
-            Icon = Properties.Resources.ApplicationBorderIcon,
+            Icon = Resources.ApplicationBorderIcon,
             ContextMenuStrip = new ContextMenuStrip()
             {
                 Items = {
@@ -38,7 +39,7 @@ public class AudioLockerTrayApp : ApplicationContext
 
     public void SetRunOnStartup(bool addRegistryKey)
     {
-        RegistryKey? registryKey = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Run", writable: true);
+        var registryKey = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Run", writable: true);
         if (registryKey is null)
         {
             _logger.Warning("Unable to get the run on startup registry key");
@@ -47,7 +48,7 @@ public class AudioLockerTrayApp : ApplicationContext
 
         if (addRegistryKey)
         {
-            registryKey.SetValue(Constants.APP_NAME, string.Join(' ', new List<string> { EXECTUABLE_PATH, "-s", _settingsFile }));
+            registryKey.SetValue(Constants.APP_NAME, string.Join(' ', [EXECTUABLE_PATH, "-s", _settingsFile]));
             _logger.Info("AudioLocker is now running on startup");
             return;
         }
