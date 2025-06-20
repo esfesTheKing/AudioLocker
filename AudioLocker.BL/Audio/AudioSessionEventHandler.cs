@@ -9,6 +9,8 @@ namespace AudioLocker.BL.Audio;
 
 public class AudioSessionEventHandler : IAudioSessionEventsHandler, IDisposable
 {
+    private const int ON_VOLUME_CHANGE_DEBOUNCER_TIME_MS = 10;
+
     private readonly ILogger _logger;
     private readonly IConfigurationStorage _configurationStorage;
     private readonly AudioSessionControl _session;
@@ -57,7 +59,7 @@ public class AudioSessionEventHandler : IAudioSessionEventsHandler, IDisposable
             _token?.Cancel();
             _token = new CancellationTokenSource();
 
-            Task.Delay(10, _token.Token).ContinueWith(task =>
+            Task.Delay(ON_VOLUME_CHANGE_DEBOUNCER_TIME_MS, _token.Token).ContinueWith(task =>
             {
                 if (task.IsCompletedSuccessfully)
                 {

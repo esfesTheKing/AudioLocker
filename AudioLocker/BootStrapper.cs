@@ -17,12 +17,12 @@ namespace AudioLocker;
 internal class BootStrapper
 {
     private readonly string LOGGER_NAME = "Logger";
-    private MMDeviceEnumerator? _enumerator;
     private DeviceConfigurationHandler? _deviceConfigurationHandler;
 
     public void Run(string[] args)
     {
         var logger = GetLogger();
+        var arguments = ParseArguments(logger, args);
 
         using var mutext = new Mutex(true, Constants.APP_NAME, out bool createdNew);
         if (!createdNew)
@@ -31,25 +31,19 @@ internal class BootStrapper
             return;
         }
 
-        var arguments = ParseArguments(logger, args);
-
-        var thread = new Thread(async () => await InitializeAudioSetup(logger, arguments));
-        thread.IsBackground = true;
-        thread.SetApartmentState(ApartmentState.MTA);
-
-        thread.Start();
-
+        InitializeLoggingOfUnhandledExcpetions(logger);
+        InitializeAudioSetup(logger, arguments);
         InitializeTrayApp(logger, arguments);
     }
 
-    private async Task InitializeAudioSetup(ILogger logger, t_StartupArguments arguments)
+    private void InitializeAudioSetup(ILogger logger, t_StartupArguments arguments)
     {
         var storage = GetStorage(arguments);
 
-        await storage.Prepare();
+        storage.Prepare().Wait();
 
-        _enumerator = new MMDeviceEnumerator();
-        _deviceConfigurationHandler = new DeviceConfigurationHandler(logger, storage, _enumerator);
+        var enumerator = new MMDeviceEnumerator();
+        _deviceConfigurationHandler = new DeviceConfigurationHandler(logger, storage, enumerator);
 
         _deviceConfigurationHandler.Initialize();
     }
@@ -67,20 +61,16 @@ internal class BootStrapper
             logger.Fatal("Unknown exception has caused the app to crash!", exception);
         };
 
+        Application.SetUnhandledExceptionMode(UnhandledExceptionMode.CatchException);
         Application.ThreadException += (_, @event) =>
         {
             logger.Fatal("Unknown exception has caused the app to crash!", @event.Exception);
         };
-
-        Application.SetUnhandledExceptionMode(UnhandledExceptionMode.CatchException);
     }
 
     private void InitializeTrayApp(ILogger logger, t_StartupArguments arguments)
     {
-        Application.SetUnhandledExceptionMode(UnhandledExceptionMode.CatchException);
         ApplicationConfiguration.Initialize();
-
-        InitializeLoggingOfUnhandledExcpetions(logger);
 
         var trayApp = new AudioLockerTrayApp(logger, arguments.SettingsFilePath);
 
