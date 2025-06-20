@@ -24,6 +24,7 @@ public class DeviceConfigurator: IDisposable
         _enumerator = enumerator;
 
         _comExceptionHandler = new COMExceptionHandler(
+            _logger,
             onKnownException: () => { },
             onUnknownException: exception => _logger.Warning("Unknown error has accord while trying to configure new session: ", exception),
             onCleanup: () => { }

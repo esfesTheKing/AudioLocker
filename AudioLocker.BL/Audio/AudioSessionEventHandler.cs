@@ -37,6 +37,7 @@ public class AudioSessionEventHandler : IAudioSessionEventsHandler, IDisposable
         _configurationStorage.OnConfigurationChanged += OnConfigurationChanged;
 
         _comExceptionHandler = new COMExceptionHandler(
+            _logger,
             onKnownException: () => { },
             onUnknownException: exception => _logger.Warning($"Unknown error encountered: {_deviceName} - {_processName}", exception),
             onCleanup: Dispose
