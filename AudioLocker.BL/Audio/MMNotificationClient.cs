@@ -9,16 +9,13 @@ using System.Runtime.InteropServices.Marshalling;
 namespace AudioLocker.BL.Audio;
 
 [GeneratedComClass]
-public partial class MMNotificationClient(
-        ILogger logger, 
-        MMDeviceEnumerator enumerator, 
-        DeviceConfigurationHandler deviceConfigurationHandler
-    ) : IMMNotificationClient
+public partial class MMNotificationClient(ILogger logger, MMDeviceEnumerator enumerator) : IMMNotificationClient
 {
-    private readonly MMDeviceEnumerator _enumerator = enumerator;
-    private readonly DeviceConfigurationHandler _deviceConfigurationHandler = deviceConfigurationHandler;
+    public Action<MMDevice>? OnDeviceAddedEvent;
+    public Action<MMDevice>? OnDeviceRemovedEvent;
 
     private readonly ILogger _logger = logger;
+    private readonly MMDeviceEnumerator _enumerator = enumerator;
 
     public void OnDeviceStateChanged(string deviceId, DeviceState newState)
     {
@@ -52,7 +49,7 @@ public partial class MMNotificationClient(
         }
 
         _logger.Info($"[{device.FriendlyName}]: New device was connected");
-        _deviceConfigurationHandler.ConfigureDevice(device);
+        OnDeviceAddedEvent?.Invoke(device);
     }
 
     public void OnDeviceRemoved(string deviceId)
@@ -64,7 +61,7 @@ public partial class MMNotificationClient(
         }
 
         _logger.Info($"[{device.FriendlyName}]: Device has disconnected");
-        _deviceConfigurationHandler.DeconfigureDevice(device);
+        OnDeviceRemovedEvent?.Invoke(device);
     }
 
     public void OnDefaultDeviceChanged(EDataFlow dataFlow, ERole role, string defaultDeviceId) { }

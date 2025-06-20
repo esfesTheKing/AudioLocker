@@ -1,23 +1,23 @@
 ﻿using AudioLocker.Core.Configuration.Abstract;
 using AudioLocker.Core.CoreAudioAPI.Enums;
-using AudioLocker.Core.CoreAudioAPI.Interfaces;
 using AudioLocker.Core.CoreAudioAPI.Wrappers;
 using AudioLocker.Core.Loggers.Abstract;
 using System.Diagnostics;
 
 namespace AudioLocker.BL.Audio;
 
-public class DeviceConfigurationHandler: IDisposable
+public class DeviceConfigurator: IDisposable
 {
     private readonly ILogger _logger;
     private readonly IConfigurationStorage _storage;
     private readonly MMDeviceEnumerator _enumerator;
 
-    private IMMNotificationClient? _notificationClient;
+    private MMNotificationClient? _notificationClient;
+    private readonly Dictionary<string, MMDevice> _devices = [];
 
     private readonly COMExceptionHandler _comExceptionHandler;
 
-    public DeviceConfigurationHandler(ILogger logger, IConfigurationStorage storage, MMDeviceEnumerator enumerator)
+    public DeviceConfigurator(ILogger logger, IConfigurationStorage storage, MMDeviceEnumerator enumerator)
     {
         _logger = logger;
         _storage = storage;
@@ -35,10 +35,12 @@ public class DeviceConfigurationHandler: IDisposable
         var devices = _enumerator.EnumerateAudioEndPoints(EDataFlow.eRender, DeviceState.DEVICE_STATE_ACTIVE);
         foreach (var device in devices)
         {
-            _comExceptionHandler.HandleSessionAccessExceptions(() => ConfigureDevice(device));
+            _comExceptionHandler.HandleAccessExceptions(() => ConfigureDevice(device));
         }
 
-        _notificationClient = new MMNotificationClient(_logger, _enumerator, this);
+        _notificationClient = new MMNotificationClient(_logger, _enumerator);
+        _notificationClient.OnDeviceAddedEvent += (device) => _comExceptionHandler.HandleAccessExceptions(() => ConfigureDevice(device));
+        _notificationClient.OnDeviceRemovedEvent += (device) => _comExceptionHandler.HandleAccessExceptions(() => DeconfigureDevice(device));
 
         _enumerator.RegisterNotificationCallback(_notificationClient);
     }
@@ -53,38 +55,46 @@ public class DeviceConfigurationHandler: IDisposable
         var devices = _enumerator.EnumerateAudioEndPoints(EDataFlow.eRender, DeviceState.DEVICE_STATE_ACTIVE);
         foreach (var device in devices)
         {
-            _comExceptionHandler.HandleSessionAccessExceptions(() => DeconfigureDevice(device));
+            _comExceptionHandler.HandleAccessExceptions(() => DeconfigureDevice(device));
         }
 
         GC.SuppressFinalize(this);
     }
 
-    internal void ConfigureDevice(MMDevice device)
+    private void ConfigureDevice(MMDevice device)
     {
         var deviceName = device.FriendlyName;
         var audioSessionManager = device.AudioSessionManager;
 
         _logger.Info($"[{deviceName}]: Configuring device...");
+        if (_devices.ContainsKey(device.Id))
+        {
+            _logger.Info($"[{deviceName}]: Device was configured previously...");
+            return;
+        }
 
         foreach (var session in audioSessionManager.Sessions)
         {
-            _comExceptionHandler.HandleSessionAccessExceptionsAsync(async () => await ConfigureSession(deviceName, session));
+            _comExceptionHandler.HandleAccessExceptionsAsync(async () => await ConfigureSession(deviceName, session));
         }
 
         audioSessionManager.OnSessionCreated += (_, session) =>
         {
-            _comExceptionHandler.HandleSessionAccessExceptionsAsync(async () => await ConfigureSession(deviceName, session));
+            _comExceptionHandler.HandleAccessExceptionsAsync(async () => await ConfigureSession(deviceName, session));
         };
 
+        _devices.Add(device.Id, device);
         _logger.Info($"[{deviceName}]: Finished configuring device");
     }
 
-    internal void DeconfigureDevice(MMDevice device)
+    private void DeconfigureDevice(MMDevice device)
     {
         foreach (var session in device.AudioSessionManager.Sessions)
         {
             session.Dispose();
         }
+
+        _devices.Remove(device.Id);
     }
 
     private async Task ConfigureSession(string deviceName, AudioSessionControl session)

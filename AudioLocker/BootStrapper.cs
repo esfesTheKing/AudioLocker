@@ -17,7 +17,7 @@ namespace AudioLocker;
 internal class BootStrapper
 {
     private readonly string LOGGER_NAME = "Logger";
-    private DeviceConfigurationHandler? _deviceConfigurationHandler;
+    private DeviceConfigurator? _deviceConfigurator;
 
     public void Run(string[] args)
     {
@@ -43,9 +43,9 @@ internal class BootStrapper
         storage.Prepare().Wait();
 
         var enumerator = new MMDeviceEnumerator();
-        _deviceConfigurationHandler = new DeviceConfigurationHandler(logger, storage, enumerator);
+        _deviceConfigurator = new DeviceConfigurator(logger, storage, enumerator);
 
-        _deviceConfigurationHandler.Initialize();
+        _deviceConfigurator.Initialize();
     }
 
     private t_StartupArguments ParseArguments(ILogger logger, string[] args)

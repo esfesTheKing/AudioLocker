@@ -11,7 +11,7 @@ internal class COMExceptionHandler(Action onKnownException, Action<Exception> on
     private readonly Action<Exception> _onUnknownException = onUnknownException;
     private readonly Action _onCleanup = onCleanup;
 
-    public void HandleSessionAccessExceptions(Action function)
+    public void HandleAccessExceptions(Action function)
     {
         try
         {
@@ -28,7 +28,7 @@ internal class COMExceptionHandler(Action onKnownException, Action<Exception> on
             _onCleanup.Invoke();
         }
     }
-    public void HandleSessionAccessExceptionsAsync(Func<Task> function)
+    public void HandleAccessExceptionsAsync(Func<Task> function)
     {
         var task = function.Invoke();
         try

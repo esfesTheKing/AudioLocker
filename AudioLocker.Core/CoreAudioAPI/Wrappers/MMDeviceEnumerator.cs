@@ -55,4 +55,3 @@ public partial class MMDeviceEnumerator
         _enumerator.UnregisterEndpointNotificationCallback(notificationClient);
     }
 }
-
