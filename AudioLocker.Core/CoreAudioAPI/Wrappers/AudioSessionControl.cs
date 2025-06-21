@@ -47,6 +47,7 @@ public class AudioSessionControl : IDisposable
         {
             _audioSession.UnregisterAudioSessionNotification(_eventsCallback);
 
+            _eventsCallback.OnSessionDisconnect -= OnSessionDisconnectCallback;
             _eventsCallback = null;
         }
     }
