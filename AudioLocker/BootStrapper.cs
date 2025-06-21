@@ -17,69 +17,86 @@ namespace AudioLocker;
 internal class BootStrapper
 {
     private readonly string LOGGER_NAME = "Logger";
+
+    private readonly ILogger _logger;
     private DeviceConfigurator? _deviceConfigurator;
+
+    public BootStrapper()
+    {
+        _logger = GetLogger();
+    }
 
     public void Run(string[] args)
     {
-        var logger = GetLogger();
-        var arguments = ParseArguments(logger, args);
+        var arguments = ParseArguments(args);
 
         using var mutext = new Mutex(true, Constants.APP_NAME, out bool createdNew);
         if (!createdNew)
         {
-            logger.Error("Another instance of this app is already running.");
+            _logger.Error("Another instance of this app is already running.");
             return;
         }
 
-        InitializeLoggingOfUnhandledExcpetions(logger);
-        InitializeAudioSetup(logger, arguments);
-        InitializeTrayApp(logger, arguments);
+        InitializeLoggingOfUnhandledExcpetions();
+        InitializeAudioSetup(arguments);
+        InitializeTrayApp(arguments);
     }
 
-    private void InitializeAudioSetup(ILogger logger, t_StartupArguments arguments)
+    private void InitializeAudioSetup(t_StartupArguments arguments)
     {
         var storage = GetStorage(arguments);
 
         storage.Prepare().Wait();
 
         var enumerator = new MMDeviceEnumerator();
-        _deviceConfigurator = new DeviceConfigurator(logger, storage, enumerator);
+        _deviceConfigurator = new DeviceConfigurator(_logger, storage, enumerator);
 
         _deviceConfigurator.Initialize();
     }
 
-    private t_StartupArguments ParseArguments(ILogger logger, string[] args)
+    private t_StartupArguments ParseArguments(string[] args)
     {
-        return CommandLineStartupArguments.Parse(logger, args);
+        return CommandLineStartupArguments.Parse(_logger, args);
     }
 
-    private void InitializeLoggingOfUnhandledExcpetions(ILogger logger)
+    private void InitializeLoggingOfUnhandledExcpetions()
     {
         AppDomain.CurrentDomain.UnhandledException += (_, @event) =>
         {
             var exception = (Exception)@event.ExceptionObject;
-            logger.Fatal("Unknown exception has caused the app to crash!", exception);
+            _logger.Fatal("Unknown exception has caused the app to crash!", exception);
         };
 
         Application.SetUnhandledExceptionMode(UnhandledExceptionMode.CatchException);
         Application.ThreadException += (_, @event) =>
         {
-            logger.Fatal("Unknown exception has caused the app to crash!", @event.Exception);
+            _logger.Fatal("Unknown exception has caused the app to crash!", @event.Exception);
         };
     }
 
-    private void InitializeTrayApp(ILogger logger, t_StartupArguments arguments)
+    private void InitializeTrayApp(t_StartupArguments arguments)
     {
         ApplicationConfiguration.Initialize();
 
-        var trayApp = new AudioLockerTrayApp(logger, arguments.SettingsFilePath);
+        var trayApp = new AudioLockerTrayApp(_logger, arguments.SettingsFilePath);
 
         if (arguments.StartOnStartup is not null)
         {
             trayApp.SetRunOnStartup((bool)arguments.StartOnStartup);
         }
 
+        Application.ApplicationExit += CleanupOnApplicationExit;
+
         Application.Run(trayApp);
+    }
+
+    private void CleanupOnApplicationExit(object? sender, EventArgs @event)
+    {
+        _logger.Info("Running cleanup before exiting...");
+        _deviceConfigurator?.Dispose();
+
+        Application.ApplicationExit -= CleanupOnApplicationExit;
+        _logger.Info("Finished running cleanup");
     }
 
     private ILogger GetLogger()
