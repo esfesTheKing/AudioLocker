@@ -5,38 +5,31 @@ namespace AudioLocker.Core.CoreAudioAPI.Wrappers;
 
 public class AudioSessionControl : IDisposable
 {
+    public SimpleAudioVolume SimpleAudioVolume;
+
+    public readonly string SessionInstanceIdentifier;
+    public readonly uint ProcessId;
+
     private readonly IAudioSessionControl2 _audioSession;
     private AudioSessionEventsCallback? _eventsCallback;
 
     internal Action<object>? OnSessionDisconnect;
 
-    public SimpleAudioVolume SimpleAudioVolume;
-
-    public uint ProcessId
-    {
-        get => _audioSession.GetProcessId();
-    }
-
-    public string SessionInstanceIdentifier
-    {
-        get => _audioSession.GetSessionInstanceIdentifier();
-    }
-
     public AudioSessionControl(IAudioSessionControl audioSession)
-        : this((IAudioSessionControl2)audioSession)
+        : this((IAudioSessionControl2)audioSession) 
     { }
 
     public AudioSessionControl(IAudioSessionControl2 audioSession)
     {
         _audioSession = audioSession;
 
+        SessionInstanceIdentifier = _audioSession.GetSessionInstanceIdentifier();
+        ProcessId = _audioSession.GetProcessId();
+
         SimpleAudioVolume = new SimpleAudioVolume((ISimpleAudioVolume)audioSession);
     }
 
-    public override int GetHashCode()
-    {
-        return SessionInstanceIdentifier.GetHashCode();
-    }
+    public override int GetHashCode() => SessionInstanceIdentifier.GetHashCode();
 
     public void RegisterEventClient(IAudioSessionEventsHandler eventClient)
     {

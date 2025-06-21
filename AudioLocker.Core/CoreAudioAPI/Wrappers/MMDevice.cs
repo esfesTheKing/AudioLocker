@@ -11,6 +11,8 @@ public partial class MMDevice
     private readonly IMMDevice _device;
     private readonly IPropertyStore _propertyStore;
 
+    public readonly string Id;
+
     public readonly AudioSessionManager AudioSessionManager;
 
     public MMDevice(IMMDevice device)
@@ -18,15 +20,13 @@ public partial class MMDevice
         _device = device;
         _propertyStore = _device.OpenPropertyStore(STGM.STGM_READ);
 
+        Id = _device.GetId();
+
         var sessionManager = _device.Activate<IAudioSessionManager2>();
 
         AudioSessionManager = new AudioSessionManager(sessionManager);
     }
 
-    public string Id
-    {
-        get => _device.GetId();
-    }
 
     public DeviceState State
     {
