@@ -6,7 +6,7 @@ using System.Diagnostics;
 
 namespace AudioLocker.BL.Audio;
 
-public class DeviceConfigurator: IDisposable
+public class DeviceConfigurator : IDisposable
 {
     private readonly ILogger _logger;
     private readonly IConfigurationStorage _storage;

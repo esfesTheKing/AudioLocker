@@ -16,7 +16,7 @@ public class AudioSessionControl : IDisposable
     internal Action<object>? OnSessionDisconnect;
 
     public AudioSessionControl(IAudioSessionControl audioSession)
-        : this((IAudioSessionControl2)audioSession) 
+        : this((IAudioSessionControl2)audioSession)
     { }
 
     public AudioSessionControl(IAudioSessionControl2 audioSession)

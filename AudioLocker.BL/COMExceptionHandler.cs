@@ -4,9 +4,9 @@ using System.Runtime.InteropServices;
 namespace AudioLocker.BL;
 
 internal class COMExceptionHandler(
-        ILogger logger, 
-        Action onKnownException, 
-        Action<Exception> onUnknownException, 
+        ILogger logger,
+        Action onKnownException,
+        Action<Exception> onUnknownException,
         Action onCleanup
     )
 {
@@ -14,7 +14,7 @@ internal class COMExceptionHandler(
     private const uint INVALID_HANDLE = 0x80070006;
 
     private readonly ILogger _logger = logger;
-    
+
     private readonly Action _onKnownException = onKnownException;
     private readonly Action<Exception> _onUnknownException = onUnknownException;
     private readonly Action _onCleanup = onCleanup;
