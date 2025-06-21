@@ -13,7 +13,7 @@ public class DeviceConfigurator: IDisposable
     private readonly MMDeviceEnumerator _enumerator;
 
     private MMNotificationClient? _notificationClient;
-    private readonly Dictionary<string, MMDevice> _devices = [];
+    private readonly Dictionary<string, MMDevice> _configuredDevices = [];
 
     private readonly COMExceptionHandler _comExceptionHandler;
 
@@ -68,7 +68,7 @@ public class DeviceConfigurator: IDisposable
         var audioSessionManager = device.AudioSessionManager;
 
         _logger.Info($"[{deviceName}]: Configuring device...");
-        if (_devices.ContainsKey(device.Id))
+        if (_configuredDevices.ContainsKey(device.Id))
         {
             _logger.Info($"[{deviceName}]: Device was configured previously...");
             return;
@@ -84,19 +84,21 @@ public class DeviceConfigurator: IDisposable
             _comExceptionHandler.HandleAccessExceptionsAsync(async () => await ConfigureSession(deviceName, session));
         };
 
-        _devices.Add(device.Id, device);
+        _configuredDevices.Add(device.Id, device);
         _logger.Info($"[{deviceName}]: Finished configuring device");
     }
 
     private void DeconfigureDevice(MMDevice device)
     {
+        device.AudioSessionManager.OnSessionCreated = null;
+
         var copy = device.AudioSessionManager.Sessions.ToList();
         foreach (var session in copy)
         {
             session.Dispose();
         }
 
-        _devices.Remove(device.Id);
+        _configuredDevices.Remove(device.Id);
     }
 
     private async Task ConfigureSession(string deviceName, AudioSessionControl session)
