@@ -38,7 +38,8 @@ public class AudioSessionManager : IDisposable
 
     private void DisposeSessions()
     {
-        foreach (var session in _sessions)
+        var copy = _sessions.ToList();
+        foreach (var session in copy)
         {
             session.Dispose();
         }
@@ -46,6 +47,8 @@ public class AudioSessionManager : IDisposable
 
     public void Dispose()
     {
+        OnSessionCreated = null;
+
         _sessionManager.UnregisterSessionNotification(_notification);
         DisposeSessions();
 

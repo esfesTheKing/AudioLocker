@@ -55,7 +55,7 @@ public class AudioSessionControl : IDisposable
     public void Dispose()
     {
         UnRegisterEventClient();
-        OnSessionDisconnect?.Invoke(this);
+        OnSessionDisconnectCallback();
 
         GC.SuppressFinalize(this);
     }

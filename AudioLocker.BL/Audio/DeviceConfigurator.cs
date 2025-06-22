@@ -90,14 +90,7 @@ public class DeviceConfigurator : IDisposable
 
     private void DeconfigureDevice(MMDevice device)
     {
-        device.AudioSessionManager.OnSessionCreated = null;
-
-        var copy = device.AudioSessionManager.Sessions.ToList();
-        foreach (var session in copy)
-        {
-            session.Dispose();
-        }
-
+        device.AudioSessionManager.Dispose();
         _configuredDevices.Remove(device.Id);
     }
 
