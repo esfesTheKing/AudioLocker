@@ -14,32 +14,23 @@ public class JsonFileConfigurationStorage(string filePath, int defaultVolumeLeve
     private static readonly ImmutableDictionary<string, ProcessConfigurationCollection> EMPTY_PROCESS_CONFIGURATIONS = ImmutableDictionary<string, ProcessConfigurationCollection>.Empty;
     private readonly JsonSerializerOptions _options = new() { WriteIndented = true };
 
-    private Dictionary<string, ProcessConfigurationCollection> _processConfigurations = new Dictionary<string, ProcessConfigurationCollection>();
+    private Dictionary<string, ProcessConfigurationCollection> _processConfigurations = [];
 
-    private readonly SemaphoreSlim _write_semaphore = new(1, 1);
+    private readonly SemaphoreSlim _writeSemaphore = new(1, 1);
 
     private ProcessConfigurationCollection? GetConfiguration(string deviceName)
     {
-        if (_processConfigurations.TryGetValue(deviceName, out var processConfiguration))
-        {
-            return processConfiguration;
-        }
+        _processConfigurations.TryGetValue(deviceName, out var processConfiguration);
 
-        return null;
+        return processConfiguration;
     }
 
     public override ProcessConfiguration? Get(string deviceName, string processName)
     {
         var collection = GetConfiguration(deviceName);
-        if (collection is null)
-        {
-            return null;
-        }
 
-        if (!collection.TryGetValue(processName, out var processConfiguration))
-        {
-            return null;
-        }
+        ProcessConfiguration? processConfiguration = null;
+        collection?.TryGetValue(processName, out processConfiguration);
 
         return processConfiguration;
     }
@@ -47,29 +38,20 @@ public class JsonFileConfigurationStorage(string filePath, int defaultVolumeLeve
     public override void Set(string deviceName, string processName, ProcessConfiguration configuration)
     {
         var collection = GetConfiguration(deviceName);
-        if (collection is null)
-        {
-            return;
-        }
 
-        collection.Add(processName, configuration);
+        collection?.Add(processName, configuration);
     }
 
     public override void Register(string deviceName, string processName)
     {
-        ProcessConfigurationCollection collection;
-        if (!_processConfigurations.TryGetValue(deviceName, out collection!))
+        if (!_processConfigurations.TryGetValue(deviceName, out ProcessConfigurationCollection? collection))
         {
-            collection = new ProcessConfigurationCollection();
+            collection = [];
+
             _processConfigurations[deviceName] = collection;
         }
 
-        if (collection.ContainsKey(processName))
-        {
-            return;
-        }
-
-        collection.Add(processName, new ProcessConfiguration { VolumeLevel = _defaultVolumeLevel });
+        collection.TryAdd(processName, new ProcessConfiguration { VolumeLevel = _defaultVolumeLevel });
     }
 
     protected override async Task CreateFile()
@@ -81,19 +63,14 @@ public class JsonFileConfigurationStorage(string filePath, int defaultVolumeLeve
 
     private async Task<Dictionary<string, ProcessConfigurationCollection>> ReadFileHandleExceptions(Stream stream)
     {
+        Dictionary<string, ProcessConfigurationCollection>? processConfigurations = null;
         try
         {
-            var processConfigurations = await JsonSerializer.DeserializeAsync<Dictionary<string, ProcessConfigurationCollection>>(stream);
-            if (processConfigurations is not null)
-            {
-                return processConfigurations;
-            }
+            processConfigurations = await JsonSerializer.DeserializeAsync<Dictionary<string, ProcessConfigurationCollection>>(stream);
         }
-        catch (JsonException)
-        {
-        }
+        catch (JsonException) { }
 
-        return new Dictionary<string, ProcessConfigurationCollection>();
+        return processConfigurations ?? [];
     }
 
     protected override async Task ReadFile()
@@ -107,14 +84,14 @@ public class JsonFileConfigurationStorage(string filePath, int defaultVolumeLeve
 
     protected override async Task WriteToFile<T>(T processConfiguration)
     {
-        var stream = File.OpenWrite(_filePath);
-        using var streamWriter = new StreamWriter(stream, Encoding.UTF8);
+        await _writeSemaphore.LockAsync(async () => {
+            using var stream = new FileStream(_filePath, FileMode.Open, FileAccess.Write, FileShare.Read);
+            using var streamWriter = new StreamWriter(stream, Encoding.UTF8);
 
-        var data = JsonSerializer.Serialize(processConfiguration, _options);
+            var data = JsonSerializer.Serialize(processConfiguration, _options);
 
-        await _write_semaphore.LockAsync(async () =>
-        {
             await streamWriter.WriteAsync(data);
+            await streamWriter.FlushAsync();
         });
     }
 
