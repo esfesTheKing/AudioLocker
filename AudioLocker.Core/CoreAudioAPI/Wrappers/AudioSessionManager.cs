@@ -7,7 +7,7 @@ public class AudioSessionManager : IDisposable
     private readonly IAudioSessionManager2 _sessionManager;
     private readonly AudioSessionCollection _sessions;
 
-    public Action<object, AudioSessionControl>? OnSessionCreated;
+    public event Action<object, AudioSessionControl>? OnSessionCreated;
 
     private readonly AudioSessionNotification _notification;
 
@@ -18,12 +18,12 @@ public class AudioSessionManager : IDisposable
     public AudioSessionManager(IAudioSessionManager2 sessionManager)
     {
         _sessionManager = sessionManager;
-        _notification = new AudioSessionNotification(this);
-
-        _sessionManager.RegisterSessionNotification(_notification);
         _sessions = new AudioSessionCollection(_sessionManager.GetSessionEnumerator());
 
-        OnSessionCreated += KeepTrackOnCreatedSessions;
+        _notification = new AudioSessionNotification(this);
+        _notification.OnSessionCreatedEvent += OnSessionCreatedCallback;
+
+        _sessionManager.RegisterSessionNotification(_notification);
     }
 
     public AudioSessionCollection Sessions
@@ -31,9 +31,11 @@ public class AudioSessionManager : IDisposable
         get => _sessions;
     }
 
-    private void KeepTrackOnCreatedSessions(object sender, AudioSessionControl newSession)
+    private void OnSessionCreatedCallback(object sender, AudioSessionControl newSession)
     {
         _sessions.Add(newSession);
+
+        OnSessionCreated?.Invoke(this, newSession);
     }
 
     private void DisposeSessions()
@@ -49,7 +51,9 @@ public class AudioSessionManager : IDisposable
     {
         OnSessionCreated = null;
 
+        _notification.OnSessionCreatedEvent -= OnSessionCreated;
         _sessionManager.UnregisterSessionNotification(_notification);
+
         DisposeSessions();
 
         GC.SuppressFinalize(this);

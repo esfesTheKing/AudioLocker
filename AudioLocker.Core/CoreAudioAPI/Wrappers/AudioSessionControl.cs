@@ -13,7 +13,7 @@ public class AudioSessionControl : IDisposable
     private readonly IAudioSessionControl2 _audioSession;
     private AudioSessionEventsCallback? _eventsCallback;
 
-    internal Action<object>? OnSessionDisconnect;
+    internal event Action<object>? OnSessionDisconnect;
 
     public AudioSessionControl(IAudioSessionControl audioSession)
         : this((IAudioSessionControl2)audioSession)
@@ -56,6 +56,8 @@ public class AudioSessionControl : IDisposable
     {
         UnRegisterEventClient();
         OnSessionDisconnectCallback();
+
+        OnSessionDisconnect = null;
 
         GC.SuppressFinalize(this);
     }

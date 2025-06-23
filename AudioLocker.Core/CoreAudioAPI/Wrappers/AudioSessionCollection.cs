@@ -39,13 +39,18 @@ public class AudioSessionCollection : ICollection<AudioSessionControl>
         }
     }
 
+    public bool Remove(AudioSessionControl item)
+    {
+        item.OnSessionDisconnect -= OnSessionDisconnect;
+
+        return _sessions.Remove(item.GetHashCode());
+    }
+
     public void Clear() => _sessions.Clear();
 
     public bool Contains(AudioSessionControl item) => _sessions.ContainsKey(item.GetHashCode());
 
     public void CopyTo(AudioSessionControl[] array, int arrayIndex) => _sessions.Values.CopyTo(array, arrayIndex);
-
-    public bool Remove(AudioSessionControl item) => _sessions.Remove(item.GetHashCode());
 
     public IEnumerator<AudioSessionControl> GetEnumerator() => _sessions.Values.GetEnumerator();
 

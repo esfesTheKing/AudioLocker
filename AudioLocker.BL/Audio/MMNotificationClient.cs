@@ -11,8 +11,8 @@ namespace AudioLocker.BL.Audio;
 [GeneratedComClass]
 public partial class MMNotificationClient(ILogger logger, MMDeviceEnumerator enumerator) : IMMNotificationClient, IDisposable
 {
-    public Action<MMDevice>? OnDeviceAddedEvent;
-    public Action<MMDevice>? OnDeviceRemovedEvent;
+    public event Action<MMDevice>? OnDeviceAddedEvent;
+    public event Action<MMDevice>? OnDeviceRemovedEvent;
 
     private readonly ILogger _logger = logger;
     private readonly MMDeviceEnumerator _enumerator = enumerator;

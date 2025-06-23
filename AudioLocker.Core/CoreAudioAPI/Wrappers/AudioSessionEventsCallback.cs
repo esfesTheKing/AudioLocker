@@ -11,7 +11,7 @@ public partial class AudioSessionEventsCallback(IAudioSessionEventsHandler handl
 {
     private readonly IAudioSessionEventsHandler _handler = handler;
 
-    internal Action? OnSessionDisconnect;
+    internal event Action? OnSessionDisconnect;
 
     public void OnChannelVolumeChanged(uint ChannelCount, nint NewChannelVolumeArray, uint ChangedChannel, ref Guid EventContext)
     {
