@@ -35,8 +35,9 @@ public partial class AudioSessionEventsCallback(IAudioSessionEventsHandler handl
 
     public void OnSessionDisconnected(AudioSessionDisconnectReason DisconnectReason)
     {
-        _handler.OnSessionDisconnected(DisconnectReason);
         OnSessionDisconnect?.Invoke();
+
+        _handler.OnSessionDisconnected(DisconnectReason);
     }
 
     public void OnSimpleVolumeChanged(float NewVolume, [MarshalAs(UnmanagedType.Bool)] bool NewMute, ref Guid EventContext)
