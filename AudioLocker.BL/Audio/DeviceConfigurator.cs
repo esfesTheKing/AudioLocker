@@ -51,6 +51,7 @@ public class DeviceConfigurator : IDisposable
         if (_notificationClient is not null)
         {
             _enumerator.UnregisterNotificationCallback(_notificationClient);
+            _notificationClient.Dispose();
         }
 
         var devices = _enumerator.EnumerateAudioEndPoints(EDataFlow.eRender, DeviceState.DEVICE_STATE_ACTIVE);

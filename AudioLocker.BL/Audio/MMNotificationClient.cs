@@ -9,7 +9,7 @@ using System.Runtime.InteropServices.Marshalling;
 namespace AudioLocker.BL.Audio;
 
 [GeneratedComClass]
-public partial class MMNotificationClient(ILogger logger, MMDeviceEnumerator enumerator) : IMMNotificationClient
+public partial class MMNotificationClient(ILogger logger, MMDeviceEnumerator enumerator) : IMMNotificationClient, IDisposable
 {
     public Action<MMDevice>? OnDeviceAddedEvent;
     public Action<MMDevice>? OnDeviceRemovedEvent;
@@ -70,4 +70,12 @@ public partial class MMNotificationClient(ILogger logger, MMDeviceEnumerator enu
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private static bool IsSupportedDevice(MMDevice device) => device.DataFlow == EDataFlow.eRender;
+
+    public void Dispose()
+    {
+        OnDeviceAddedEvent = null;
+        OnDeviceRemovedEvent = null;
+
+        GC.SuppressFinalize(this);
+    }
 }
