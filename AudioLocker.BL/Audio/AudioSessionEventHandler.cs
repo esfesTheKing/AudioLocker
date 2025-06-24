@@ -9,16 +9,12 @@ namespace AudioLocker.BL.Audio;
 
 public class AudioSessionEventHandler : IAudioSessionEventsHandler, IDisposable
 {
-    private const int ON_VOLUME_CHANGE_DEBOUNCER_TIME_MS = 10;
-
     private readonly ILogger _logger;
     private readonly IConfigurationStorage _configurationStorage;
     private readonly AudioSessionControl _session;
     private readonly string _deviceName;
     private readonly string _processName;
     private readonly COMExceptionHandler _comExceptionHandler;
-
-    private CancellationTokenSource? _token;
 
     public AudioSessionEventHandler(
             ILogger logger,
@@ -55,18 +51,9 @@ public class AudioSessionEventHandler : IAudioSessionEventsHandler, IDisposable
 
     public void OnVolumeChanged(float volume, bool isMuted)
     {
-        _comExceptionHandler.HandleAccessExceptions(() =>
+        Debouncer.Debounce(_session.SessionInstanceIdentifier, () =>
         {
-            _token?.Cancel();
-            _token = new CancellationTokenSource();
-
-            Task.Delay(ON_VOLUME_CHANGE_DEBOUNCER_TIME_MS, _token.Token).ContinueWith(task =>
-            {
-                if (task.IsCompletedSuccessfully)
-                {
-                    OnVolumeChanged(volume);
-                }
-            });
+            _comExceptionHandler.HandleAccessExceptions(() => OnVolumeChanged(volume));
         });
     }
 

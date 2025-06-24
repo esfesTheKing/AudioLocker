@@ -28,14 +28,20 @@ public partial class MMNotificationClient(ILogger logger, MMDeviceEnumerator enu
         switch (newState)
         {
             case DeviceState.DEVICE_STATE_ACTIVE:
-                _logger.Info($"[{device.FriendlyName}]: Device's state was set to active");
-                OnDeviceAdded(deviceId);
+                Debouncer.Debounce(deviceId, () =>
+                {
+                    _logger.Info($"[{device.FriendlyName}]: Device's state was set to active");
+                    OnDeviceAdded(deviceId);
+                });
                 break;
             case DeviceState.DEVICE_STATE_DISABLED:
             case DeviceState.DEVICE_STATE_UNPLUGGED:
             case DeviceState.DEVICE_STATE_NOTPRESENT:
-                _logger.Info($"[{device.FriendlyName}]: Device's state was set to inactive");
-                OnDeviceRemoved(deviceId);
+                Debouncer.Debounce(deviceId, () =>
+                {
+                    _logger.Info($"[{device.FriendlyName}]: Device's state was set to inactive");
+                    OnDeviceRemoved(deviceId);
+                });
                 break;
         }
     }
