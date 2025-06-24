@@ -91,7 +91,12 @@ public class DeviceConfigurator : IDisposable
     private void DeconfigureDevice(MMDevice device)
     {
         device.AudioSessionManager.Dispose();
-        _configuredDevices.Remove(device.Id);
+
+        var deviceWasFound = _configuredDevices.Remove(device.Id);
+        if (!deviceWasFound)
+        {
+            _logger.Warning($"[{device.FriendlyName}]: Was not found in _configuredDevices");
+        }
     }
 
     private async Task ConfigureSession(string deviceName, AudioSessionControl session)
