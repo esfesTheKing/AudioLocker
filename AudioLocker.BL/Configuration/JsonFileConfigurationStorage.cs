@@ -27,19 +27,12 @@ public class JsonFileConfigurationStorage(string filePath, int defaultVolumeLeve
 
     public override ProcessConfiguration? Get(string deviceName, string processName)
     {
-        var collection = GetConfiguration(deviceName);
+        ProcessConfigurationCollection? collection = GetConfiguration(deviceName);
 
         ProcessConfiguration? processConfiguration = null;
         collection?.TryGetValue(processName, out processConfiguration);
 
         return processConfiguration;
-    }
-
-    public override void Set(string deviceName, string processName, ProcessConfiguration configuration)
-    {
-        var collection = GetConfiguration(deviceName);
-
-        collection?.Add(processName, configuration);
     }
 
     public override void Register(string deviceName, string processName)
@@ -48,7 +41,7 @@ public class JsonFileConfigurationStorage(string filePath, int defaultVolumeLeve
         {
             collection = [];
 
-            _processConfigurations[deviceName] = collection;
+            _processConfigurations.Add(deviceName, collection);
         }
 
         collection.TryAdd(processName, new ProcessConfiguration { VolumeLevel = _defaultVolumeLevel });
