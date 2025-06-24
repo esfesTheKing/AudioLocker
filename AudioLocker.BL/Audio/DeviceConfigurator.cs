@@ -54,8 +54,7 @@ public class DeviceConfigurator : IDisposable
             _notificationClient.Dispose();
         }
 
-        var devices = _enumerator.EnumerateAudioEndPoints(EDataFlow.eRender, DeviceState.DEVICE_STATE_ACTIVE);
-        foreach (var device in devices)
+        foreach (var device in _configuredDevices.Values)
         {
             _comExceptionHandler.HandleAccessExceptions(() => DeconfigureDevice(device));
         }
