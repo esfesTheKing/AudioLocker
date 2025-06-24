@@ -98,9 +98,9 @@ public class AudioSessionEventHandler : IAudioSessionEventsHandler, IDisposable
 
     public void OnDisplayNameChanged(string displayName) { }
 
-    public void OnChannelVolumeChanged(uint channelCount, nint newVolumes, uint channelIndex) { }
+    public void OnChannelVolumeChanged(uint channelCount, float[] newVolumes, uint channelIndex) { }
 
-    public void OnGroupingParamChanged(ref Guid groupingId) { }
+    public void OnGroupingParamChanged(Guid groupingId) { }
 
     public void OnIconPathChanged(string iconPath) { }
 

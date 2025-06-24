@@ -4,15 +4,20 @@ using System.Runtime.InteropServices.Marshalling;
 
 namespace AudioLocker.Core.CoreAudioAPI.Interfaces;
 
+// https://learn.microsoft.com/en-us/windows/win32/api/mmdeviceapi/nn-mmdeviceapi-immdevice
+// IDL Definition: "C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0\um\mmdeviceapi.idl"
 [GeneratedComInterface]
 [Guid("D666063F-1587-4E43-81F1-B948E807363F")]
 public partial interface IMMDevice
 {
     [return: MarshalAs(UnmanagedType.Interface)]
-    object Activate(ref Guid iid, CLSCTX clsCtx, IntPtr activationParams);
+    object Activate(ref Guid iid, CLSCTX dwClsCtx, IntPtr pActivationParams);
+
     IPropertyStore OpenPropertyStore(STGM stgmAccess);
+
     [return: MarshalAs(UnmanagedType.LPWStr)]
     string GetId();
+
     DeviceState GetState();
 }
 

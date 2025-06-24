@@ -1,29 +1,29 @@
 ﻿using AudioLocker.Core.CoreAudioAPI.Enums;
 using AudioLocker.Core.CoreAudioAPI.Interfaces;
+using AudioLocker.Core.PInvoke;
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.Marshalling;
 
 namespace AudioLocker.Core.CoreAudioAPI.Wrappers;
 
-
 [Guid("BCDE0395-E52F-467C-8E3D-C4579291692E")]
-public partial class MMDeviceEnumerator
+public class MMDeviceEnumerator
 {
-    [LibraryImport("Ole32")]
-    private static partial int CoCreateInstance(Guid rclsid, IntPtr pUnkOuter, int dwClsContext, Guid riid, out IntPtr ppObj);
-
     private readonly IMMDeviceEnumerator _enumerator;
 
     public MMDeviceEnumerator()
     {
         ComWrappers cw = new StrategyBasedComWrappers();
 
+        var mmDeviceEnumeratorGuid = typeof(MMDeviceEnumerator).GUID;
+        var iMMDeviceEnumeratorGuid = typeof(IMMDeviceEnumerator).GUID;
+
         Marshal.ThrowExceptionForHR(
-            CoCreateInstance(
-                typeof(MMDeviceEnumerator).GUID,
+            Ole32.CoCreateInstance(
+                ref mmDeviceEnumeratorGuid,
                 IntPtr.Zero,
                 (int)CLSCTX.CLSCTX_ALL,
-                typeof(IMMDeviceEnumerator).GUID,
+                ref iMMDeviceEnumeratorGuid,
                 out IntPtr obj
             )
         );
