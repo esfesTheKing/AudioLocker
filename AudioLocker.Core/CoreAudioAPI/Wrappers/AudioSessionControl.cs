@@ -26,6 +26,7 @@ public class AudioSessionControl : IDisposable
         SessionInstanceIdentifier = _audioSession.GetSessionInstanceIdentifier();
         ProcessId = _audioSession.GetProcessId();
 
+        // https://stackoverflow.com/a/65444615
         SimpleAudioVolume = new SimpleAudioVolume((ISimpleAudioVolume)audioSession);
     }
 
