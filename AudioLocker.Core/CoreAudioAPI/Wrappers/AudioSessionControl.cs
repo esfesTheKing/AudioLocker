@@ -26,7 +26,12 @@ public class AudioSessionControl : IDisposable
         SessionInstanceIdentifier = _audioSession.GetSessionInstanceIdentifier();
         ProcessId = _audioSession.GetProcessId();
 
-        // https://stackoverflow.com/a/65444615
+        // NOTES:
+        //   1. "... you can query ISimpleAudioVolume interface on IAudioSessionControl interface..."
+        //   2. "Using QueryInterface on a COM object is the same as performing a cast operation in managed code."
+        // Sources:
+        //   https://learn.microsoft.com/en-us/dotnet/api/system.runtime.interopservices.marshal.queryinterface
+        //   https://stackoverflow.com/a/65444615
         SimpleAudioVolume = new SimpleAudioVolume((ISimpleAudioVolume)audioSession);
     }
 
