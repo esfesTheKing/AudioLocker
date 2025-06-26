@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 
 namespace AudioLocker.Core.CoreAudioAPI.Wrappers;
 
-public partial class MMDevice
+public class MMDevice
 {
     private readonly IMMDevice _device;
     private readonly IPropertyStore _propertyStore;
