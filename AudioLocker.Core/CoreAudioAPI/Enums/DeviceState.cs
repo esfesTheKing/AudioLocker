@@ -1,7 +1,7 @@
 ﻿namespace AudioLocker.Core.CoreAudioAPI.Enums;
 
 // https://learn.microsoft.com/en-us/windows/win32/coreaudio/device-state-xxx-constants
-public enum DeviceState: uint
+public enum DeviceState : uint
 {
     DEVICE_STATE_ACTIVE = 0x1,
     DEVICE_STATE_DISABLED = 0x2,

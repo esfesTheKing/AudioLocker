@@ -77,7 +77,8 @@ public class JsonFileConfigurationStorage(string filePath, int defaultVolumeLeve
 
     protected override async Task WriteToFile<T>(T processConfiguration)
     {
-        await _writeSemaphore.LockAsync(async () => {
+        await _writeSemaphore.LockAsync(async () =>
+        {
             using var stream = new FileStream(_filePath, FileMode.Open, FileAccess.Write, FileShare.Read);
             using var streamWriter = new StreamWriter(stream, Encoding.UTF8);
 
