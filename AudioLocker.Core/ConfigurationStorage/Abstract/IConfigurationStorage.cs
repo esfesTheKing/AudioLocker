@@ -7,7 +7,6 @@ public interface IConfigurationStorage
     event Action OnConfigurationChanged;
 
     ProcessConfiguration? Get(string deviceName, string processName);
-    void Set(string deviceName, string processName, ProcessConfiguration configuration);
 
     Task Prepare();
     Task Reload();

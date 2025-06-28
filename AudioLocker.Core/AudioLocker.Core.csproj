@@ -5,16 +5,17 @@
     <TargetFramework>net9.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+	<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Logger\**" />
-    <EmbeddedResource Remove="Logger\**" />
-    <None Remove="Logger\**" />
+	  <Compile Remove="Logger\**" />
+	  <EmbeddedResource Remove="Logger\**" />
+	  <None Remove="Logger\**" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\AudioLocker.Common\AudioLocker.Common.csproj" />
+	  <ProjectReference Include="..\AudioLocker.Common\AudioLocker.Common.csproj" />
   </ItemGroup>
-
+	
 </Project>

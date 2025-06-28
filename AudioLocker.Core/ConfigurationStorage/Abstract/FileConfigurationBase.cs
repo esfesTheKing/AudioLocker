@@ -36,7 +36,6 @@ public abstract class FileConfigurationBase : IConfigurationStorage
         _watcher.EnableRaisingEvents = true;
     }
 
-    public abstract void Set(string deviceName, string processName, ProcessConfiguration configuration);
     public abstract ProcessConfiguration? Get(string deviceName, string processName);
     public abstract void Register(string deviceName, string processName);
     public abstract Task Prepare();

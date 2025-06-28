@@ -1,4 +1,5 @@
 using AudioLocker.Core.Loggers.Abstract;
+using AudioLocker.Properties;
 using Microsoft.Win32;
 using System.Diagnostics;
 
@@ -6,7 +7,6 @@ namespace AudioLocker;
 
 public class AudioLockerTrayApp : ApplicationContext
 {
-    private readonly string REGISTRY_KEY_NAME = "AudioLocker";
     private readonly string EXECTUABLE_PATH = Application.ExecutablePath;
 
     private readonly ILogger _logger;
@@ -21,7 +21,7 @@ public class AudioLockerTrayApp : ApplicationContext
 
         _trayIcon = new NotifyIcon()
         {
-            Icon = Properties.Resources.ApplicationBorderIcon,
+            Icon = Resources.ApplicationBorderIcon,
             ContextMenuStrip = new ContextMenuStrip()
             {
                 Items = {
@@ -33,13 +33,13 @@ public class AudioLockerTrayApp : ApplicationContext
                 }
             },
             Visible = true,
-            Text = "AudioLocker",
+            Text = Constants.APP_NAME,
         };
     }
 
     public void SetRunOnStartup(bool addRegistryKey)
     {
-        RegistryKey? registryKey = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Run", writable: true);
+        var registryKey = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Run", writable: true);
         if (registryKey is null)
         {
             _logger.Warning("Unable to get the run on startup registry key");
@@ -48,12 +48,12 @@ public class AudioLockerTrayApp : ApplicationContext
 
         if (addRegistryKey)
         {
-            registryKey.SetValue(REGISTRY_KEY_NAME, string.Join(' ', new List<string> { EXECTUABLE_PATH, "-s", _settingsFile }));
+            registryKey.SetValue(Constants.APP_NAME, string.Join(' ', [EXECTUABLE_PATH, "-s", _settingsFile]));
             _logger.Info("AudioLocker is now running on startup");
             return;
         }
 
-        registryKey.DeleteValue(REGISTRY_KEY_NAME, false);
+        registryKey.DeleteValue(Constants.APP_NAME, false);
         _logger.Info("AudioLocker is now not running on startup");
     }
 
@@ -71,7 +71,7 @@ public class AudioLockerTrayApp : ApplicationContext
     private void OnOpenLogsFolder(object? sender, EventArgs e)
     {
         var appdataPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-        var logsDirectory = Path.Combine(appdataPath, "AudioLocker", "logs");
+        var logsDirectory = Path.Combine(appdataPath, Constants.APP_NAME, "logs");
 
         var startInfo = new ProcessStartInfo
         {
