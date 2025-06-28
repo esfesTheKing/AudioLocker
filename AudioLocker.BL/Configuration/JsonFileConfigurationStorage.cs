@@ -8,7 +8,7 @@ namespace AudioLocker.BL.Configuration;
 
 public class JsonFileConfigurationStorage(string filePath, int defaultVolumeLevel) : FileConfigurationStorageBase<GeneralAudioConfiguration>(filePath)
 {
-    private GeneralAudioConfiguration _generalAudioConfiguration = new GeneralAudioConfiguration();
+    private GeneralAudioConfiguration _generalAudioConfiguration = [];
     private readonly int _defaultVolumeLevel = defaultVolumeLevel;
     private readonly SemaphoreSlim _writeSemaphore = new SemaphoreSlim(1, 1);
 
