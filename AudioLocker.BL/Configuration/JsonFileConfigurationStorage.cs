@@ -4,7 +4,7 @@ using AudioLocker.Core.ConfigurationStorage.Abstract;
 using System.Text;
 using System.Text.Json;
 
-namespace AudioLocker.BL.Configuration;
+namespace AudioLocker.BL.ConfigurationStorage;
 
 public class JsonFileConfigurationStorage(string filePath, int defaultVolumeLevel) : FileConfigurationStorageBase<GeneralAudioConfiguration>(filePath)
 {

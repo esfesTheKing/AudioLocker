@@ -1,7 +1,7 @@
 ﻿using AudioLocker.Common.DataTypes;
 using System.Text.Json.Serialization;
 
-namespace AudioLocker.BL.Configuration;
+namespace AudioLocker.BL.ConfigurationStorage;
 
 public class GeneralAudioConfiguration : Dictionary<string, DeviceAudioConfiguration> 
 { }

@@ -1,5 +1,5 @@
 ﻿using AudioLocker.BL.Audio;
-using AudioLocker.BL.Configuration;
+using AudioLocker.BL.ConfigurationStorage;
 using AudioLocker.BL.Loggers;
 using AudioLocker.Core.ConfigurationStorage.Abstract;
 using AudioLocker.Core.CoreAudioAPI.Wrappers;
