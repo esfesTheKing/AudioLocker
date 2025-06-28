@@ -3,22 +3,17 @@ using AudioLocker.BL.ConfigurationStorage;
 using AudioLocker.BL.Loggers;
 using AudioLocker.Core.ConfigurationStorage.Abstract;
 using AudioLocker.Core.CoreAudioAPI.Wrappers;
-using AudioLocker.Core.Loggers.Abstract;
 using AudioLocker.StartupArguments;
-using log4net;
-using log4net.Config;
-using System.Runtime.Versioning;
-using t_StartupArguments = AudioLocker.BL.StartupArguments;
+using Serilog;
 
-[assembly: XmlConfigurator(Watch = true, ConfigFile = "./App.config")]
+using AudioLockerILogger = AudioLocker.Core.Loggers.Abstract.ILogger;
+using t_StartupArguments = AudioLocker.BL.StartupArguments;
 
 namespace AudioLocker;
 
 internal class BootStrapper
 {
-    private readonly string LOGGER_NAME = "Logger";
-
-    private readonly ILogger _logger;
+    private readonly AudioLockerILogger _logger;
     private DeviceConfigurator? _deviceConfigurator;
 
     public BootStrapper()
@@ -99,11 +94,28 @@ internal class BootStrapper
         _logger.Info("Finished running cleanup");
     }
 
-    private ILogger GetLogger()
+    private AudioLockerILogger GetLogger()
     {
-        var log = LogManager.GetLogger(LOGGER_NAME);
+        var appdataRoaming = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+        var outputTemplate = "{Timestamp:yyyy-MM-dd HH:mm:ss} [{Level:u4}] [{Class}.{Method}] {Message}{NewLine}{Exception}";
 
-        return new Log4NetLogger(log);
+        var log = new LoggerConfiguration()
+            .Enrich.FromLogContext()
+            .WriteTo.Map(
+                _ => DateTime.Now.ToString("yyyy.MM.dd"),
+                (date, wt) =>
+                {
+                    wt.File(
+                        $"{appdataRoaming}\\{Constants.APP_NAME}\\logs\\{date}.txt",
+                        retainedFileCountLimit: null,
+                        outputTemplate: outputTemplate,
+                        fileSizeLimitBytes: 5L * 1024 * 1024 // 5MB
+                    );
+                }
+            )
+            .CreateLogger();
+
+        return new SerilogLogger(log);
     }
 
     private IConfigurationStorage GetStorage(t_StartupArguments arguments)
