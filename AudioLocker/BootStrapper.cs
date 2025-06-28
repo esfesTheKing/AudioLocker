@@ -105,6 +105,7 @@ internal class BootStrapper
 
     private IConfigurationStorage GetStorage()
     {
+        // TODO: Move defualt volume level to settings file
         var storage = new JsonFileConfigurationStorage(ResolveSettingsFilePath(), 10);
 
         return storage;
