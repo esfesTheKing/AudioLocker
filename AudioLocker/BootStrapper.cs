@@ -3,11 +3,9 @@ using AudioLocker.BL.ConfigurationStorage;
 using AudioLocker.BL.Loggers;
 using AudioLocker.Core.ConfigurationStorage.Abstract;
 using AudioLocker.Core.CoreAudioAPI.Wrappers;
-using AudioLocker.StartupArguments;
 using Serilog;
 
 using AudioLockerILogger = AudioLocker.Core.Loggers.Abstract.ILogger;
-using t_StartupArguments = AudioLocker.BL.StartupArguments;
 
 namespace AudioLocker;
 
@@ -23,8 +21,6 @@ internal class BootStrapper
 
     public void Run(string[] args)
     {
-        var arguments = ParseArguments(args);
-
         using var mutext = new Mutex(true, Constants.APP_NAME, out bool createdNew);
         if (!createdNew)
         {
@@ -33,13 +29,13 @@ internal class BootStrapper
         }
 
         InitializeLoggingOfUnhandledExcpetions();
-        InitializeAudioSetup(arguments);
-        InitializeTrayApp(arguments);
+        InitializeAudioSetup();
+        InitializeTrayApp();
     }
 
-    private void InitializeAudioSetup(t_StartupArguments arguments)
+    private void InitializeAudioSetup()
     {
-        var storage = GetStorage(arguments);
+        var storage = GetStorage();
 
         storage.Prepare().Wait();
 
@@ -47,11 +43,6 @@ internal class BootStrapper
         _deviceConfigurator = new DeviceConfigurator(_logger, storage, enumerator);
 
         _deviceConfigurator.Initialize();
-    }
-
-    private t_StartupArguments ParseArguments(string[] args)
-    {
-        return CommandLineStartupArguments.Parse(_logger, args);
     }
 
     private void InitializeLoggingOfUnhandledExcpetions()
@@ -69,17 +60,11 @@ internal class BootStrapper
         };
     }
 
-    private void InitializeTrayApp(t_StartupArguments arguments)
+    private void InitializeTrayApp()
     {
         ApplicationConfiguration.Initialize();
 
-        var trayApp = new AudioLockerTrayApp(_logger, arguments.SettingsFilePath);
-
-        if (arguments.StartOnStartup is not null)
-        {
-            trayApp.SetRunOnStartup((bool)arguments.StartOnStartup);
-        }
-
+        var trayApp = new AudioLockerTrayApp(_logger, ResolveSettingsFilePath());
         Application.ApplicationExit += CleanupOnApplicationExit;
 
         Application.Run(trayApp);
@@ -118,10 +103,27 @@ internal class BootStrapper
         return new SerilogLogger(log);
     }
 
-    private IConfigurationStorage GetStorage(t_StartupArguments arguments)
+    private IConfigurationStorage GetStorage()
     {
-        var storage = new JsonFileConfigurationStorage(arguments.SettingsFilePath, arguments.DefaultVolumeLevel);
+        var storage = new JsonFileConfigurationStorage(ResolveSettingsFilePath(), 10);
 
         return storage;
+    }
+
+    private string ResolveSettingsFilePath()
+    {
+        var localPath = Path.Combine(Application.StartupPath, "settings.json");
+        if (Path.Exists(localPath))
+        {
+            return localPath;
+        }
+
+        var homePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), $".{Constants.APP_NAME}", "settings.json");
+        if (Path.Exists(homePath))
+        {
+            return homePath;
+        }
+
+        return localPath;
     }
 }

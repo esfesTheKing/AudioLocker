@@ -7,8 +7,6 @@ namespace AudioLocker;
 
 public class AudioLockerTrayApp : ApplicationContext
 {
-    private readonly string EXECTUABLE_PATH = Application.ExecutablePath;
-
     private readonly ILogger _logger;
     private readonly string _settingsFile;
 
@@ -48,7 +46,7 @@ public class AudioLockerTrayApp : ApplicationContext
 
         if (addRegistryKey)
         {
-            registryKey.SetValue(Constants.APP_NAME, string.Join(' ', [EXECTUABLE_PATH, "-s", _settingsFile]));
+            registryKey.SetValue(Constants.APP_NAME, string.Join(' ', [Application.ExecutablePath, "-s", _settingsFile]));
             _logger.Info("AudioLocker is now running on startup");
             return;
         }
