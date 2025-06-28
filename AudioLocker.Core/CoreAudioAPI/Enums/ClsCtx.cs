@@ -1,6 +1,7 @@
 ﻿namespace AudioLocker.Core.CoreAudioAPI.Enums;
 
 // https://learn.microsoft.com/en-us/windows/win32/api/wtypesbase/ne-wtypesbase-clsctx
+// IDL Definition: "C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0\shared\WTypesbase.Idl"
 public enum CLSCTX : uint
 {
     CLSCTX_INPROC_SERVER = 0x1,

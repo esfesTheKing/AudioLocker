@@ -4,7 +4,7 @@ namespace AudioLocker.Core.CoreAudioAPI.Wrappers;
 
 public class SimpleAudioVolume(ISimpleAudioVolume simpleAudioVolume)
 {
-    private ISimpleAudioVolume _simpleAudioVolume = simpleAudioVolume;
+    private readonly ISimpleAudioVolume _simpleAudioVolume = simpleAudioVolume;
 
     public float Volume
     {

@@ -3,24 +3,19 @@ using AudioLocker.Core.CoreAudioAPI.Interfaces;
 using AudioLocker.Core.CoreAudioAPI.Structs;
 using AudioLocker.Core.CoreAudioAPI.Wrappers;
 using AudioLocker.Core.Loggers.Abstract;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices.Marshalling;
 
 namespace AudioLocker.BL.Audio;
 
 [GeneratedComClass]
-public partial class MMNotificationClient : IMMNotificationClient
+public partial class MMNotificationClient(ILogger logger, MMDeviceEnumerator enumerator) : IMMNotificationClient, IDisposable
 {
-    private readonly MMDeviceEnumerator _enumerator;
-    private readonly AudioManager _audioManager;
+    public event Action<MMDevice>? OnDeviceAddedEvent;
+    public event Action<MMDevice>? OnDeviceRemovedEvent;
 
-    private readonly ILogger _logger;
-
-    public MMNotificationClient(ILogger logger, MMDeviceEnumerator enumerator, AudioManager audioManager)
-    {
-        _logger = logger;
-        _enumerator = enumerator;
-        _audioManager = audioManager;
-    }
+    private readonly ILogger _logger = logger;
+    private readonly MMDeviceEnumerator _enumerator = enumerator;
 
     public void OnDeviceStateChanged(string deviceId, DeviceState newState)
     {
@@ -30,17 +25,25 @@ public partial class MMNotificationClient : IMMNotificationClient
             return;
         }
 
-        if (newState == DeviceState.DEVICE_STATE_ACTIVE)
+        switch (newState)
         {
-            _logger.Info($"Device's state was set to active: {device.FriendlyName}");
-
-            OnDeviceAdded(deviceId);
+            case DeviceState.DEVICE_STATE_ACTIVE:
+                Debouncer.Debounce(deviceId, () =>
+                {
+                    _logger.Info($"[{device.FriendlyName}]: Device's state was set to active");
+                    OnDeviceAdded(deviceId);
+                });
+                break;
+            case DeviceState.DEVICE_STATE_DISABLED:
+            case DeviceState.DEVICE_STATE_UNPLUGGED:
+            case DeviceState.DEVICE_STATE_NOTPRESENT:
+                Debouncer.Debounce(deviceId, () =>
+                {
+                    _logger.Info($"[{device.FriendlyName}]: Device's state was set to inactive");
+                    OnDeviceRemoved(deviceId);
+                });
+                break;
         }
-    }
-
-    private bool IsSupportedDevice(MMDevice device)
-    {
-        return device.DataFlow == EDataFlow.eRender;
     }
 
     public void OnDeviceAdded(string pwstrDeviceId)
@@ -51,9 +54,8 @@ public partial class MMNotificationClient : IMMNotificationClient
             return;
         }
 
-        _logger.Info($"New device was connected: {device.FriendlyName}");
-
-        Task.Run(async () => await _audioManager.SetupMMDevice(device));
+        _logger.Info($"[{device.FriendlyName}]: New device was connected");
+        OnDeviceAddedEvent?.Invoke(device);
     }
 
     public void OnDeviceRemoved(string deviceId)
@@ -64,16 +66,22 @@ public partial class MMNotificationClient : IMMNotificationClient
             return;
         }
 
-        _logger.Info($"Device has disconnected: {device.FriendlyName}");
-        _audioManager.RemoveSessionHandlers(device);
-        //Task.Run(() => _audioManager.RemoveSessionHandlers(device));
+        _logger.Info($"[{device.FriendlyName}]: Device has disconnected");
+        OnDeviceRemovedEvent?.Invoke(device);
     }
 
-    public void OnDefaultDeviceChanged(EDataFlow dataFlow, ERole role, string defaultDeviceId)
-    {
-    }
+    public void OnDefaultDeviceChanged(EDataFlow dataFlow, ERole role, string defaultDeviceId) { }
 
-    public void OnPropertyValueChanged(string pwstrDeviceId, PropertyKey key)
+    public void OnPropertyValueChanged(string pwstrDeviceId, PropertyKey key) { }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private static bool IsSupportedDevice(MMDevice device) => device.DataFlow == EDataFlow.eRender;
+
+    public void Dispose()
     {
+        OnDeviceAddedEvent = null;
+        OnDeviceRemovedEvent = null;
+
+        GC.SuppressFinalize(this);
     }
 }

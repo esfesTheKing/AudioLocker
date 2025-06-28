@@ -1,8 +1,8 @@
-﻿using AudioLocker.Common.DataTypes;
+using AudioLocker.Common.DataTypes;
 
 namespace AudioLocker.Core.ConfigurationStorage.Abstract;
 
-public abstract class FileConfigurationStorage<T> : IConfigurationStorage
+public abstract class FileConfigurationStorageBase<T> : IConfigurationStorage
 {
     private readonly int FILE_AVAILABLITY_SLEEP_IN_MILLISECONDS = 100;
 
@@ -12,7 +12,7 @@ public abstract class FileConfigurationStorage<T> : IConfigurationStorage
 
     public event Action? OnConfigurationChanged;
 
-    public FileConfigurationStorage(string filePath)
+    public FileConfigurationStorageBase(string filePath)
     {
         _filePath = filePath;
 
@@ -35,7 +35,6 @@ public abstract class FileConfigurationStorage<T> : IConfigurationStorage
         _watcher.EnableRaisingEvents = true;
     }
 
-    public abstract void Set(string deviceName, string processName, ProcessAudioConfiguration configuration);
     public abstract ProcessAudioConfiguration? Get(string deviceName, string processName);
     public abstract void Register(string deviceName, string processName);
     public abstract Task Prepare();

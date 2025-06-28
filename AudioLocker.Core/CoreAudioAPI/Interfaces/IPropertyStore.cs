@@ -7,13 +7,19 @@ using System.Runtime.InteropServices.Marshalling;
 
 namespace AudioLocker.Core.CoreAudioAPI.Interfaces;
 
+// https://learn.microsoft.com/en-us/windows/win32/api/propsys/nn-propsys-ipropertystore
+// IDL Definition: "C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0\um\propsys.idl"
 [GeneratedComInterface]
 [Guid("886D8EEB-8CF2-4446-8D02-CDBA1DBDCF99")]
 public partial interface IPropertyStore
 {
-    void GetCount(out int count);
-    PropertyKey GetAt(int index);
+    int GetCount();
+
+    PropertyKey GetAt(int iProp);
+
     PropVariant GetValue(ref PropertyKey key);
-    void SaveValue(ref PropertyKey key, ref PropVariant variant);
+
+    void SaveValue(ref PropertyKey key, ref PropVariant propvar);
+
     void Commit();
 }

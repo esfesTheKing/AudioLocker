@@ -1,38 +1,41 @@
 ﻿using AudioLocker.Core.CoreAudioAPI.Interfaces;
 using AudioLocker.Core.CoreAudioAPI.Wrappers.Interfaces;
-using System.Diagnostics;
 
 namespace AudioLocker.Core.CoreAudioAPI.Wrappers;
 
 public class AudioSessionControl : IDisposable
 {
+    public SimpleAudioVolume SimpleAudioVolume;
+
+    public readonly string SessionInstanceIdentifier;
+    public readonly uint ProcessId;
+
     private readonly IAudioSessionControl2 _audioSession;
     private AudioSessionEventsCallback? _eventsCallback;
 
-    internal Action<object>? OnSessionDisconnect;
-
-    public SimpleAudioVolume SimpleAudioVolume;
-
-    public uint ProcessId
-    {
-        get => _audioSession.GetProcessId();
-    }
+    internal event Action<object>? OnSessionDisconnect;
 
     public AudioSessionControl(IAudioSessionControl audioSession)
         : this((IAudioSessionControl2)audioSession)
     { }
+
     public AudioSessionControl(IAudioSessionControl2 audioSession)
     {
         _audioSession = audioSession;
 
-        Debug.Assert(audioSession is ISimpleAudioVolume);
+        SessionInstanceIdentifier = _audioSession.GetSessionInstanceIdentifier();
+        ProcessId = _audioSession.GetProcessId();
+
+        // NOTES:
+        //   1. "... you can query ISimpleAudioVolume interface on IAudioSessionControl interface..."
+        //   2. "Using QueryInterface on a COM object is the same as performing a cast operation in managed code."
+        // Sources:
+        //   https://learn.microsoft.com/en-us/dotnet/api/system.runtime.interopservices.marshal.queryinterface
+        //   https://stackoverflow.com/a/65444615
         SimpleAudioVolume = new SimpleAudioVolume((ISimpleAudioVolume)audioSession);
     }
 
-    ~AudioSessionControl()
-    {
-        Dispose();
-    }
+    public override int GetHashCode() => SessionInstanceIdentifier.GetHashCode();
 
     public void RegisterEventClient(IAudioSessionEventsHandler eventClient)
     {
@@ -44,17 +47,13 @@ public class AudioSessionControl : IDisposable
         _audioSession.RegisterAudioSessionNotification(_eventsCallback);
     }
 
-    private void OnSessionDisconnectCallback()
-    {
-        OnSessionDisconnect?.Invoke(this);
-    }
-
     public void UnRegisterEventClient()
     {
         if (_eventsCallback is not null)
         {
             _audioSession.UnregisterAudioSessionNotification(_eventsCallback);
 
+            _eventsCallback.OnSessionDisconnect -= OnSessionDisconnectCallback;
             _eventsCallback = null;
         }
     }
@@ -62,6 +61,15 @@ public class AudioSessionControl : IDisposable
     public void Dispose()
     {
         UnRegisterEventClient();
+        OnSessionDisconnectCallback();
+
+        OnSessionDisconnect = null;
+
         GC.SuppressFinalize(this);
+    }
+
+    private void OnSessionDisconnectCallback()
+    {
+        OnSessionDisconnect?.Invoke(this);
     }
 }

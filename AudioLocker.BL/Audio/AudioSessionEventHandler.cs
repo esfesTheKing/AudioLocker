@@ -3,8 +3,6 @@ using AudioLocker.Core.CoreAudioAPI.Enums;
 using AudioLocker.Core.CoreAudioAPI.Wrappers;
 using AudioLocker.Core.CoreAudioAPI.Wrappers.Interfaces;
 using AudioLocker.Core.Loggers.Abstract;
-//using NAudio.CoreAudioApi;
-//using NAudio.CoreAudioApi.Interfaces;
 using System.Runtime.CompilerServices;
 
 namespace AudioLocker.BL.Audio;
@@ -16,9 +14,6 @@ public class AudioSessionEventHandler : IAudioSessionEventsHandler, IDisposable
     private readonly AudioSessionControl _session;
     private readonly string _deviceName;
     private readonly string _processName;
-
-    private CancellationTokenSource? _token;
-
     private readonly COMExceptionHandler _comExceptionHandler;
 
     public AudioSessionEventHandler(
@@ -38,15 +33,10 @@ public class AudioSessionEventHandler : IAudioSessionEventsHandler, IDisposable
         _configurationStorage.OnConfigurationChanged += OnConfigurationChanged;
 
         _comExceptionHandler = new COMExceptionHandler(
+            _logger,
             onKnownException: () => { },
-            onUnknownException: exception =>
-            {
-                _logger.Warning($"Unknown error encountered: {_deviceName} - {_processName}", exception);
-            },
-            onCleanup: () =>
-            {
-                Dispose();
-            }
+            onUnknownException: exception => _logger.Warning($"Unknown error encountered: {_deviceName} - {_processName}", exception),
+            onCleanup: Dispose
         );
     }
 
@@ -55,35 +45,38 @@ public class AudioSessionEventHandler : IAudioSessionEventsHandler, IDisposable
         if (state == AudioSessionState.AudioSessionStateExpired)
         {
             _logger.Info($"{_processName}: application closed");
+            Dispose();
         }
-    }
-
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    private static int GetVolumeLevel(float volume) => (int)(volume * 100);
-
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    private static float GetVolumeLevelPercentage(int volume) => (float)volume / 100;
-
-    private void OnConfigurationChanged()
-    {
-        _comExceptionHandler.HandleSessionAccessExceptions(() => OnVolumeChanged(_session.SimpleAudioVolume.Volume));
     }
 
     public void OnVolumeChanged(float volume, bool isMuted)
     {
-        _comExceptionHandler.HandleSessionAccessExceptions(() =>
+        Debouncer.Debounce(_session.SessionInstanceIdentifier, () =>
         {
-            _token?.Cancel();
-            _token = new CancellationTokenSource();
-
-            Task.Delay(10, _token.Token).ContinueWith(task =>
-            {
-                if (task.IsCompletedSuccessfully)
-                {
-                    OnVolumeChanged(volume);
-                }
-            });
+            _comExceptionHandler.HandleAccessExceptions(() => OnVolumeChanged(volume));
         });
+    }
+
+    public void OnSessionDisconnected(AudioSessionDisconnectReason disconnectReason)
+    {
+        _logger.Info($"[{_deviceName}] {_processName}: Session disconnected");
+        Dispose();
+    }
+
+    public void Dispose()
+    {
+        _logger.Info($"Unergistering event handler for {_deviceName} - {_processName}");
+
+        _configurationStorage.OnConfigurationChanged -= OnConfigurationChanged;
+
+        _session.Dispose();
+
+        GC.SuppressFinalize(this);
+    }
+
+    internal void OnConfigurationChanged()
+    {
+        _comExceptionHandler.HandleAccessExceptions(() => OnVolumeChanged(_session.SimpleAudioVolume.Volume));
     }
 
     private void OnVolumeChanged(float volume)
@@ -103,36 +96,17 @@ public class AudioSessionEventHandler : IAudioSessionEventsHandler, IDisposable
         _logger.Info($"[{_deviceName}] {_processName}: volume level was set from {GetVolumeLevel(volume)} to {configuration.VolumeLevel}");
     }
 
-    public void OnSessionDisconnected(AudioSessionDisconnectReason disconnectReason)
-    {
-        Console.WriteLine($"Session disconnected: {_processName}");
-        Dispose();
-    }
+    public void OnDisplayNameChanged(string displayName) { }
 
-    public void OnDisplayNameChanged(string displayName)
-    {
-    }
+    public void OnChannelVolumeChanged(uint channelCount, float[] newVolumes, uint channelIndex) { }
 
-    public void OnChannelVolumeChanged(uint channelCount, nint newVolumes, uint channelIndex)
-    {
-    }
+    public void OnGroupingParamChanged(Guid groupingId) { }
 
-    public void OnGroupingParamChanged(ref Guid groupingId)
-    {
-    }
+    public void OnIconPathChanged(string iconPath) { }
 
-    public void OnIconPathChanged(string iconPath)
-    {
-    }
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private static int GetVolumeLevel(float volume) => (int)(volume * 100);
 
-    public void Dispose()
-    {
-        _logger.Info($"Unergistering event handler for {_deviceName} - {_processName}");
-
-        _configurationStorage.OnConfigurationChanged -= OnConfigurationChanged;
-
-        _session.Dispose();
-
-        GC.SuppressFinalize(this);
-    }
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private static float GetVolumeLevelPercentage(int volume) => (float)volume / 100;
 }

@@ -6,13 +6,13 @@ namespace AudioLocker.Core.CoreAudioAPI.Wrappers;
 public class AudioSessionCollection : ICollection<AudioSessionControl>
 {
     private readonly IAudioSessionEnumerator _enumerator;
-    private readonly List<AudioSessionControl> _sessions;
+    private readonly OrderedDictionary<int, AudioSessionControl> _sessions;
 
     public AudioSessionCollection(IAudioSessionEnumerator enumerator)
     {
         _enumerator = enumerator;
 
-        _sessions = GetInitialSessions();
+        _sessions = GetSessionsFromEnumerator();
     }
 
     public int Count
@@ -22,14 +22,43 @@ public class AudioSessionCollection : ICollection<AudioSessionControl>
 
     public bool IsReadOnly => false;
 
-    public AudioSessionControl this[int index]
+    /// <summary>
+    /// Tries to add the AudioSessionControl to the collections.
+    /// </summary>
+    /// <remarks>
+    /// If unable to add `item` to the collection, this method will silently fail.
+    /// </remarks>
+    public void Add(AudioSessionControl item)
     {
-        get => _sessions[index];
+        item.OnSessionDisconnect += OnSessionDisconnect;
+
+        var success = _sessions.TryAdd(item.GetHashCode(), item);
+        if (!success)
+        {
+            item.OnSessionDisconnect -= OnSessionDisconnect;
+        }
     }
 
-    private List<AudioSessionControl> GetInitialSessions()
+    public bool Remove(AudioSessionControl item)
     {
-        var sessions = new List<AudioSessionControl>();
+        item.OnSessionDisconnect -= OnSessionDisconnect;
+
+        return _sessions.Remove(item.GetHashCode());
+    }
+
+    public void Clear() => _sessions.Clear();
+
+    public bool Contains(AudioSessionControl item) => _sessions.ContainsKey(item.GetHashCode());
+
+    public void CopyTo(AudioSessionControl[] array, int arrayIndex) => _sessions.Values.CopyTo(array, arrayIndex);
+
+    public IEnumerator<AudioSessionControl> GetEnumerator() => _sessions.Values.GetEnumerator();
+
+    IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+
+    private OrderedDictionary<int, AudioSessionControl> GetSessionsFromEnumerator()
+    {
+        var sessions = new OrderedDictionary<int, AudioSessionControl>();
 
         for (int index = 0; index < _enumerator.GetCount(); index++)
         {
@@ -38,36 +67,11 @@ public class AudioSessionCollection : ICollection<AudioSessionControl>
 
             session.OnSessionDisconnect += OnSessionDisconnect;
 
-            sessions.Add(session);
+            sessions.Add(session.GetHashCode(), session);
         }
 
         return sessions;
     }
 
     private void OnSessionDisconnect(object sender) => Remove((AudioSessionControl)sender);
-
-    public void Add(AudioSessionControl item)
-    {
-        item.OnSessionDisconnect += OnSessionDisconnect;
-
-        _sessions.Add(item);
-    }
-
-    public void Clear() => _sessions.Clear();
-
-    public bool Contains(AudioSessionControl item) => _sessions.Contains(item);
-
-    public void CopyTo(AudioSessionControl[] array, int arrayIndex) => _sessions.CopyTo(array, arrayIndex);
-
-    public bool Remove(AudioSessionControl item) => _sessions.Remove(item);
-
-    public IEnumerator<AudioSessionControl> GetEnumerator()
-    {
-        for (int index = 0; index < Count; index++)
-        {
-            yield return this[index];
-        }
-    }
-
-    IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 }
