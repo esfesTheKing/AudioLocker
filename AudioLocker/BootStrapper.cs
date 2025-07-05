@@ -19,7 +19,7 @@ internal class BootStrapper
         _logger = GetLogger();
     }
 
-    public void Run(string[] args)
+    public void Run()
     {
         using var mutext = new Mutex(true, Constants.APP_NAME, out bool createdNew);
         if (!createdNew)
@@ -91,12 +91,13 @@ internal class BootStrapper
                 (date, wt) =>
                 {
                     wt.File(
-                        $"{appdataRoaming}\\{Constants.APP_NAME}\\logs\\{date}.txt",
+                        $"{appdataRoaming}\\{Constants.APP_NAME}\\logs\\{date}.log",
                         retainedFileCountLimit: null,
                         outputTemplate: outputTemplate,
                         fileSizeLimitBytes: 5L * 1024 * 1024 // 5MB
                     );
-                }
+                },
+                sinkMapCountLimit: 1 // Keep only the sink of the current day
             )
             .CreateLogger();
 
@@ -106,7 +107,7 @@ internal class BootStrapper
     private IConfigurationStorage GetStorage()
     {
         // TODO: Move defualt volume level to settings file
-        var storage = new JsonFileConfigurationStorage(ResolveSettingsFilePath(), 10);
+        var storage = new JsonFileConfigurationStorage(ResolveSettingsFilePath(), Constants.DEFAULT_AUDIO_SESSION_VOLUME_LEVEL);
 
         return storage;
     }
