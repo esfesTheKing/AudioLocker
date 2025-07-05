@@ -94,7 +94,8 @@ internal class BootStrapper
                         $"{appdataRoaming}\\{Constants.APP_NAME}\\logs\\{date}.log",
                         retainedFileCountLimit: null,
                         outputTemplate: outputTemplate,
-                        fileSizeLimitBytes: 5L * 1024 * 1024 // 5MB
+                        fileSizeLimitBytes: 5L * 1024 * 1024, // 5MB
+                        shared: true
                     );
                 },
                 sinkMapCountLimit: 1 // Keep only the sink of the current day
