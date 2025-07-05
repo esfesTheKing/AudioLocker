@@ -1,5 +1,4 @@
 using AudioLocker.Core.Loggers.Abstract;
-using AudioLocker.Properties;
 using Microsoft.Win32;
 using System.Diagnostics;
 
@@ -19,7 +18,7 @@ public class AudioLockerTrayApp : ApplicationContext
 
         _trayIcon = new NotifyIcon()
         {
-            Icon = Resources.ApplicationBorderIcon,
+            Icon = Icon.ExtractAssociatedIcon(Application.ExecutablePath),
             ContextMenuStrip = new ContextMenuStrip()
             {
                 Items = {
@@ -46,7 +45,7 @@ public class AudioLockerTrayApp : ApplicationContext
 
         if (addRegistryKey)
         {
-            registryKey.SetValue(Constants.APP_NAME, string.Join(' ', [Application.ExecutablePath, "-s", _settingsFile]));
+            registryKey.SetValue(Constants.APP_NAME, Application.ExecutablePath);
             _logger.Info("AudioLocker is now running on startup");
             return;
         }
