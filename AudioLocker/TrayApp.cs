@@ -22,8 +22,8 @@ public class AudioLockerTrayApp : ApplicationContext
             ContextMenuStrip = new ContextMenuStrip()
             {
                 Items = {
-                    new ToolStripMenuItem("Startup On", null, (_, _) => SetRunOnStartup(true)),
-                    new ToolStripMenuItem("Startup Off", null, (_, _) => SetRunOnStartup(false)),
+                    new ToolStripMenuItem("Enable On Boot", null, AddToRunOnStartup),
+                    new ToolStripMenuItem("Disable On Boot", null, RemoveFromRunOnStartup),
                     new ToolStripMenuItem("Settings", null, OnOpenSettings),
                     new ToolStripMenuItem("Logs", null, OnOpenLogsFolder),
                     new ToolStripMenuItem("Exit", null, OnExit),
@@ -34,7 +34,7 @@ public class AudioLockerTrayApp : ApplicationContext
         };
     }
 
-    public void SetRunOnStartup(bool addRegistryKey)
+    private void AddToRunOnStartup(object? sender, EventArgs e)
     {
         var registryKey = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Run", writable: true);
         if (registryKey is null)
@@ -43,14 +43,20 @@ public class AudioLockerTrayApp : ApplicationContext
             return;
         }
 
-        if (addRegistryKey)
+        registryKey.SetValue(Constants.APP_NAME, Application.ExecutablePath);
+        _logger.Info("AudioLocker is now running on startup");
+    }
+
+    private void RemoveFromRunOnStartup(object? sender, EventArgs e)
+    {
+        var registryKey = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Run", writable: true);
+        if (registryKey is null)
         {
-            registryKey.SetValue(Constants.APP_NAME, Application.ExecutablePath);
-            _logger.Info("AudioLocker is now running on startup");
+            _logger.Warning("Unable to get the run on startup registry key");
             return;
         }
 
-        registryKey.DeleteValue(Constants.APP_NAME, false);
+        registryKey.DeleteValue(Constants.APP_NAME, throwOnMissingValue: false);
         _logger.Info("AudioLocker is now not running on startup");
     }
 
