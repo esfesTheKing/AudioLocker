@@ -1,4 +1,5 @@
 using AudioLocker.Core.Loggers.Abstract;
+using AudioLocker.TrayAppTheme;
 using Microsoft.Win32;
 using System.Diagnostics;
 
@@ -27,11 +28,24 @@ public class AudioLockerTrayApp : ApplicationContext
                     new ToolStripMenuItem("Settings", null, OnOpenSettings),
                     new ToolStripMenuItem("Logs", null, OnOpenLogsFolder),
                     new ToolStripMenuItem("Exit", null, OnExit),
-                }
+                },
+                Renderer = GetRenderer()
             },
             Visible = true,
             Text = Constants.APP_NAME,
         };
+    }
+
+    private static ToolStripProfessionalRenderer GetRenderer()
+    {
+#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+        if (Application.IsDarkModeEnabled)
+        {
+            return new ToolStripProfessionalRenderer(new TransparentSelectionDarkTheme());
+        }
+#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+
+        return new ToolStripProfessionalRenderer(new TransparentSelectionClassicTheme());
     }
 
     private void AddToRunOnStartup(object? sender, EventArgs e)
