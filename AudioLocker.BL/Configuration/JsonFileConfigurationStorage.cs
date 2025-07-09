@@ -61,7 +61,7 @@ public class JsonFileConfigurationStorage(string filePath, int defaultVolumeLeve
         {
         }
 
-        _generalAudioConfiguration = processConfigurations ?? new GeneralAudioConfiguration();
+        _generalAudioConfiguration = processConfigurations ?? [];
     }
 
     protected override async Task WriteToFile(GeneralAudioConfiguration processConfiguration)
