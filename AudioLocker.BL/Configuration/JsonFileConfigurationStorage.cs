@@ -68,7 +68,7 @@ public class JsonFileConfigurationStorage(string filePath, int defaultVolumeLeve
     {
         await _writeSemaphore.LockAsync(async () =>
         {
-            using var stream = new FileStream(_filePath, FileMode.Open, FileAccess.Write, FileShare.Read);
+            using var stream = new FileStream(_filePath, FileMode.OpenOrCreate, FileAccess.Write, FileShare.Read);
             using var streamWriter = new StreamWriter(stream, Encoding.UTF8);
 
             var data = JsonSerializer.Serialize(processConfiguration, GeneralAudioConfigurationSerializationContext.Default.GeneralAudioConfiguration);
