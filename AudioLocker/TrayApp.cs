@@ -2,6 +2,8 @@ using AudioLocker.Core.Loggers.Abstract;
 using AudioLocker.TrayAppTheme;
 using Microsoft.Win32;
 using System.Diagnostics;
+using System.Reflection;
+using System.Runtime.CompilerServices;
 
 namespace AudioLocker;
 
@@ -9,6 +11,9 @@ public class AudioLockerTrayApp : ApplicationContext
 {
     private readonly ILogger _logger;
     private readonly string _settingsFile;
+
+    private readonly Icon DarkThemeIcon = GetIcon("AudioLocker.Assets.Application Border.ico");
+    private readonly Icon LightThemeIcon = GetIcon("AudioLocker.Assets.Application Border Dark.ico");
 
     private readonly NotifyIcon _trayIcon;
 
@@ -19,7 +24,7 @@ public class AudioLockerTrayApp : ApplicationContext
 
         _trayIcon = new NotifyIcon()
         {
-            Icon = Icon.ExtractAssociatedIcon(Application.ExecutablePath),
+            Icon = GetIconMatchingCurrentTheme(),
             ContextMenuStrip = new ContextMenuStrip()
             {
                 Items = {
@@ -53,10 +58,10 @@ public class AudioLockerTrayApp : ApplicationContext
                 return;
             }
 
-            // TODO: Change Icon for classic (light) theme support
-
             Application.SetColorMode(Application.SystemColorMode);
             _trayIcon.ContextMenuStrip.Renderer = GetRenderer();
+
+            _trayIcon.Icon = GetIconMatchingCurrentTheme();
         });
     }
 
@@ -69,7 +74,21 @@ public class AudioLockerTrayApp : ApplicationContext
 
         return new ToolStripProfessionalRenderer(new TransparentSelectionClassicTheme());
     }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private Icon GetIconMatchingCurrentTheme()
+    {
+        return Application.SystemColorMode == SystemColorMode.Dark ? DarkThemeIcon : LightThemeIcon;
+    }
 #pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+
+    private static Icon GetIcon(string manifestResourceName)
+    {
+        var assembly = Assembly.GetExecutingAssembly();
+
+        var stream = assembly.GetManifestResourceStream(manifestResourceName);
+        return stream is null ? throw new Exception("No Icon was embedded in exe") : new Icon(stream);
+    }
 
     private void AddToRunOnStartup(object? sender, EventArgs e)
     {
