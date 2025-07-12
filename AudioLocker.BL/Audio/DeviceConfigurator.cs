@@ -1,4 +1,4 @@
-﻿using AudioLocker.Core.Configuration.Abstract;
+﻿using AudioLocker.Core.ConfigurationStorage.Abstract;
 using AudioLocker.Core.CoreAudioAPI.Enums;
 using AudioLocker.Core.CoreAudioAPI.Wrappers;
 using AudioLocker.Core.Loggers.Abstract;
