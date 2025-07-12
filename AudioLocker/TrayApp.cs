@@ -34,7 +34,7 @@ public class AudioLockerTrayApp : ApplicationContext
         };
     }
 
-    private void AddToRunOnStartup(object? sender, EventArgs e)
+    private void AddToRunOnStartup(object? sender, EventArgs @event)
     {
         var registryKey = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Run", writable: true);
         if (registryKey is null)
@@ -47,7 +47,7 @@ public class AudioLockerTrayApp : ApplicationContext
         _logger.Info("AudioLocker is now running on startup");
     }
 
-    private void RemoveFromRunOnStartup(object? sender, EventArgs e)
+    private void RemoveFromRunOnStartup(object? sender, EventArgs @event)
     {
         var registryKey = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Run", writable: true);
         if (registryKey is null)
@@ -60,7 +60,7 @@ public class AudioLockerTrayApp : ApplicationContext
         _logger.Info("AudioLocker is now not running on startup");
     }
 
-    private void OnOpenSettings(object? sender, EventArgs e)
+    private void OnOpenSettings(object? sender, EventArgs @event)
     {
         var startInfo = new ProcessStartInfo
         {
@@ -71,7 +71,7 @@ public class AudioLockerTrayApp : ApplicationContext
         Process.Start(startInfo);
     }
 
-    private void OnOpenLogsFolder(object? sender, EventArgs e)
+    private void OnOpenLogsFolder(object? sender, EventArgs @event)
     {
         var appdataPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
         var logsDirectory = Path.Combine(appdataPath, Constants.APP_NAME, "logs");
@@ -87,7 +87,7 @@ public class AudioLockerTrayApp : ApplicationContext
         _logger.Info($"Opening logs directory: {logsDirectory}");
     }
 
-    private void OnExit(object? sender, EventArgs e)
+    private void OnExit(object? sender, EventArgs @event)
     {
         Exit();
     }

@@ -66,13 +66,13 @@ public abstract class FileConfigurationStorageBase<T> : IConfigurationStorage
         }
     }
 
-    private void OnChanged(object sender, FileSystemEventArgs e)
+    private void OnChanged(object sender, FileSystemEventArgs @event)
     {
         ReadFile();
         OnConfigurationChanged?.Invoke();
     }
 
-    private void OnFileNotFound(object sender, FileSystemEventArgs e)
+    private void OnFileNotFound(object sender, FileSystemEventArgs @event)
     {
         Prepare();
         ReadFile();
