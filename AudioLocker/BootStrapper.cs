@@ -52,7 +52,7 @@ internal class BootStrapper
             var exception = (Exception)@event.ExceptionObject;
             _logger.Fatal("Unknown exception has caused the app to crash!", exception);
 
-            _deviceConfigurator?.Dispose();
+            CleanupOnApplicationExit(null, EventArgs.Empty);
         };
 
         Application.SetUnhandledExceptionMode(UnhandledExceptionMode.CatchException);
@@ -60,7 +60,7 @@ internal class BootStrapper
         {
             _logger.Fatal("Unknown exception has caused the app to crash!", @event.Exception);
 
-            _deviceConfigurator?.Dispose();
+            CleanupOnApplicationExit(null, EventArgs.Empty);
         };
     }
 
