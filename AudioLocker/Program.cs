@@ -3,9 +3,9 @@ namespace AudioLocker;
 internal static class Program
 {
     [STAThread]
-    static void Main(string[] args)
+    static void Main()
     {
         var bootStrapper = new BootStrapper();
-        bootStrapper.Run(args);
+        bootStrapper.Run();
     }
 }

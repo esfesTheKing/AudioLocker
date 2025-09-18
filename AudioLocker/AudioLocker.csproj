@@ -1,72 +1,36 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
     <TargetFramework>net9.0-windows7.0</TargetFramework>
     <Nullable>enable</Nullable>
-    <UseWindowsForms>True</UseWindowsForms>
     <ImplicitUsings>enable</ImplicitUsings>
-    <PackageIcon>Application.png</PackageIcon>
-    <ApplicationIcon>Assets\Application Border.ico</ApplicationIcon>
-    <UseWPF>False</UseWPF>
-	<!-->PublishAot>true</PublishAot>
-	<_SuppressWinFormsTrimError>true</_SuppressWinFormsTrimError-->
-  </PropertyGroup>
 
+	<ApplicationIcon>Assets\Application Border.ico</ApplicationIcon>
+
+	<UseWPF>False</UseWPF>
+    <UseWindowsForms>True</UseWindowsForms>
+
+	<PublishAot>true</PublishAot>
+	<PublishTrimmed>true</PublishTrimmed>
+	<TrimmerSingleWarn>false</TrimmerSingleWarn>
+	<_SuppressWinFormsTrimError>true</_SuppressWinFormsTrimError>
+
+	<InvariantGlobalization>true</InvariantGlobalization>
+	<TrimmerRemoveSymbols>true</TrimmerRemoveSymbols>
+  </PropertyGroup>
   <ItemGroup>
-    <Content Include="Assets\Application Border.ico" />
+    <EmbeddedResource Include="Assets\Application Border Dark.ico" WithCulture="false"/>
+    <EmbeddedResource Include="Assets\Application Border.ico" WithCulture="false"/>
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="CommandLineParser" Version="2.9.1" />
-    <PackageReference Include="log4net" Version="3.0.3" />
+    <PackageReference Include="Serilog" Version="4.3.0" />
+    <PackageReference Include="Serilog.Sinks.File" Version="7.0.0" />
+    <PackageReference Include="Serilog.Sinks.Map" Version="2.0.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\AudioLocker.BL\AudioLocker.BL.csproj" />
     <ProjectReference Include="..\AudioLocker.Core\AudioLocker.Core.csproj" />
   </ItemGroup>
-
-  <ItemGroup>
-    <Compile Update="Properties\Resources.Designer.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
-    <Compile Update="Properties\Settings.Designer.cs">
-      <DesignTimeSharedInput>True</DesignTimeSharedInput>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Settings.settings</DependentUpon>
-    </Compile>
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Update="App.config">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="Assets\Application.ico">
-      <Pack>True</Pack>
-      <PackagePath>\</PackagePath>
-    </None>
-    <None Update="Assets\Application.png">
-      <Pack>True</Pack>
-      <PackagePath>\</PackagePath>
-    </None>
-    <None Update="Properties\Settings.settings">
-      <Generator>SettingsSingleFileGenerator</Generator>
-      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
-    </None>
-  </ItemGroup>
-
-  <ItemGroup>
-    <EmbeddedResource Update="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Resources\" />
-  </ItemGroup>
-
 </Project>

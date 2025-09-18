@@ -1,24 +1,17 @@
 ﻿using AudioLocker.BL.Audio;
-using AudioLocker.BL.Configuration;
+using AudioLocker.BL.ConfigurationStorage;
 using AudioLocker.BL.Loggers;
-using AudioLocker.Core.Configuration.Abstract;
+using AudioLocker.Core.ConfigurationStorage.Abstract;
 using AudioLocker.Core.CoreAudioAPI.Wrappers;
-using AudioLocker.Core.Loggers.Abstract;
-using AudioLocker.StartupArguments;
-using log4net;
-using log4net.Config;
+using Serilog;
 
-using t_StartupArguments = AudioLocker.BL.StartupArguments;
-
-[assembly: XmlConfigurator(Watch = true, ConfigFile = "./App.config")]
+using AudioLockerILogger = AudioLocker.Core.Loggers.Abstract.ILogger;
 
 namespace AudioLocker;
 
 internal class BootStrapper
 {
-    private readonly string LOGGER_NAME = "Logger";
-
-    private readonly ILogger _logger;
+    private readonly AudioLockerILogger _logger;
     private DeviceConfigurator? _deviceConfigurator;
 
     public BootStrapper()
@@ -26,10 +19,8 @@ internal class BootStrapper
         _logger = GetLogger();
     }
 
-    public void Run(string[] args)
+    public void Run()
     {
-        var arguments = ParseArguments(args);
-
         using var mutext = new Mutex(true, Constants.APP_NAME, out bool createdNew);
         if (!createdNew)
         {
@@ -38,13 +29,13 @@ internal class BootStrapper
         }
 
         InitializeLoggingOfUnhandledExcpetions();
-        InitializeAudioSetup(arguments);
-        InitializeTrayApp(arguments);
+        InitializeAudioSetup();
+        InitializeTrayApp();
     }
 
-    private void InitializeAudioSetup(t_StartupArguments arguments)
+    private void InitializeAudioSetup()
     {
-        var storage = GetStorage(arguments);
+        var storage = GetStorage();
 
         storage.Prepare().Wait();
 
@@ -54,37 +45,33 @@ internal class BootStrapper
         _deviceConfigurator.Initialize();
     }
 
-    private t_StartupArguments ParseArguments(string[] args)
-    {
-        return CommandLineStartupArguments.Parse(_logger, args);
-    }
-
     private void InitializeLoggingOfUnhandledExcpetions()
     {
         AppDomain.CurrentDomain.UnhandledException += (_, @event) =>
         {
             var exception = (Exception)@event.ExceptionObject;
             _logger.Fatal("Unknown exception has caused the app to crash!", exception);
+
+            CleanupOnApplicationExit(null, EventArgs.Empty);
         };
 
         Application.SetUnhandledExceptionMode(UnhandledExceptionMode.CatchException);
         Application.ThreadException += (_, @event) =>
         {
             _logger.Fatal("Unknown exception has caused the app to crash!", @event.Exception);
+
+            CleanupOnApplicationExit(null, EventArgs.Empty);
         };
     }
 
-    private void InitializeTrayApp(t_StartupArguments arguments)
+    private void InitializeTrayApp()
     {
         ApplicationConfiguration.Initialize();
+#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+        Application.SetColorMode(SystemColorMode.System);
+#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
 
-        var trayApp = new AudioLockerTrayApp(_logger, arguments.SettingsFilePath);
-
-        if (arguments.StartOnStartup is not null)
-        {
-            trayApp.SetRunOnStartup((bool)arguments.StartOnStartup);
-        }
-
+        var trayApp = new AudioLockerTrayApp(_logger, ResolveSettingsFilePath());
         Application.ApplicationExit += CleanupOnApplicationExit;
 
         Application.Run(trayApp);
@@ -99,17 +86,54 @@ internal class BootStrapper
         _logger.Info("Finished running cleanup");
     }
 
-    private ILogger GetLogger()
+    private AudioLockerILogger GetLogger()
     {
-        var log = LogManager.GetLogger(LOGGER_NAME);
+        var appdataRoaming = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+        var outputTemplate = "{Timestamp:yyyy-MM-dd HH:mm:ss} [{Level:u4}] [{Class}.{Method}] {Message}{NewLine}{Exception}";
 
-        return new Log4NetLogger(log);
+        var log = new LoggerConfiguration()
+            .Enrich.FromLogContext()
+            .WriteTo.Map(
+                _ => DateTime.Now.ToString("yyyy.MM.dd"),
+                (date, wt) =>
+                {
+                    wt.File(
+                        $"{appdataRoaming}\\{Constants.APP_NAME}\\logs\\{date}.log",
+                        retainedFileCountLimit: null,
+                        outputTemplate: outputTemplate,
+                        fileSizeLimitBytes: 5L * 1024 * 1024, // 5MB
+                        shared: true
+                    );
+                },
+                sinkMapCountLimit: 1 // Keep only the sink of the current day
+            )
+            .CreateLogger();
+
+        return new SerilogLogger(log);
     }
 
-    private IConfigurationStorage GetStorage(t_StartupArguments arguments)
+    private IConfigurationStorage GetStorage()
     {
-        var storage = new JsonFileConfigurationStorage(arguments.SettingsFilePath, arguments.DefaultVolumeLevel);
+        // TODO: Move defualt volume level to settings file
+        var storage = new JsonFileConfigurationStorage(ResolveSettingsFilePath(), Constants.DEFAULT_AUDIO_SESSION_VOLUME_LEVEL);
 
         return storage;
+    }
+
+    private string ResolveSettingsFilePath()
+    {
+        var localPath = Path.Combine(Application.StartupPath, "settings.json");
+        if (Path.Exists(localPath))
+        {
+            return localPath;
+        }
+
+        var homePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), $".{Constants.APP_NAME}", "settings.json");
+        if (Path.Exists(homePath))
+        {
+            return homePath;
+        }
+
+        return localPath;
     }
 }

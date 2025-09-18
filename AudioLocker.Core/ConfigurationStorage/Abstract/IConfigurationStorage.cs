@@ -1,12 +1,12 @@
 ﻿using AudioLocker.Common.DataTypes;
 
-namespace AudioLocker.Core.Configuration.Abstract;
+namespace AudioLocker.Core.ConfigurationStorage.Abstract;
 
 public interface IConfigurationStorage
 {
     event Action OnConfigurationChanged;
 
-    ProcessConfiguration? Get(string deviceName, string processName);
+    ProcessAudioConfiguration? Get(string deviceName, string processName);
 
     Task Prepare();
     Task Reload();

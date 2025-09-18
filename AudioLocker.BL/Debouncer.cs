@@ -1,10 +1,12 @@
-﻿namespace AudioLocker.BL;
+﻿using System.Collections.Concurrent;
+
+namespace AudioLocker.BL;
 
 public static class Debouncer
 {
     private const int DEFAULT_DEBOUNCE_TIME_MS = 10;
 
-    private readonly static Dictionary<string, CancellationTokenSource?> _tokens = [];
+    private readonly static ConcurrentDictionary<string, CancellationTokenSource?> _tokens = [];
 
     public static void Debounce(string id, Action action, int debounce_ms = DEFAULT_DEBOUNCE_TIME_MS)
     {
@@ -25,7 +27,7 @@ public static class Debouncer
                 }
                 finally
                 {
-                    _tokens.Remove(id);
+                    _tokens.TryRemove(id, out _);
                 }
             }
         });
