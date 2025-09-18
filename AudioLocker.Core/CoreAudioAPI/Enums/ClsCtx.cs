@@ -32,5 +32,11 @@ public enum CLSCTX : uint
     CLSCTX_ACTIVATE_ARM32_SERVER = 0x2000000,
     CLSCTX_ALLOW_LOWER_TRUST_REGISTRATION,
     CLSCTX_PS_DLL = 0x80000000,
+
+    // https://learn.microsoft.com/en-us/windows/win32/api/combaseapi/nf-combaseapi-cocreateinstance
+    // In the CLSCTX enumeration, you can specify the type of server used to manage the object.
+    // The constants can be CLSCTX_INPROC_SERVER, CLSCTX_INPROC_HANDLER, CLSCTX_LOCAL_SERVER,
+    // CLSCTX_REMOTE_SERVER or any combination of these values.
+    // The constant CLSCTX_ALL is defined as the combination of all four.
     CLSCTX_ALL = CLSCTX_INPROC_SERVER | CLSCTX_INPROC_HANDLER | CLSCTX_LOCAL_SERVER | CLSCTX_REMOTE_SERVER,
 }
