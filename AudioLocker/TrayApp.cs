@@ -1,3 +1,4 @@
+using AudioLocker.BL;
 using AudioLocker.Core.Loggers.Abstract;
 using AudioLocker.TrayAppTheme;
 using Microsoft.Win32;
@@ -51,7 +52,7 @@ public class AudioLockerTrayApp : ApplicationContext
 #pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
     private void OnUserPreferenceChanged(object? sender, UserPreferenceChangedEventArgs @event)
     {
-        Task.Run(() =>
+        Debouncer.Debounce(Constants.APP_NAME, () =>
         {
             if (_trayIcon.ContextMenuStrip is null)
             {
