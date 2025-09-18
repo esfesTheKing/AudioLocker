@@ -1,6 +1,9 @@
 using AudioLocker.Core.Loggers.Abstract;
+using AudioLocker.TrayAppTheme;
 using Microsoft.Win32;
 using System.Diagnostics;
+using System.Reflection;
+using System.Runtime.CompilerServices;
 
 namespace AudioLocker;
 
@@ -8,6 +11,9 @@ public class AudioLockerTrayApp : ApplicationContext
 {
     private readonly ILogger _logger;
     private readonly string _settingsFile;
+
+    private readonly Icon DarkThemeIcon = GetIcon("AudioLocker.Assets.Application Border.ico");
+    private readonly Icon LightThemeIcon = GetIcon("AudioLocker.Assets.Application Border Dark.ico");
 
     private readonly NotifyIcon _trayIcon;
 
@@ -18,7 +24,7 @@ public class AudioLockerTrayApp : ApplicationContext
 
         _trayIcon = new NotifyIcon()
         {
-            Icon = Icon.ExtractAssociatedIcon(Application.ExecutablePath),
+            Icon = GetIconMatchingCurrentTheme(),
             ContextMenuStrip = new ContextMenuStrip()
             {
                 Items = {
@@ -27,11 +33,61 @@ public class AudioLockerTrayApp : ApplicationContext
                     new ToolStripMenuItem("Settings", null, OnOpenSettings),
                     new ToolStripMenuItem("Logs", null, OnOpenLogsFolder),
                     new ToolStripMenuItem("Exit", null, OnExit),
-                }
+                },
+                Renderer = GetRenderer()
             },
             Visible = true,
             Text = Constants.APP_NAME,
         };
+
+        SystemEvents.UserPreferenceChanged += OnUserPreferenceChanged;
+    }
+
+    // NOTE:
+    //  This callback will run on a thread that can not modify our application,
+    //  thus we need to run it in a different thread using `Task.Run`.
+    //
+    //  https://learn.microsoft.com/en-us/dotnet/api/microsoft.win32.systemevents?view=windowsdesktop-9.0#remarks
+#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+    private void OnUserPreferenceChanged(object? sender, UserPreferenceChangedEventArgs @event)
+    {
+        Task.Run(() =>
+        {
+            if (_trayIcon.ContextMenuStrip is null)
+            {
+                return;
+            }
+
+            Application.SetColorMode(Application.SystemColorMode);
+            _trayIcon.ContextMenuStrip.Renderer = GetRenderer();
+
+            _trayIcon.Icon = GetIconMatchingCurrentTheme();
+        });
+    }
+
+    private static ToolStripProfessionalRenderer GetRenderer()
+    {
+        if (Application.SystemColorMode == SystemColorMode.Dark)
+        {
+            return new ToolStripProfessionalRenderer(new TransparentSelectionDarkTheme());
+        }
+
+        return new ToolStripProfessionalRenderer(new TransparentSelectionClassicTheme());
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private Icon GetIconMatchingCurrentTheme()
+    {
+        return Application.SystemColorMode == SystemColorMode.Dark ? DarkThemeIcon : LightThemeIcon;
+    }
+#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+
+    private static Icon GetIcon(string manifestResourceName)
+    {
+        var assembly = Assembly.GetExecutingAssembly();
+
+        var stream = assembly.GetManifestResourceStream(manifestResourceName);
+        return stream is null ? throw new Exception("No Icon was embedded in exe") : new Icon(stream);
     }
 
     private void AddToRunOnStartup(object? sender, EventArgs @event)
@@ -96,6 +152,8 @@ public class AudioLockerTrayApp : ApplicationContext
     {
         // Hide tray icon, otherwise it will remain shown until user mouses over it
         _trayIcon.Visible = false;
+
+        SystemEvents.UserPreferenceChanged -= OnUserPreferenceChanged;
 
         Application.Exit();
     }

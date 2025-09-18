@@ -18,6 +18,10 @@
 	<InvariantGlobalization>true</InvariantGlobalization>
 	<TrimmerRemoveSymbols>true</TrimmerRemoveSymbols>
   </PropertyGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Assets\Application Border Dark.ico" WithCulture="false"/>
+    <EmbeddedResource Include="Assets\Application Border.ico" WithCulture="false"/>
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Serilog" Version="4.3.0" />
