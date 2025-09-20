@@ -2,7 +2,7 @@
 
 namespace AudioLocker.BL;
 
-public static class Debouncer
+public static class ThreadDebouncer
 {
     private const int DEFAULT_DEBOUNCE_TIME_MS = 10;
 

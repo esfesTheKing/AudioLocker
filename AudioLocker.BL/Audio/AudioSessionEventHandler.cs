@@ -51,7 +51,7 @@ public class AudioSessionEventHandler : IAudioSessionEventsHandler, IDisposable
 
     public void OnVolumeChanged(float volume, bool isMuted)
     {
-        Debouncer.Debounce(_session.SessionInstanceIdentifier, () =>
+        ThreadDebouncer.Debounce(_session.SessionInstanceIdentifier, () =>
         {
             _comExceptionHandler.HandleAccessExceptions(() => OnVolumeChanged(volume));
         });

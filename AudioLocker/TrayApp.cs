@@ -52,7 +52,7 @@ public class AudioLockerTrayApp : ApplicationContext
 #pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
     private void OnUserPreferenceChanged(object? sender, UserPreferenceChangedEventArgs @event)
     {
-        Debouncer.Debounce(Constants.APP_NAME, () =>
+        ThreadDebouncer.Debounce(Constants.APP_NAME, () =>
         {
             if (_trayIcon.ContextMenuStrip is null)
             {
