@@ -29,15 +29,18 @@ internal class BootStrapper
         }
 
         InitializeLoggingOfUnhandledExcpetions();
-        InitializeAudioSetup();
+#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+        Task.Run(InitializeAudioSetup);
+#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+
         InitializeTrayApp();
     }
 
-    private void InitializeAudioSetup()
+    private async Task InitializeAudioSetup()
     {
         var storage = GetStorage();
 
-        storage.Prepare().Wait();
+        await storage.Prepare();
 
         var enumerator = new MMDeviceEnumerator();
         _deviceConfigurator = new DeviceConfigurator(_logger, storage, enumerator);
