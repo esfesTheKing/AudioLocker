@@ -3,7 +3,7 @@ using System.Text.Json.Serialization;
 
 namespace AudioLocker.BL.ConfigurationStorage;
 
-public class GeneralAudioConfiguration : Dictionary<string, DeviceAudioConfiguration> 
+public class GeneralAudioConfiguration : Dictionary<string, DeviceAudioConfiguration>
 { }
 
 [JsonSourceGenerationOptions(WriteIndented = true, IndentSize = 4)]
