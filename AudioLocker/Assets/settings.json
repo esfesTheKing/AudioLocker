@@ -1,0 +1,690 @@
+﻿{
+    "Speakers (Logitech G935/G933s Gaming Headset)": {
+        "steam": {
+            "VolumeLevel": 10,
+            "IsManual": false
+        },
+        "Spotify": {
+            "VolumeLevel": 100,
+            "IsManual": false
+        },
+        "msrdc": {
+            "VolumeLevel": 10,
+            "IsManual": false
+        },
+        "r5apex": {
+            "VolumeLevel": 10,
+            "IsManual": false
+        },
+        "setup.tmp": {
+            "VolumeLevel": 10,
+            "IsManual": false
+        },
+        "firefox": {
+            "VolumeLevel": 10,
+            "IsManual": false
+        },
+        "setup": {
+            "VolumeLevel": 10,
+            "IsManual": false
+        },
+        "WhatsApp": {
+            "VolumeLevel": 10,
+            "IsManual": false
+        },
+        "HorizonZeroDawn": {
+            "VolumeLevel": 10,
+            "IsManual": false
+        },
+        "svchost": {
+            "VolumeLevel": 10,
+            "IsManual": false
+        },
+        "conhost": {
+            "VolumeLevel": 10,
+            "IsManual": false
+        },
+        "DiscordHookHelper": {
+            "VolumeLevel": 10,
+            "IsManual": false
+        },
+        "mstsc": {
+            "VolumeLevel": 10,
+            "IsManual": false
+        },
+        "lghub_agent": {
+            "VolumeLevel": 10,
+            "IsManual": false
+        },
+        "ShellExperienceHost": {
+            "VolumeLevel": 10,
+            "IsManual": false
+        },
+        "BrawlhallaEAC": {
+            "VolumeLevel": 10,
+            "IsManual": false
+        },
+        "BrawlhallaGame": {
+            "VolumeLevel": 10,
+            "IsManual": false
+        },
+        "vlc": {
+            "VolumeLevel": 10,
+            "IsManual": true
+        },
+        "taskhostw": {
+            "VolumeLevel": 10,
+            "IsManual": false
+        },
+        "obs64": {
+            "VolumeLevel": 10,
+            "IsManual": false
+        },
+        "DiscordHookHelper64": {
+            "VolumeLevel": 10,
+            "IsManual": false
+        },
+        "wmplayer": {
+            "VolumeLevel": 10,
+            "IsManual": false
+        },
+        "AnyDesk": {
+            "VolumeLevel": 10,
+            "IsManual": false
+        },
+        "SearchApp": {
+            "VolumeLevel": 10,
+            "IsManual": false
+        },
+        "start_protected_game": {
+            "VolumeLevel": 10,
+            "IsManual": false
+        },
+        "msedge": {
+            "VolumeLevel": 10,
+            "IsManual": false
+        },
+        "QCef": {
+            "VolumeLevel": 10,
+            "IsManual": false
+        },
+        "StreamFab64": {
+            "VolumeLevel": 10,
+            "IsManual": false
+        },
+        "VirtualBoxVM": {
+            "VolumeLevel": 10,
+            "IsManual": false
+        },
+        "r5apex_dx12": {
+            "VolumeLevel": 10,
+            "IsManual": false
+        },
+        "GoWR": {
+            "VolumeLevel": 50,
+            "IsManual": false
+        },
+        "MarvelRivals_Launcher": {
+            "VolumeLevel": 10,
+            "IsManual": false
+        },
+        "Marvel-Win64-Shipping": {
+            "VolumeLevel": 10,
+            "IsManual": false
+        },
+        "Brawlhalla": {
+            "VolumeLevel": 10,
+            "IsManual": false
+        },
+        "WinStore.App": {
+            "VolumeLevel": 10,
+            "IsManual": false
+        },
+        "rundll32": {
+            "VolumeLevel": 10,
+            "IsManual": false
+        },
+        "stremio-shell-ng": {
+            "VolumeLevel": 10,
+            "IsManual": false
+        },
+        "Test": {
+            "VolumeLevel": 10,
+            "IsManual": false
+        },
+        "pythonw-ui": {
+            "VolumeLevel": 10,
+            "IsManual": false
+        },
+        "Idle": {
+            "VolumeLevel": 10,
+            "IsManual": false
+        },
+        "steamwebhelper": {
+            "VolumeLevel": 10,
+            "IsManual": false
+        },
+        "chrome": {
+            "VolumeLevel": 10,
+            "IsManual": true
+        },
+        "Discord": {
+            "VolumeLevel": 100,
+            "IsManual": false
+        },
+        "Telegram": {
+            "VolumeLevel": 10,
+            "IsManual": false
+        },
+        "WindowsTerminal": {
+            "VolumeLevel": 10,
+            "IsManual": false
+        },
+        "language.changer": {
+            "VolumeLevel": 10,
+            "IsManual": false
+        },
+        "Spider-Man2": {
+            "VolumeLevel": 10,
+            "IsManual": false
+        },
+        "Photos": {
+            "VolumeLevel": 10,
+            "IsManual": false
+        },
+        "WhatsApp.Root": {
+            "VolumeLevel": 10,
+            "IsManual": false
+        },
+        "msedgewebview2": {
+            "VolumeLevel": 10,
+            "IsManual": false
+        },
+        "AMD Ryzen Master": {
+            "VolumeLevel": 10,
+            "IsManual": false
+        },
+        "SystemSettings": {
+            "VolumeLevel": 10,
+            "IsManual": false
+        }
+    },
+    "Speakers (Sonic Studio Virtual Mixer)": {
+        "Idle": {
+            "VolumeLevel": 10,
+            "IsManual": false
+        }
+    },
+    "Speakers (Realtek(R) Audio)": {
+        "Idle": {
+            "VolumeLevel": 10,
+            "IsManual": false
+        }
+    },
+    "M27Q (NVIDIA High Definition Audio)": {
+        "Idle": {
+            "VolumeLevel": 10,
+            "IsManual": false
+        }
+    },
+    "Realtek Digital Output (Realtek(R) Audio)": {
+        "Idle": {
+            "VolumeLevel": 10,
+            "IsManual": false
+        }
+    },
+    "Speakers (JBL Boost TV Stereo)": {
+        "Idle": {
+            "VolumeLevel": 10,
+            "IsManual": false
+        },
+        "steam": {
+            "VolumeLevel": 10,
+            "IsManual": false
+        },
+        "Discord": {
+            "VolumeLevel": 10,
+            "IsManual": false
+        },
+        "WhatsApp": {
+            "VolumeLevel": 10,
+            "IsManual": false
+        },
+        "Telegram": {
+            "VolumeLevel": 10,
+            "IsManual": false
+        },
+        "chrome": {
+            "VolumeLevel": 10,
+            "IsManual": true
+        },
+        "start_protected_game": {
+            "VolumeLevel": 10,
+            "IsManual": false
+        },
+        "r5apex": {
+            "VolumeLevel": 10,
+            "IsManual": false
+        },
+        "vlc": {
+            "VolumeLevel": 10,
+            "IsManual": true
+        },
+        "ShellExperienceHost": {
+            "VolumeLevel": 10,
+            "IsManual": false
+        },
+        "WinStore.App": {
+            "VolumeLevel": 10,
+            "IsManual": false
+        },
+        "WindowsTerminal": {
+            "VolumeLevel": 10,
+            "IsManual": false
+        },
+        "Spotify": {
+            "VolumeLevel": 10,
+            "IsManual": false
+        },
+        "setup": {
+            "VolumeLevel": 10,
+            "IsManual": false
+        },
+        "stremio-shell-ng": {
+            "VolumeLevel": 10,
+            "IsManual": false
+        },
+        "obs64": {
+            "VolumeLevel": 10,
+            "IsManual": false
+        },
+        "msedge": {
+            "VolumeLevel": 10,
+            "IsManual": false
+        },
+        "msrdc": {
+            "VolumeLevel": 10,
+            "IsManual": false
+        },
+        "steamwebhelper": {
+            "VolumeLevel": 10,
+            "IsManual": false
+        },
+        "AnyDesk": {
+            "VolumeLevel": 10,
+            "IsManual": false
+        },
+        "firefox": {
+            "VolumeLevel": 10,
+            "IsManual": false
+        },
+        "setup.tmp": {
+            "VolumeLevel": 10,
+            "IsManual": false
+        },
+        "language.changer": {
+            "VolumeLevel": 10,
+            "IsManual": false
+        },
+        "Spider-Man2": {
+            "VolumeLevel": 10,
+            "IsManual": false
+        },
+        "SystemSettings": {
+            "VolumeLevel": 10,
+            "IsManual": false
+        },
+        "GoWR": {
+            "VolumeLevel": 10,
+            "IsManual": false
+        },
+        "Photos": {
+            "VolumeLevel": 10,
+            "IsManual": false
+        },
+        "msedgewebview2": {
+            "VolumeLevel": 10,
+            "IsManual": false
+        },
+        "WhatsApp.Root": {
+            "VolumeLevel": 10,
+            "IsManual": false
+        },
+        "r5apex_dx12": {
+            "VolumeLevel": 10,
+            "IsManual": false
+        }
+    },
+    "M27Q (High Definition Audio Device)": {
+        "Idle": {
+            "VolumeLevel": 10,
+            "IsManual": false
+        },
+        "steam": {
+            "VolumeLevel": 10,
+            "IsManual": false
+        },
+        "Telegram": {
+            "VolumeLevel": 10,
+            "IsManual": false
+        },
+        "Discord": {
+            "VolumeLevel": 10,
+            "IsManual": false
+        },
+        "chrome": {
+            "VolumeLevel": 10,
+            "IsManual": false
+        }
+    },
+    "Speakers (2- Logitech G935/G933s Gaming Headset)": {
+        "steamwebhelper": {
+            "VolumeLevel": 10,
+            "IsManual": false
+        },
+        "chrome": {
+            "VolumeLevel": 10,
+            "IsManual": true
+        },
+        "Telegram": {
+            "VolumeLevel": 10,
+            "IsManual": false
+        },
+        "devenv": {
+            "VolumeLevel": 10,
+            "IsManual": false
+        },
+        "Discord": {
+            "VolumeLevel": 100,
+            "IsManual": false
+        },
+        "Idle": {
+            "VolumeLevel": 10,
+            "IsManual": false
+        },
+        "WindowsTerminal": {
+            "VolumeLevel": 10,
+            "IsManual": false
+        },
+        "steam": {
+            "VolumeLevel": 10,
+            "IsManual": false
+        },
+        "Spotify": {
+            "VolumeLevel": 100,
+            "IsManual": false
+        },
+        "msrdc": {
+            "VolumeLevel": 10,
+            "IsManual": false
+        },
+        "r5apex": {
+            "VolumeLevel": 10,
+            "IsManual": false
+        },
+        "setup.tmp": {
+            "VolumeLevel": 10,
+            "IsManual": false
+        },
+        "firefox": {
+            "VolumeLevel": 10,
+            "IsManual": false
+        },
+        "setup": {
+            "VolumeLevel": 10,
+            "IsManual": false
+        },
+        "WhatsApp": {
+            "VolumeLevel": 10,
+            "IsManual": false
+        },
+        "HorizonZeroDawn": {
+            "VolumeLevel": 10,
+            "IsManual": false
+        },
+        "svchost": {
+            "VolumeLevel": 10,
+            "IsManual": false
+        },
+        "conhost": {
+            "VolumeLevel": 10,
+            "IsManual": false
+        },
+        "DiscordHookHelper": {
+            "VolumeLevel": 10,
+            "IsManual": false
+        },
+        "mstsc": {
+            "VolumeLevel": 10,
+            "IsManual": false
+        },
+        "lghub_agent": {
+            "VolumeLevel": 10,
+            "IsManual": false
+        },
+        "ShellExperienceHost": {
+            "VolumeLevel": 10,
+            "IsManual": false
+        },
+        "BrawlhallaEAC": {
+            "VolumeLevel": 10,
+            "IsManual": false
+        },
+        "BrawlhallaGame": {
+            "VolumeLevel": 10,
+            "IsManual": false
+        },
+        "vlc": {
+            "VolumeLevel": 10,
+            "IsManual": true
+        },
+        "taskhostw": {
+            "VolumeLevel": 10,
+            "IsManual": false
+        },
+        "obs64": {
+            "VolumeLevel": 10,
+            "IsManual": false
+        },
+        "DiscordHookHelper64": {
+            "VolumeLevel": 10,
+            "IsManual": false
+        },
+        "wmplayer": {
+            "VolumeLevel": 10,
+            "IsManual": false
+        },
+        "AnyDesk": {
+            "VolumeLevel": 10,
+            "IsManual": false
+        },
+        "SearchApp": {
+            "VolumeLevel": 10,
+            "IsManual": false
+        },
+        "start_protected_game": {
+            "VolumeLevel": 10,
+            "IsManual": false
+        },
+        "msedge": {
+            "VolumeLevel": 10,
+            "IsManual": false
+        },
+        "QCef": {
+            "VolumeLevel": 10,
+            "IsManual": false
+        },
+        "StreamFab64": {
+            "VolumeLevel": 10,
+            "IsManual": false
+        },
+        "VirtualBoxVM": {
+            "VolumeLevel": 10,
+            "IsManual": false
+        },
+        "AMD Ryzen Master": {
+            "VolumeLevel": 10,
+            "IsManual": false
+        },
+        "PhotosApp": {
+            "VolumeLevel": 10,
+            "IsManual": false
+        }
+    },
+    "Speakers (3- Logitech G935/G933s Gaming Headset)": {
+        "steamwebhelper": {
+            "VolumeLevel": 10,
+            "IsManual": false
+        },
+        "chrome": {
+            "VolumeLevel": 10,
+            "IsManual": true
+        },
+        "Telegram": {
+            "VolumeLevel": 10,
+            "IsManual": false
+        },
+        "devenv": {
+            "VolumeLevel": 10,
+            "IsManual": false
+        },
+        "Discord": {
+            "VolumeLevel": 100,
+            "IsManual": false
+        },
+        "Idle": {
+            "VolumeLevel": 10,
+            "IsManual": false
+        },
+        "WindowsTerminal": {
+            "VolumeLevel": 10,
+            "IsManual": false
+        },
+        "steam": {
+            "VolumeLevel": 10,
+            "IsManual": false
+        },
+        "Spotify": {
+            "VolumeLevel": 100,
+            "IsManual": false
+        },
+        "msrdc": {
+            "VolumeLevel": 10,
+            "IsManual": false
+        },
+        "r5apex": {
+            "VolumeLevel": 10,
+            "IsManual": false
+        },
+        "setup.tmp": {
+            "VolumeLevel": 10,
+            "IsManual": false
+        },
+        "firefox": {
+            "VolumeLevel": 10,
+            "IsManual": false
+        },
+        "setup": {
+            "VolumeLevel": 10,
+            "IsManual": false
+        },
+        "WhatsApp": {
+            "VolumeLevel": 10,
+            "IsManual": false
+        },
+        "HorizonZeroDawn": {
+            "VolumeLevel": 10,
+            "IsManual": false
+        },
+        "svchost": {
+            "VolumeLevel": 10,
+            "IsManual": false
+        },
+        "conhost": {
+            "VolumeLevel": 10,
+            "IsManual": false
+        },
+        "DiscordHookHelper": {
+            "VolumeLevel": 10,
+            "IsManual": false
+        },
+        "mstsc": {
+            "VolumeLevel": 10,
+            "IsManual": false
+        },
+        "lghub_agent": {
+            "VolumeLevel": 10,
+            "IsManual": false
+        },
+        "ShellExperienceHost": {
+            "VolumeLevel": 10,
+            "IsManual": false
+        },
+        "BrawlhallaEAC": {
+            "VolumeLevel": 10,
+            "IsManual": false
+        },
+        "BrawlhallaGame": {
+            "VolumeLevel": 10,
+            "IsManual": false
+        },
+        "vlc": {
+            "VolumeLevel": 10,
+            "IsManual": true
+        },
+        "taskhostw": {
+            "VolumeLevel": 10,
+            "IsManual": false
+        },
+        "obs64": {
+            "VolumeLevel": 10,
+            "IsManual": false
+        },
+        "DiscordHookHelper64": {
+            "VolumeLevel": 10,
+            "IsManual": false
+        },
+        "wmplayer": {
+            "VolumeLevel": 10,
+            "IsManual": false
+        },
+        "AnyDesk": {
+            "VolumeLevel": 10,
+            "IsManual": false
+        },
+        "SearchApp": {
+            "VolumeLevel": 10,
+            "IsManual": false
+        },
+        "start_protected_game": {
+            "VolumeLevel": 10,
+            "IsManual": false
+        },
+        "msedge": {
+            "VolumeLevel": 10,
+            "IsManual": false
+        },
+        "QCef": {
+            "VolumeLevel": 10,
+            "IsManual": false
+        },
+        "StreamFab64": {
+            "VolumeLevel": 10,
+            "IsManual": false
+        },
+        "VirtualBoxVM": {
+            "VolumeLevel": 10,
+            "IsManual": false
+        },
+        "AMD Ryzen Master": {
+            "VolumeLevel": 10,
+            "IsManual": false
+        }
+    },
+    "Digital Audio (S/PDIF) (High Definition Audio Device)": {
+        "Idle": {
+            "VolumeLevel": 10,
+            "IsManual": false
+        }
+    }
+}
