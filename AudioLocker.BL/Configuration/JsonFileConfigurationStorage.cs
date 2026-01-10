@@ -12,14 +12,14 @@ public class JsonFileConfigurationStorage(string filePath, int defaultVolumeLeve
     private readonly int _defaultVolumeLevel = defaultVolumeLevel;
     private readonly SemaphoreSlim _writeSemaphore = new SemaphoreSlim(1, 1);
 
-    private DeviceAudioConfiguration? GetConfiguration(string deviceName)
+    private DeviceAudioConfiguration? GetConfiguration(ReadOnlySpan<char> deviceName)
     {
         _generalAudioConfiguration.TryGetValue(deviceName, out var processConfiguration);
 
         return processConfiguration;
     }
 
-    public override ProcessAudioConfiguration? Get(string deviceName, string processName)
+    public override ProcessAudioConfiguration? Get(ReadOnlySpan<char> deviceName, ReadOnlySpan<char> processName)
     {
         DeviceAudioConfiguration? collection = GetConfiguration(deviceName);
 
@@ -29,16 +29,16 @@ public class JsonFileConfigurationStorage(string filePath, int defaultVolumeLeve
         return processConfiguration;
     }
 
-    public override void Register(string deviceName, string processName)
+    public override void Register(ReadOnlySpan<char> deviceName, string processName)
     {
         if (!_generalAudioConfiguration.TryGetValue(deviceName, out DeviceAudioConfiguration? collection))
         {
             collection = [];
 
-            _generalAudioConfiguration.Add(deviceName, collection);
+            _generalAudioConfiguration.Add(deviceName.ToString(), collection);
         }
 
-        collection.TryAdd(processName, new ProcessAudioConfiguration { VolumeLevel = _defaultVolumeLevel });
+        collection!.TryAdd(processName, new ProcessAudioConfiguration { VolumeLevel = _defaultVolumeLevel });
     }
 
     protected override async Task CreateFile()

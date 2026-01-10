@@ -6,11 +6,11 @@ public interface IConfigurationStorage
 {
     event Action OnConfigurationChanged;
 
-    ProcessAudioConfiguration? Get(string deviceName, string processName);
+    ProcessAudioConfiguration? Get(ReadOnlySpan<char> deviceName, ReadOnlySpan<char> processName);
 
     Task Prepare();
     Task Reload();
     Task Save();
 
-    void Register(string deviceName, string processName);
+    void Register(ReadOnlySpan<char> deviceName, string processName);
 }

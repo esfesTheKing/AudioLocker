@@ -35,8 +35,8 @@ public abstract class FileConfigurationStorageBase<T> : IConfigurationStorage
         _watcher.EnableRaisingEvents = true;
     }
 
-    public abstract ProcessAudioConfiguration? Get(string deviceName, string processName);
-    public abstract void Register(string deviceName, string processName);
+    public abstract ProcessAudioConfiguration? Get(ReadOnlySpan<char> deviceName, ReadOnlySpan<char> processName);
+    public abstract void Register(ReadOnlySpan<char> deviceName, string processName);
     public abstract Task Prepare();
     public abstract Task Reload();
     public abstract Task Save();

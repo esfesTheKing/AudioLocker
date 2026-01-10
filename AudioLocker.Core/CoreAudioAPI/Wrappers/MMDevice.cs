@@ -27,7 +27,6 @@ public class MMDevice
         AudioSessionManager = new AudioSessionManager(sessionManager);
     }
 
-
     public DeviceState State
     {
         get => _device.GetState();
